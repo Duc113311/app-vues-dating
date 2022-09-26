@@ -12,7 +12,6 @@
 </template>
 <script>
 import { fireStoreCore, collection, getDocs } from "./configs/firebase";
-
 export default {
   setup() {
     async function getUser() {

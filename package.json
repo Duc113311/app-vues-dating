@@ -12,6 +12,7 @@
     "core-js": "^3.8.3",
     "element-plus": "^2.2.16",
     "firebase": "^9.9.4",
+    "intl-tel-input": "^17.0.19",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
   },

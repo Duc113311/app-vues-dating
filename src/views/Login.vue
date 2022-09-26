@@ -1,3 +1,4 @@
+script
 <template>
   <!-- header -->
   <div
@@ -86,20 +87,10 @@
     </div>
   </div>
 
-  <el-dialog
-    class="dialog-phone"
-    v-model="centerDialogVisible"
-    width="90%"
-    align-center
-  >
+  <!-- <el-dialog class="dialog-phone" v-model="centerDialogVisible" align-center>
     <h2 class="mb-2 text-xl text-white">My number is</h2>
-    <input
-      id="phone"
-      type="tel"
-      pattern="[0-9]"
-      class="txt-phone w-full"
-      name="phone"
-    />
+    <input type="tel" id="phone" />
+
     <div class="recapcha" id="recaptcha-container"></div>
     <div class="mt-2 text-color">
       <span
@@ -118,7 +109,12 @@
         >Continue</el-button
       >
     </div>
-  </el-dialog>
+  </el-dialog> -->
+
+  <PhoneNumber
+    v-if="centerDialogVisible"
+    :isShowDialog="centerDialogVisible"
+  ></PhoneNumber>
 </template>
 
 <script>
@@ -131,9 +127,10 @@ import {
   FacebookAuthProvider,
 } from "../configs/firebase";
 
+import PhoneNumber from "@/components/form-dialog/phone-number.vue";
 export default {
   name: "Login-auth",
-  components: {},
+  components: { PhoneNumber },
   setup() {},
   data() {
     return {
@@ -142,6 +139,9 @@ export default {
   },
 
   methods: {
+    onShow() {
+      debugger;
+    },
     /**
      * Login Google
      */
@@ -211,6 +211,8 @@ export default {
       this.centerDialogVisible = val;
     },
   },
+
+  created: function () {},
 };
 </script>
 
@@ -278,5 +280,18 @@ export default {
 .color-button {
   background-color: #2e465c;
   border: 1px solid #2e465c !important;
+}
+
+/* màn hình điện thoại */
+@media all and (max-width: 480px) {
+  .dialog-phone {
+    width: 90%;
+  }
+}
+/* Màn hình máy tính */
+@media all and (min-width: 1280px) {
+  .dialog-phone {
+    width: 20%;
+  }
 }
 </style>
