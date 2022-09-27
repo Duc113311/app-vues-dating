@@ -1,4 +1,3 @@
-script
 <template>
   <!-- header -->
   <div
@@ -110,11 +109,16 @@ script
       >
     </div>
   </el-dialog> -->
-
+  <!-- 
   <PhoneNumber
     v-if="centerDialogVisible"
     :isShowDialog="centerDialogVisible"
-  ></PhoneNumber>
+  ></PhoneNumber> -->
+
+  <WelcomeDating
+    v-if="centerDialogVisible"
+    :isShowWelcome="centerDialogVisible"
+  ></WelcomeDating>
 </template>
 
 <script>
@@ -127,10 +131,10 @@ import {
   FacebookAuthProvider,
 } from "../configs/firebase";
 
-import PhoneNumber from "@/components/form-dialog/phone-number.vue";
+import WelcomeDating from "@/components/form-dialog/welcome.vue";
 export default {
   name: "Login-auth",
-  components: { PhoneNumber },
+  components: { WelcomeDating },
   setup() {},
   data() {
     return {
@@ -139,24 +143,20 @@ export default {
   },
 
   methods: {
-    onShow() {
-      debugger;
-    },
+    onShow() {},
     /**
      * Login Google
      */
     onLoginGoogle() {
-      debugger;
       console.log("Da vào day");
       // var email = "nguyenvanducdev@gmail.com";
       // var password = "12345678";
-      debugger;
+
       signInWithPopup(auth, provider)
         .then((result) => {
           const credential = GoogleAuthProvider.credentialFromResult(result);
           const token = credential.accessToken;
 
-          debugger;
           // The signed-in user info.
           const user = result.user;
           console.log(token);
@@ -178,10 +178,8 @@ export default {
      * Login facebook
      */
     onLoginFacebook() {
-      debugger;
       signInWithPopup(auth, provider)
         .then((result) => {
-          debugger;
           const user = result.user;
 
           // This gives you a Facebook Access Token. You can use it to access the Facebook API.
@@ -192,7 +190,6 @@ export default {
           // ...
         })
         .catch((error) => {
-          debugger;
           const errorCode = error.code;
           const errorMessage = error.message;
           // The email of the user's account used.
@@ -207,7 +204,6 @@ export default {
      * Login Phone Number
      */
     onClickPhoneNumber(val) {
-      debugger;
       this.centerDialogVisible = val;
     },
   },
