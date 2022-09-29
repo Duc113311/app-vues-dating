@@ -1,13 +1,12 @@
 <template>
   <el-dialog
     @open="open"
-    @closed="close()"
     class="dialog-phone"
     v-model="showDialog"
     align-center
   >
     <!-- Màn nhập số điện thoại theo vùng -->
-    <!-- <div class="phone-number" v-if="isShowCode">
+    <div class="phone-number">
       <h2 class="mb-2 text-xl text-white">My number is</h2>
       <input
         id="phone"
@@ -37,7 +36,7 @@
           >Continue</el-button
         >
       </div>
-    </div> -->
+    </div>
 
     <!-- Màn nhập mã code -->
     <!-- <div class="number-code" v-else>
@@ -107,7 +106,7 @@
     </div> -->
 
     <!-- Màn nhập email -->
-    <div class="email-form w-full">
+    <!-- <div class="email-form w-full">
       <h2 class="mb-2 text-xl text-white">What's your email?</h2>
       <div class="mt-2 text-color">
         Don't lose access to your account, verify your email
@@ -149,14 +148,15 @@
           >
         </el-radio-group>
       </div>
-    </div>
+    </div> -->
   </el-dialog>
   <WelcomeDating :isShowWelcome="isShowWelcome"></WelcomeDating>
 </template>
 
 <script>
 import WelcomeDating from "@/components/form-dialog/welcome.vue";
-
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { auth } from "../../configs/firebase";
 import intlTelInput from "intl-tel-input";
 
 export default {
@@ -181,30 +181,39 @@ export default {
   methods: {
     open() {
       this.showDialog = this.isShowDialog;
+      debugger;
       this.isShowCode = true;
-      if (this.showDialog) {
-        var input = document.querySelector("#phone");
-        this.valQR = intlTelInput(input, {
-          utilsScript:
-            "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
-        });
-      }
-    },
-
-    close() {
-      this.showDialog = false;
+      var input = document.querySelector("#phone");
+      this.valQR = intlTelInput(input, {
+        utilsScript:
+          "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
+      });
     },
 
     onClickCodeQR() {
-      this.isShowCode = false;
-    },
+      debugger;
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha-container",
+        { size: "invisible" },
+        auth
+      );
+      var input = document.querySelector("#phone");
 
-    onPhoneNumber() {
-      this.isShowCode = true;
-    },
+      const phoneNumber = input.getNumber();
+      // const phoneNumber = document.getElementById("phoneNumber").value;
+      const appVerifier = window.recaptchaVerifier;
+      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+        .then((confirmationResult) => {
+          debugger;
 
-    onClickEmailWelcome() {
-      this.isShowWelcome = true;
+          confirmationResult.verificationId;
+        })
+        .catch((error) => {
+          debugger;
+          console.log(error);
+          // Error; SMS not sent
+          // ...
+        });
     },
   },
 
@@ -221,7 +230,6 @@ export default {
 
 <style lang="css">
 .txt-phone {
-  width: 35vh;
   padding-bottom: 10px;
   padding-top: 10px;
   font-size: 18px;

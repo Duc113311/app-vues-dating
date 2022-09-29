@@ -5,7 +5,7 @@
   >
     <div>
       <div>
-        <div class="flex justify-center">
+        <div class="flex justify-center mb-8">
           <img
             src="../assets/images/app_icon_512x512.png"
             width="100"
@@ -16,14 +16,14 @@
         </div>
         <div class="block text-center justify-center mt-3 text-white">
           <h2 class="text-2xl">Warm Welcome</h2>
-          <h2 class="text-xl">We hope you have a sweet time here</h2>
+          <h2 class="text-xl mt-2">We hope you have a sweet time here</h2>
         </div>
       </div>
       <!-- Body -->
       <div class="h-30 justify-center flex p-10">
         <div class="grid">
           <el-button
-            class="bg-white text-base text-black w-72 rounded-lg p-5 mb-4"
+            class="bg-white text-base text-black w-80 rounded-lg px-6 py-6 mb-4"
             @click="onLoginGoogle()"
           >
             <img src="../assets/images/google_icon.svg" class="mr-1" alt="" />
@@ -32,7 +32,7 @@
 
           <el-button
             type="primary"
-            class="bg-blue-500 text-base text-white w-72 rounded-lg p-5 mb-4"
+            class="bg-blue-500 text-base text-white w-80 rounded-lg px-6 py-6 mb-4"
             @click="onLoginFacebook()"
           >
             <img
@@ -43,7 +43,7 @@
           >
           <el-button
             type="danger"
-            class="bg-red-400 text-base text-white w-72 rounded-lg p-5 mb-3"
+            class="bg-red-400 text-base text-white w-80 rounded-lg px-6 py-6 mb-3"
             @click="onClickPhoneNumber(true)"
             ><img
               src="../assets/images/phone_number_icon.svg"
@@ -109,33 +109,43 @@
       >
     </div>
   </el-dialog> -->
-  <!-- 
+
   <PhoneNumber
     v-if="centerDialogVisible"
     :isShowDialog="centerDialogVisible"
-  ></PhoneNumber> -->
+  ></PhoneNumber>
 
-  <WelcomeDating
+  <!-- <WelcomeDating
     v-if="centerDialogVisible"
     :isShowWelcome="centerDialogVisible"
-  ></WelcomeDating>
+  ></WelcomeDating> -->
 </template>
 
 <script>
 // @ is an alias to /src
+import { auth } from "../configs/firebase";
+
 import {
-  auth,
-  signInWithPopup,
-  provider,
   GoogleAuthProvider,
   FacebookAuthProvider,
-} from "../configs/firebase";
-
-import WelcomeDating from "@/components/form-dialog/welcome.vue";
+  signInWithPopup,
+} from "firebase/auth";
+import PhoneNumber from "@/components/form-dialog/phone-number.vue";
 export default {
   name: "Login-auth",
-  components: { WelcomeDating },
-  setup() {},
+  components: { PhoneNumber },
+  setup() {
+    const providerGoogle = new GoogleAuthProvider();
+    const providerFace = new FacebookAuthProvider();
+    providerFace.addScope("user_birthday");
+    providerFace.setCustomParameters({
+      display: "popup",
+    });
+    return {
+      providerGoogle,
+      providerFace,
+    };
+  },
   data() {
     return {
       centerDialogVisible: false,
@@ -151,9 +161,10 @@ export default {
       console.log("Da vào day");
       // var email = "nguyenvanducdev@gmail.com";
       // var password = "12345678";
-
-      signInWithPopup(auth, provider)
+      debugger;
+      signInWithPopup(auth, this.providerGoogle)
         .then((result) => {
+          debugger;
           const credential = GoogleAuthProvider.credentialFromResult(result);
           const token = credential.accessToken;
 
@@ -169,7 +180,6 @@ export default {
           // The email of the user's account used.
           // The AuthCredential type that was used.
           console.log(errorMessage);
-          console.log(provider);
           console.log(errorCode);
         });
     },
@@ -178,10 +188,11 @@ export default {
      * Login facebook
      */
     onLoginFacebook() {
-      signInWithPopup(auth, provider)
+      debugger;
+      signInWithPopup(auth, this.providerFace)
         .then((result) => {
           const user = result.user;
-
+          debugger;
           // This gives you a Facebook Access Token. You can use it to access the Facebook API.
           const credential = FacebookAuthProvider.credentialFromResult(result);
           const accessToken = credential.accessToken;
@@ -203,8 +214,8 @@ export default {
     /**
      * Login Phone Number
      */
-    onClickPhoneNumber(val) {
-      this.centerDialogVisible = val;
+    onClickPhoneNumber() {
+      this.$router.push("/phone-number");
     },
   },
 
@@ -278,16 +289,24 @@ export default {
   border: 1px solid #2e465c !important;
 }
 
+.text-2xl {
+  font-size: 1.8rem !important;
+  font-weight: 600;
+}
+.el-button > span {
+  font-size: 20px;
+}
+
 /* màn hình điện thoại */
-@media all and (max-width: 480px) {
+@media all and (min-width: 480px) {
   .dialog-phone {
-    width: 90%;
+    width: 70%;
   }
 }
 /* Màn hình máy tính */
 @media all and (min-width: 1280px) {
   .dialog-phone {
-    width: 20%;
+    width: 30%;
   }
 }
 </style>

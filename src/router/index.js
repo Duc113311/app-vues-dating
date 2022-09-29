@@ -21,6 +21,15 @@ const routes = [
   },
 
   {
+    path: "/phone-number",
+    name: "my-phone",
+    component: () =>
+      import(
+        /* webpackChunkName: "my-phone" */ "../views/phone-number/code-qr.vue"
+      ),
+  },
+
+  {
     path: "/profile",
     name: "user-profile",
     // route level code-splitting

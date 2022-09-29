@@ -2,7 +2,7 @@
   <div class="w-full h-full user-profile p-5 grid">
     <div>
       <div class="text-3xl">
-        <i class="fas fa-chevron-left"></i>
+        <i class="fas fa-chevron-left" @click="onBackForm()"></i>
       </div>
       <div v-if="isNumber === 0">
         <YourName> </YourName>
@@ -15,6 +15,12 @@
       </div>
       <div v-if="isNumber === 3">
         <MySexual></MySexual>
+      </div>
+      <div v-if="isNumber === 4">
+        <MyInterests></MyInterests>
+      </div>
+      <div v-if="isNumber === 5">
+        <MyPhotos></MyPhotos>
       </div>
     </div>
     <!--  -->
@@ -44,6 +50,8 @@
 </template>
 
 <script>
+import MyPhotos from "../components/user-profile/my-photos";
+import MyInterests from "../components/user-profile/my-interests";
 import MySexual from "../components/user-profile/my-sexual";
 import AmSex from "../components/user-profile/am-sex";
 import YourName from "../components/user-profile/your-name.vue";
@@ -51,6 +59,8 @@ import BirthDay from "../components/user-profile/birth-day.vue";
 export default {
   name: "UserProfile",
   components: {
+    MyPhotos,
+    MyInterests,
     MySexual,
     AmSex,
     YourName,
@@ -67,8 +77,10 @@ export default {
   },
   methods: {
     onClickContinue() {
-      debugger;
       this.isNumber = this.isNumber + 1;
+    },
+    onBackForm() {
+      this.isNumber = this.isNumber - 1;
     },
   },
 };

@@ -2,8 +2,6 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 import {
   signInWithPopup,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
   getAuth,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
@@ -25,10 +23,7 @@ const app = initializeApp(firebaseConfig);
 const fireStoreCore = getFirestore(app);
 const auth = getAuth(app);
 // const provider = new GoogleAuthProvider();
-const provider = new FacebookAuthProvider();
-provider.setCustomParameters({
-  display: "popup",
-});
+auth.languageCode = "it";
 
 export {
   fireStoreCore,
@@ -36,8 +31,5 @@ export {
   getDocs,
   signInWithPopup,
   createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  provider,
   auth,
 };
