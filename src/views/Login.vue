@@ -124,13 +124,13 @@
 <script>
 // @ is an alias to /src
 import { auth } from "../configs/firebase";
-
 import {
   GoogleAuthProvider,
   FacebookAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
 import PhoneNumber from "@/components/form-dialog/phone-number.vue";
+import axios from "axios";
 export default {
   name: "Login-auth",
   components: { PhoneNumber },
@@ -141,6 +141,7 @@ export default {
     providerFace.setCustomParameters({
       display: "popup",
     });
+
     return {
       providerGoogle,
       providerFace,
@@ -148,12 +149,27 @@ export default {
   },
   data() {
     return {
+      userDatas: [],
       centerDialogVisible: false,
     };
   },
 
   methods: {
-    onShow() {},
+    async createTokensByUserID() {
+      try {
+        await axios
+          .get(
+            "http://localhost:5000/heartlink-dating-project/us-central1/app/base/v1/users"
+          )
+          .then((response) => {
+            console.log(response);
+            debugger;
+          });
+      } catch (error) {
+        debugger;
+        console.log(error);
+      }
+    },
     /**
      * Login Google
      */
@@ -166,13 +182,12 @@ export default {
         .then((result) => {
           debugger;
           const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential.accessToken;
 
           // The signed-in user info.
-          const user = result.user;
-          console.log(token);
-          console.log("User>>Goole>>>>", user);
-          window.localStorage.setItem("accessToken", JSON.stringify(token));
+          const userID = result.user.uid;
+          this.createTokensByUserID();
+          console.log(credential);
+          console.log("User>>Goole>>>>", userID);
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -184,9 +199,6 @@ export default {
         });
     },
 
-    /**
-     * Login facebook
-     */
     onLoginFacebook() {
       debugger;
       signInWithPopup(auth, this.providerFace)

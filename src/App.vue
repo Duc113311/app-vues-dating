@@ -7,6 +7,7 @@
       <router-link to="/login">Login</router-link>
     </nav> -->
       <router-view />
+      <div class="recapcha" id="recaptcha-container"></div>
     </div>
   </div>
 </template>
@@ -39,5 +40,11 @@ export default {
 }
 .back-color {
   background-color: rgba(0, 0, 0, 0.607);
+}
+
+.recapcha {
+  display: none;
+  justify-content: end;
+  margin-bottom: 15px;
 }
 </style>

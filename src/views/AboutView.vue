@@ -29,8 +29,11 @@ export default {
 
   setup() {
     function TestAxios() {
+      debugger;
       axios
-        .get(`http://jsonplaceholder.typicode.com/posts`)
+        .get(
+          `http://localhost:5000/heartlink-dating-project/us-central1/app/base/v1/users`
+        )
         .then((response) => {
           this.posts = response.data;
         })
@@ -43,6 +46,8 @@ export default {
   },
 
   // lấy dữ liệu khi component được tạo thành công
-  created() {},
+  created() {
+    this.TestAxios();
+  },
 };
 </script>

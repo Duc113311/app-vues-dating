@@ -5,10 +5,97 @@
         <i class="fas fa-chevron-left" @click="onBackForm()"></i>
       </div>
       <div v-if="isShowCode === 0">
-        <MyNumber></MyNumber>
+        <div class="phone-number">
+          <h2 class="mb-2 text-xl font-semibold text-white">My number is</h2>
+          <div class="w-full">
+            <input
+              id="phone"
+              type="tel"
+              pattern="[0-9]"
+              class="txt-phone w-full rounded-lg"
+              autocomplete="tel"
+              name="phone"
+            />
+          </div>
+
+          <div class="mt-5 text-color">
+            <span
+              >When you tap "Continue", Heartlink will send a text with
+              verificatrion code. Message and data rates maty apply.</span
+            >
+            <span>The verifed phone number can be used to log in.</span>
+            <a href="http://">Learn what happens when your number changes</a>
+          </div>
+        </div>
       </div>
       <div v-if="isShowCode === 1">
-        <MyCode></MyCode>
+        <div class="number-code">
+          <h2 class="mb-2 text-xl text-white">My code is</h2>
+          <div class="mt-2 text-color">Please enter Code sent to</div>
+          <div class="text-code flex justify-center mt-8 mb-8">
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              name="digit-1"
+              id="digit-1"
+              data-next="digit-2"
+            />
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              data-previous="digit-1"
+              name="digit-2"
+              id="digit-2"
+              data-next="digit-3"
+            />
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              data-previous="digit-2"
+              name="digit-3"
+              id="digit-3"
+              data-next="digit-4"
+            />
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              name="digit-4"
+              data-previous="digit-3"
+              id="digit-4"
+              data-next="digit-5"
+            />
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              name="digit-5"
+              data-previous="digit-4"
+              id="digit-5"
+              data-next="digit-6"
+            />
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              name="digit-6"
+              id="digit-6"
+              data-previous="digit-5"
+            />
+          </div>
+          <div class="mb-4">
+            <a href="#" @click="onPhoneNumber()">Update contact info</a>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -26,29 +113,114 @@
 </template>
 
 <script>
-import MyNumber from "../../components/login-phone/my-number";
-import MyCode from "@/components/login-phone/my-code.vue";
+import intlTelInput from "intl-tel-input";
+// import { auth } from "../../configs/firebase";
+import {
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+  getAuth,
+  PhoneAuthProvider,
+  signInWithCredential,
+} from "firebase/auth";
 export default {
-  components: { MyNumber, MyCode },
   name: "CodeQR",
 
   setup() {
-    return;
+    const auth = getAuth();
+    return {
+      auth,
+    };
   },
   data() {
     return {
       isShowCode: 0,
+      valCodeQR: null,
+      sentCodeId: "",
     };
   },
 
   methods: {
+    setuprecaptcha() {
+      debugger;
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: function () {
+            debugger;
+
+            console.log("recature resolved");
+            this.onClickContinueCode();
+          },
+        },
+        this.auth
+      );
+    },
     onBackForm() {
       this.$router.go(-1);
     },
 
-    onClickContinueCode() {
-      this.isShowCode = this.isShowCode + 1;
+    async onClickContinueCode() {
+      debugger;
+
+      if (this.sentCodeId !== "") {
+        await this.singWithPhone(this.sentCodeId);
+      } else {
+        this.isShowCode = this.isShowCode + 1;
+        this.setuprecaptcha();
+        const phoneNumber = this.valCodeQR.getNumber();
+        // const recaptchaContainer = document.getElementById("recaptcha-container");
+
+        const appVerifier = window.recaptchaVerifier;
+        signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
+          .then((confirmationResult) => {
+            debugger;
+
+            this.sentCodeId = confirmationResult.verificationId;
+
+            console.log(this.sentCodeId);
+          })
+          .catch((error) => {
+            debugger;
+            console.log(error);
+            // Error; SMS not sent
+            // ...
+          });
+      }
     },
+
+    singWithPhone(sentCodeId) {
+      const digit1 = document.getElementById("digit-1");
+      const digit2 = document.getElementById("digit-2");
+      const digit3 = document.getElementById("digit-3");
+      const digit4 = document.getElementById("digit-4");
+      const digit5 = document.getElementById("digit-5");
+      const digit6 = document.getElementById("digit-6");
+      const code =
+        digit1.value +
+        digit2.value +
+        digit3.value +
+        digit4.value +
+        digit5.value +
+        digit6.value;
+      const credential = PhoneAuthProvider.credential(sentCodeId, code);
+      signInWithCredential(this.auth, credential)
+        .then((result) => {
+          debugger;
+          console.log(result);
+        })
+        .catch((error) => {
+          alert("error", error);
+        });
+    },
+  },
+
+  mounted() {
+    var input = document.querySelector("#phone");
+    this.valCodeQR = intlTelInput(input, {
+      utilsScript:
+        "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
+    });
   },
 };
 </script>
@@ -60,5 +232,44 @@ export default {
 }
 .text-color {
   color: #6587a5;
+}
+
+.user-profile {
+  background-color: #382e41;
+  grid-template-rows: 25fr 4fr;
+}
+.txt-phone {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  font-size: 18px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.iti--allow-dropdown {
+  width: 100%;
+}
+
+.one-code {
+  width: 48px;
+  border-radius: 4px;
+  background-color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  height: 48px;
+  touch-action: manipulation;
+  padding-left: 8px;
+  padding-right: 8px;
+  vertical-align: middle;
+  margin-right: 5px;
 }
 </style>
