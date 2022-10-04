@@ -1,7 +1,14 @@
 import { ref } from "vue";
 
-const error = ref(null);
-const isPending = ref(false);
-export function loginAccount() {
-  return {};
-}
+const state = {};
+
+const mutations = {};
+
+const actions = {};
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+  actions,
+};

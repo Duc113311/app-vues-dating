@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       posts: [],
+      userID: 982,
       errors: [],
     };
   },
@@ -30,15 +31,16 @@ export default {
   setup() {
     function TestAxios() {
       debugger;
+      const userID = "2LwGxBY06zWaIR7VcTIgSglhMMf4";
       axios
-        .get(
-          `http://localhost:5000/heartlink-dating-project/us-central1/app/base/v1/users`
+        .post(
+          `http://localhost:5000/heartlink-dating-project/us-central1/app/login/v1/create-token/${userID}`
         )
         .then((response) => {
           this.posts = response.data;
         })
         .catch((e) => {
-          this.errors.push(e);
+          console.log(e);
         });
     }
     TestAxios();

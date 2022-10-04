@@ -1,13 +1,13 @@
 <template>
   <div class="w-full h-full user-profile p-5 grid">
     <div>
-      <div class="text-3xl mb-6">
+      <div v-if="isShowCode !== 0" class="text-3xl">
         <i class="fas fa-chevron-left" @click="onBackForm()"></i>
       </div>
-      <div v-if="isShowCode === 0">
+      <div v-if="isShowCode === 0" class="mt-6">
         <div class="phone-number">
           <h2 class="mb-2 text-xl font-semibold text-white">My number is</h2>
-          <div class="w-full">
+          <div class="w-full mb-5">
             <input
               id="phone"
               type="tel"
@@ -15,10 +15,15 @@
               class="txt-phone w-full rounded-lg"
               autocomplete="tel"
               name="phone"
+              required
+              @change="onClickInput()"
             />
+            <span class="error-text text-red-600">{{
+              this.sendCodeError
+            }}</span>
           </div>
 
-          <div class="mt-5 text-color">
+          <div class="text-color">
             <span
               >When you tap "Continue", Heartlink will send a text with
               verificatrion code. Message and data rates maty apply.</span
@@ -29,7 +34,7 @@
         </div>
       </div>
       <div v-if="isShowCode === 1">
-        <div class="number-code">
+        <div class="number-code mt-6">
           <h2 class="mb-2 text-xl text-white">My code is</h2>
           <div class="mt-2 text-color">Please enter Code sent to</div>
           <div class="text-code flex justify-center mt-8 mb-8">
@@ -110,9 +115,13 @@
       </div>
     </div>
   </div>
+
+  <Welcome v-if="isWellcome" :isShowWelcome="isWellcome"></Welcome>
 </template>
 
 <script>
+import axios from "axios";
+
 import intlTelInput from "intl-tel-input";
 // import { auth } from "../../configs/firebase";
 import {
@@ -122,9 +131,9 @@ import {
   PhoneAuthProvider,
   signInWithCredential,
 } from "firebase/auth";
+import Welcome from "@/components/form-dialog/welcome.vue";
 export default {
   name: "CodeQR",
-
   setup() {
     const auth = getAuth();
     return {
@@ -136,9 +145,10 @@ export default {
       isShowCode: 0,
       valCodeQR: null,
       sentCodeId: "",
+      sendCodeError: "",
+      isWellcome: false,
     };
   },
-
   methods: {
     setuprecaptcha() {
       debugger;
@@ -148,7 +158,6 @@ export default {
           size: "invisible",
           callback: function () {
             debugger;
-
             console.log("recature resolved");
             this.onClickContinueCode();
           },
@@ -159,36 +168,50 @@ export default {
     onBackForm() {
       this.$router.go(-1);
     },
-
     async onClickContinueCode() {
       debugger;
-
-      if (this.sentCodeId !== "") {
-        await this.singWithPhone(this.sentCodeId);
+      const phoneNumber = this.valCodeQR.getNumber();
+      if (phoneNumber) {
+        if (this.sentCodeId !== "") {
+          await this.singWithPhone(this.sentCodeId);
+        } else {
+          this.isShowCode = this.isShowCode + 1;
+          this.setuprecaptcha();
+          // const recaptchaContainer = document.getElementById("recaptcha-container");
+          const appVerifier = window.recaptchaVerifier;
+          signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
+            .then((confirmationResult) => {
+              debugger;
+              this.sentCodeId = confirmationResult.verificationId;
+              console.log(this.sentCodeId);
+            })
+            .catch((error) => {
+              debugger;
+              console.log(error);
+              // Error; SMS not sent
+              // ...
+            });
+        }
       } else {
-        this.isShowCode = this.isShowCode + 1;
-        this.setuprecaptcha();
-        const phoneNumber = this.valCodeQR.getNumber();
-        // const recaptchaContainer = document.getElementById("recaptcha-container");
-
-        const appVerifier = window.recaptchaVerifier;
-        signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
-          .then((confirmationResult) => {
-            debugger;
-
-            this.sentCodeId = confirmationResult.verificationId;
-
-            console.log(this.sentCodeId);
-          })
-          .catch((error) => {
-            debugger;
-            console.log(error);
-            // Error; SMS not sent
-            // ...
-          });
+        this.sendCodeError = "Bạn chưa điền số điện thoại";
       }
     },
-
+    async createTokensByUserID(userID) {
+      debugger;
+      try {
+        await axios
+          .post(
+            `http://localhost:5000/heartlink-dating-project/us-central1/app/login/v1/create-token/${userID}`
+          )
+          .then((response) => {
+            debugger;
+            console.log(response);
+          });
+      } catch (error) {
+        debugger;
+        console.log(error);
+      }
+    },
     singWithPhone(sentCodeId) {
       const digit1 = document.getElementById("digit-1");
       const digit2 = document.getElementById("digit-2");
@@ -207,14 +230,33 @@ export default {
       signInWithCredential(this.auth, credential)
         .then((result) => {
           debugger;
+          const userID = result.user.uid;
+          this.createTokensByUserID(userID);
+          this.isWellcome = true;
           console.log(result);
         })
         .catch((error) => {
           alert("error", error);
         });
     },
+    onValidatePhoneNumber(val) {
+      debugger;
+      var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+      if (vnf_regex.test(val) == false) {
+        this.sendCodeError = "Số điện thoại của bạn không đúng định dạng";
+        // Số điện thoại của bạn không đúng định dạng!
+      }
+    },
+    onClickInput() {
+      debugger;
+      const mobile = document.getElementById("phone").value;
+      if (mobile != "") {
+        this.onValidatePhoneNumber(mobile);
+      } else {
+        this.sendCodeError = "Bạn chưa điền số điện thoại";
+      }
+    },
   },
-
   mounted() {
     var input = document.querySelector("#phone");
     this.valCodeQR = intlTelInput(input, {
@@ -222,20 +264,17 @@ export default {
         "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
     });
   },
+  components: { Welcome },
 };
 </script>
 
 <style lang="css">
-.user-profile {
-  background-color: #382e41;
-  grid-template-rows: 25fr 4fr;
-}
 .text-color {
-  color: #6587a5;
+  color: #737b91;
 }
 
 .user-profile {
-  background-color: #382e41;
+  background-color: #232937;
   grid-template-rows: 25fr 4fr;
 }
 .txt-phone {
@@ -271,5 +310,8 @@ input[type="number"] {
   padding-right: 8px;
   vertical-align: middle;
   margin-right: 5px;
+}
+
+.error-text {
 }
 </style>

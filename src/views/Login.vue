@@ -32,7 +32,7 @@
 
           <el-button
             type="primary"
-            class="bg-blue-500 text-base text-white w-80 rounded-lg px-6 py-6 mb-4"
+            class="bg-face text-base text-white w-80 rounded-lg px-6 py-6 mb-4"
             @click="onLoginFacebook()"
           >
             <img
@@ -43,7 +43,7 @@
           >
           <el-button
             type="danger"
-            class="bg-red-400 text-base text-white w-80 rounded-lg px-6 py-6 mb-3"
+            class="bg-phone text-base text-white w-80 rounded-lg px-6 py-6 mb-3"
             @click="onClickPhoneNumber(true)"
             ><img
               src="../assets/images/phone_number_icon.svg"
@@ -115,10 +115,7 @@
     :isShowDialog="centerDialogVisible"
   ></PhoneNumber>
 
-  <!-- <WelcomeDating
-    v-if="centerDialogVisible"
-    :isShowWelcome="centerDialogVisible"
-  ></WelcomeDating> -->
+  <WelcomeDating v-if="isWellcome" :isShowWelcome="isWellcome"></WelcomeDating>
 </template>
 
 <script>
@@ -130,10 +127,12 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import PhoneNumber from "@/components/form-dialog/phone-number.vue";
+import WelcomeDating from "@/components/form-dialog/welcome.vue";
+
 import axios from "axios";
 export default {
   name: "Login-auth",
-  components: { PhoneNumber },
+  components: { PhoneNumber, WelcomeDating },
   setup() {
     const providerGoogle = new GoogleAuthProvider();
     const providerFace = new FacebookAuthProvider();
@@ -151,19 +150,24 @@ export default {
     return {
       userDatas: [],
       centerDialogVisible: false,
+      isWellcome: false,
     };
   },
 
   methods: {
-    async createTokensByUserID() {
+    async createTokensByUserID(userID) {
+      debugger;
+
       try {
         await axios
-          .get(
-            "http://localhost:5000/heartlink-dating-project/us-central1/app/base/v1/users"
+          .post(
+            `http://localhost:5000/heartlink-dating-project/us-central1/app/login/v1/create-token/${userID}`
           )
           .then((response) => {
-            console.log(response);
             debugger;
+            document.cookie = `accessToken=${response.data.data.accessToken}`;
+
+            console.log(response);
           });
       } catch (error) {
         debugger;
@@ -185,7 +189,8 @@ export default {
 
           // The signed-in user info.
           const userID = result.user.uid;
-          this.createTokensByUserID();
+          this.createTokensByUserID(userID);
+          this.isWellcome = true;
           console.log(credential);
           console.log("User>>Goole>>>>", userID);
         })
@@ -309,16 +314,12 @@ export default {
   font-size: 20px;
 }
 
+.bg-face {
+  background-color: #0085fe;
+}
+.bg-phone {
+  background-color: #fd5d65;
+}
+
 /* màn hình điện thoại */
-@media all and (min-width: 480px) {
-  .dialog-phone {
-    width: 70%;
-  }
-}
-/* Màn hình máy tính */
-@media all and (min-width: 1280px) {
-  .dialog-phone {
-    width: 30%;
-  }
-}
 </style>
