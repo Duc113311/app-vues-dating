@@ -1,234 +1,281 @@
 <template>
-  <el-dialog
-    @open="open"
-    class="dialog-phone"
-    v-model="showDialog"
-    align-center
+  <div
+    class="w-full h-full user-profile p-5 grid absolute top-0"
+    v-if="this.isShowPhone"
   >
-    <!-- Màn nhập số điện thoại theo vùng -->
-    <div class="phone-number">
-      <h2 class="mb-2 text-xl text-white">My number is</h2>
-      <input
-        id="phone"
-        type="number"
-        pattern="[0-9.]+"
-        class="txt-phone w-full"
-        autocomplete="tel"
-        name="phone"
-        v-model="valCodeQR"
-      />
-
-      <div class="recapcha" id="recaptcha-container"></div>
-      <div class="mt-2 text-color">
-        <span
-          >When you tap "Continue", Heartlink will send a text with
-          verificatrion code. Message and data rates maty apply.</span
-        >
-        <span>The verifed phone number can be used to log in.</span>
-        <a href="http://">Learn what happens when your number changes</a>
+    <div>
+      <div v-if="isShowCode !== 0" class="text-3xl">
+        <i class="fas fa-chevron-left" @click="onBackForm()"></i>
       </div>
+      <div v-if="isShowCode === 0" class="mt-6">
+        <div class="phone-number">
+          <h2 class="mb-2 text-xl font-semibold text-white">My number is</h2>
+          <div class="w-full">
+            <input
+              id="phone"
+              type="tel"
+              pattern="[0-9]"
+              class="txt-phone w-full rounded-lg"
+              autocomplete="tel"
+              name="phone"
+              required
+              @change="onClickInput()"
+            />
+            <div
+              class="error-text justify-center flex text-red-600 w-full mt-2"
+            >
+              {{ this.sendCodeError }}
+            </div>
+          </div>
 
-      <div class="mt-4 flex justify-center">
+          <div class="text-color">
+            <span
+              >When you tap "Continue", Heartlink will send a text with
+              verificatrion code. Message and data rates maty apply.</span
+            >
+            <span>The verifed phone number can be used to log in.</span>
+            <a href="http://">Learn what happens when your number changes</a>
+          </div>
+        </div>
+      </div>
+      <div v-if="isShowCode === 1">
+        <div class="number-code mt-6">
+          <h2 class="mb-2 text-xl text-white">My code is</h2>
+          <div class="mt-2 text-color">Please enter Code sent to</div>
+          <div class="text-code flex justify-center mt-8 mb-8">
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              name="digit-1"
+              id="digit-1"
+              data-next="digit-2"
+            />
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              data-previous="digit-1"
+              name="digit-2"
+              id="digit-2"
+              data-next="digit-3"
+            />
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              data-previous="digit-2"
+              name="digit-3"
+              id="digit-3"
+              data-next="digit-4"
+            />
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              name="digit-4"
+              data-previous="digit-3"
+              id="digit-4"
+              data-next="digit-5"
+            />
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              name="digit-5"
+              data-previous="digit-4"
+              id="digit-5"
+              data-next="digit-6"
+            />
+            <input
+              type="tel"
+              pattern="[0-9.]+"
+              class="one-code text-center"
+              autocomplete="tel"
+              name="digit-6"
+              id="digit-6"
+              data-previous="digit-5"
+            />
+          </div>
+          <div class="mb-4">
+            <a href="#" @click="onPhoneNumber()">Update contact info</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex justify-center mt-3">
         <el-button
           type="danger"
           class="text-base text-white w-72 rounded-lg p-5 color-button"
-          @click="onClickCodeQR()"
+          @click="onClickContinueCode()"
           >Continue</el-button
         >
       </div>
     </div>
-
-    <!-- Màn nhập mã code -->
-    <!-- <div class="number-code" v-else>
-      <h2 class="mb-2 text-xl text-white">My code is</h2>
-      <div class="mt-2 text-color">Please enter Code sent to</div>
-      <div class="text-code flex justify-center mt-8 mb-8">
-        <input
-          type="tel"
-          pattern="[0-9.]+"
-          class="one-code text-center"
-          autocomplete="tel"
-          name="phone"
-          v-model="valCodeQR"
-        />
-        <input
-          type="tel"
-          pattern="[0-9.]+"
-          class="one-code text-center"
-          autocomplete="tel"
-          name="phone"
-          v-model="valCodeQR"
-        />
-        <input
-          type="tel"
-          pattern="[0-9.]+"
-          class="one-code text-center"
-          autocomplete="tel"
-          name="phone"
-          v-model="valCodeQR"
-        />
-        <input
-          type="tel"
-          pattern="[0-9.]+"
-          class="one-code text-center"
-          autocomplete="tel"
-          name="phone"
-          v-model="valCodeQR"
-        />
-        <input
-          type="tel"
-          pattern="[0-9.]+"
-          class="one-code text-center"
-          autocomplete="tel"
-          name="phone"
-          v-model="valCodeQR"
-        />
-        <input
-          type="tel"
-          pattern="[0-9.]+"
-          class="one-code text-center"
-          autocomplete="tel"
-          name="phone"
-          v-model="valCodeQR"
-        />
-      </div>
-      <div class="mb-4">
-        <a href="#" @click="onPhoneNumber()">Update contact info</a>
-      </div>
-      <div class="mt-4 flex justify-center">
-        <el-button
-          type="danger"
-          class="text-base text-white w-72 rounded-lg p-5 color-button"
-          @click="onClickCodeQR()"
-          >Continue</el-button
-        >
-      </div>
-    </div> -->
-
-    <!-- Màn nhập email -->
-    <!-- <div class="email-form w-full">
-      <h2 class="mb-2 text-xl text-white">What's your email?</h2>
-      <div class="mt-2 text-color">
-        Don't lose access to your account, verify your email
-      </div>
-      <input
-        id="email"
-        type="email"
-        class="txt-phone w-36 mt-7 rounded-lg pl-3 pr-3"
-        name="email"
-        placeholder="Enter email"
-        v-model="valCodeQR"
-      />
-
-      <div class="mt-7 flex justify-center">
-        <el-button
-          type="danger"
-          class="text-base text-white w-64 rounded-lg p-5 color-button"
-          @click="onClickEmailWelcome()"
-          >Continue</el-button
-        >
-      </div>
-      <div class="mt-7 flex justify-center">OR</div>
-      <div class="mt-7 flex justify-center">
-        <el-button
-          class="bg-white text-base text-black w-72 rounded-lg p-5 mb-4"
-          @click="onLoginGoogle()"
-        >
-          <img src="../../assets/images/google_icon.svg" class="mr-1" alt="" />
-          Log in with Google
-        </el-button>
-      </div>
-      <div class="mt-2 text-color">
-        Verify instantly by connecting your Google account
-      </div>
-      <div class="mt-4 w-full overflow-hidden whitespace-nowrap">
-        <el-radio-group v-model="radio1" class="ml-4">
-          <el-radio label="1" size="large"
-            >I want to receive news, updates and offers from Heartlink</el-radio
-          >
-        </el-radio-group>
-      </div>
-    </div> -->
-  </el-dialog>
-  <WelcomeDating :isShowWelcome="isShowWelcome"></WelcomeDating>
+  </div>
 </template>
 
 <script>
-import WelcomeDating from "@/components/form-dialog/welcome.vue";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth } from "../../configs/firebase";
 import intlTelInput from "intl-tel-input";
-
+import {
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+  getAuth,
+  PhoneAuthProvider,
+  signInWithCredential,
+} from "firebase/auth";
 export default {
   name: "FormPhoneNumber",
   setup() {
-    return;
+    const auth = getAuth();
+    return {
+      auth,
+    };
   },
-  components: {
-    WelcomeDating,
-  },
-  props: ["isShowDialog"],
+  props: ["isShowPhone"],
+
   data() {
     return {
-      showDialog: false,
-      valCodeQR: "",
-      phoneNumber: "092282864",
-      isShowCode: false,
-      isShowWelcome: false,
+      isShowCode: 0,
+      valCodeQR: null,
+      sentCodeId: "",
+      sendCodeError: "",
+      isWellcome: false,
     };
   },
 
   methods: {
-    open() {
-      this.showDialog = this.isShowDialog;
-      debugger;
-      this.isShowCode = true;
-      var input = document.querySelector("#phone");
-      this.valQR = intlTelInput(input, {
-        utilsScript:
-          "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
-      });
-    },
-
-    onClickCodeQR() {
+    setuprecaptcha() {
       debugger;
       window.recaptchaVerifier = new RecaptchaVerifier(
         "recaptcha-container",
-        { size: "invisible" },
-        auth
+        {
+          size: "invisible",
+          callback: function () {
+            debugger;
+            console.log("recature resolved");
+            this.onClickContinueCode();
+          },
+        },
+        this.auth
       );
-      var input = document.querySelector("#phone");
+    },
 
-      const phoneNumber = input.getNumber();
-      // const phoneNumber = document.getElementById("phoneNumber").value;
-      const appVerifier = window.recaptchaVerifier;
-      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-        .then((confirmationResult) => {
+    onBackForm() {
+      this.$router.go(-1);
+    },
+    async onClickContinueCode() {
+      debugger;
+      const mobile = document.getElementById("phone").value;
+      const result = this.onValidatePhoneNumber(mobile);
+      const phoneNumber = this.valCodeQR.getNumber();
+      if (result) {
+        if (phoneNumber) {
+          if (this.sentCodeId !== "") {
+            await this.singWithPhone(this.sentCodeId);
+          } else {
+            this.isShowCode = this.isShowCode + 1;
+            this.setuprecaptcha();
+            // const recaptchaContainer = document.getElementById("recaptcha-container");
+            const appVerifier = window.recaptchaVerifier;
+            signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
+              .then((confirmationResult) => {
+                debugger;
+                this.sentCodeId = confirmationResult.verificationId;
+                console.log(this.sentCodeId);
+              })
+              .catch((error) => {
+                debugger;
+                console.log(error);
+                // Error; SMS not sent
+                // ...
+              });
+          }
+        }
+      }
+    },
+
+    singWithPhone(sentCodeId) {
+      const digit1 = document.getElementById("digit-1");
+      const digit2 = document.getElementById("digit-2");
+      const digit3 = document.getElementById("digit-3");
+      const digit4 = document.getElementById("digit-4");
+      const digit5 = document.getElementById("digit-5");
+      const digit6 = document.getElementById("digit-6");
+      const code =
+        digit1.value +
+        digit2.value +
+        digit3.value +
+        digit4.value +
+        digit5.value +
+        digit6.value;
+      const credential = PhoneAuthProvider.credential(sentCodeId, code);
+      signInWithCredential(this.auth, credential)
+        .then((result) => {
           debugger;
-
-          confirmationResult.verificationId;
+          const userID = result.user.uid;
+          this.createTokensByUserID(userID);
+          this.isWellcome = true;
+          console.log(result);
         })
         .catch((error) => {
-          debugger;
-          console.log(error);
-          // Error; SMS not sent
-          // ...
+          alert("error", error);
         });
+    },
+
+    onValidatePhoneNumber(val) {
+      debugger;
+      var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+      if (val !== "") {
+        if (vnf_regex.test(val) == false) {
+          this.sendCodeError = "Số điện thoại của bạn không đúng định dạng";
+          return false;
+          // Số điện thoại của bạn không đúng định dạng!
+        } else {
+          this.sendCodeError = "";
+          return true;
+        }
+      } else {
+        this.sendCodeError = "Bạn chưa điền số điện thoại";
+      }
+    },
+    onClickInput() {
+      debugger;
+      const mobile = document.getElementById("phone").value;
+      if (mobile != "") {
+        this.onValidatePhoneNumber(mobile);
+      } else {
+        this.sendCodeError = "Bạn chưa điền số điện thoại";
+      }
     },
   },
 
   mounted() {
-    this.showDialog = this.isShowDialog;
-    // var input = document.querySelector("#phone");
-    // intlTelInput(input, {
-    //   utilsScript:
-    //     "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
-    // });
+    var input = document.querySelector("#phone");
+    this.valCodeQR = intlTelInput(input, {
+      utilsScript:
+        "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
+    });
   },
 };
 </script>
 
 <style lang="css">
+.text-color {
+  color: #737b91;
+}
+
+.user-profile {
+  background-color: #232937;
+  grid-template-rows: 25fr 4fr;
+}
 .txt-phone {
   padding-bottom: 10px;
   padding-top: 10px;
@@ -246,6 +293,10 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+.iti--allow-dropdown {
+  width: 100%;
+}
+
 .one-code {
   width: 48px;
   border-radius: 4px;
@@ -258,5 +309,10 @@ input[type="number"] {
   padding-right: 8px;
   vertical-align: middle;
   margin-right: 5px;
+}
+
+.iti__country-list {
+  width: 29vh;
+  overflow-x: clip;
 }
 </style>

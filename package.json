@@ -14,8 +14,10 @@
     "element-plus": "^2.2.16",
     "firebase": "^9.9.4",
     "intl-tel-input": "^17.0.19",
+    "js-cookie": "^3.0.1",
     "vue": "^3.2.13",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

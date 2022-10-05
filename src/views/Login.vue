@@ -1,3 +1,4 @@
+script
 <template>
   <!-- header -->
   <div
@@ -52,25 +53,6 @@
             />Log in with Phone number</el-button
           >
         </div>
-
-        <!-- <button
-          class="p-2 bg-sky-500 text-cyan-50 rounded-sm"
-          @click="onLoginGoogle()"
-        >
-          Login with Google
-        </button>
-        <button
-          @click="onLoginFacebook()"
-          class="mt-3 p-2 bg-sky-500 text-cyan-50 rounded-sm"
-        >
-          Login with Facebook
-        </button>
-        <button
-          @click="onLoginPhoneNumber()"
-          class="mt-3 p-2 bg-sky-500 text-cyan-50 rounded-sm"
-        >
-          Login with PhoneNumber
-        </button> -->
       </div>
 
       <div class="mt-5 items-center content-center text-white ml-5 mr-3">
@@ -86,34 +68,7 @@
     </div>
   </div>
 
-  <!-- <el-dialog class="dialog-phone" v-model="centerDialogVisible" align-center>
-    <h2 class="mb-2 text-xl text-white">My number is</h2>
-    <input type="tel" id="phone" />
-
-    <div class="recapcha" id="recaptcha-container"></div>
-    <div class="mt-2 text-color">
-      <span
-        >When you tap "Continue", Heartlink will send a text with verificatrion
-        code. Message and data rates maty apply.</span
-      >
-      <span>The verifed phone number can be used to log in.</span>
-      <a href="http://">Learn what happens when your number changes</a>
-    </div>
-
-    <div class="mt-4 flex justify-center">
-      <el-button
-        type="danger"
-        class="text-base text-white w-72 rounded-lg p-5 color-button"
-        @click="onClickPhoneNumber(true)"
-        >Continue</el-button
-      >
-    </div>
-  </el-dialog> -->
-
-  <PhoneNumber
-    v-if="centerDialogVisible"
-    :isShowDialog="centerDialogVisible"
-  ></PhoneNumber>
+  <PhoneNumber v-if="isShowPhone" :isShowPhone="isShowPhone"></PhoneNumber>
 
   <WelcomeDating v-if="isWellcome" :isShowWelcome="isWellcome"></WelcomeDating>
 </template>
@@ -128,12 +83,14 @@ import {
 } from "firebase/auth";
 import PhoneNumber from "@/components/form-dialog/phone-number.vue";
 import WelcomeDating from "@/components/form-dialog/welcome.vue";
-
-import axios from "axios";
+import storeTokens from "@/stores/login/store-token";
+import getToken from "@/middleware/auth";
+// Set up actions
 export default {
   name: "Login-auth",
   components: { PhoneNumber, WelcomeDating },
   setup() {
+    // Set giá trị Login Google & Facebook
     const providerGoogle = new GoogleAuthProvider();
     const providerFace = new FacebookAuthProvider();
     providerFace.addScope("user_birthday");
@@ -149,94 +106,98 @@ export default {
   data() {
     return {
       userDatas: [],
-      centerDialogVisible: false,
+      isShowPhone: false,
       isWellcome: false,
     };
   },
 
   methods: {
-    async createTokensByUserID(userID) {
+    // Login bằng Google
+    async onLoginGoogle() {
+      const status = await this.onCheckUserIdExits();
       debugger;
+      if (!status) {
+        await signInWithPopup(auth, this.providerGoogle)
+          .then((result) => {
+            const credential = GoogleAuthProvider.credentialFromResult(result);
 
-      try {
-        await axios
-          .post(
-            `http://localhost:5000/heartlink-dating-project/us-central1/app/login/v1/create-token/${userID}`
-          )
-          .then((response) => {
-            debugger;
-            document.cookie = `accessToken=${response.data.data.accessToken}`;
-
-            console.log(response);
+            // Dùng userID để tạo ra Token
+            const userID = result.user.uid;
+            storeTokens.dispatch("postTokenByUserID", { id: userID });
+            this.isWellcome = true;
+            console.log(credential);
+            console.log("User>>Goole>>>>", userID);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            // The AuthCredential type that was used.
+            console.log(errorMessage);
+            console.log(errorCode);
           });
-      } catch (error) {
-        debugger;
-        console.log(error);
+      } else {
+        this.isWellcome = true;
       }
     },
-    /**
-     * Login Google
-     */
-    onLoginGoogle() {
-      console.log("Da vào day");
-      // var email = "nguyenvanducdev@gmail.com";
-      // var password = "12345678";
+
+    async onCheckUserIdExits() {
+      const userId = await getToken("userId");
       debugger;
-      signInWithPopup(auth, this.providerGoogle)
-        .then((result) => {
-          debugger;
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-
-          // The signed-in user info.
-          const userID = result.user.uid;
-          this.createTokensByUserID(userID);
-          this.isWellcome = true;
-          console.log(credential);
-          console.log("User>>Goole>>>>", userID);
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // The email of the user's account used.
-          // The AuthCredential type that was used.
-          console.log(errorMessage);
-          console.log(errorCode);
-        });
+      await storeTokens.dispatch("checkUserIdExist", {
+        id: userId,
+      });
+      return storeTokens.state.isUserId;
     },
-
+    // Login Facebook
     onLoginFacebook() {
       debugger;
-      signInWithPopup(auth, this.providerFace)
-        .then((result) => {
-          const user = result.user;
-          debugger;
-          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-          const credential = FacebookAuthProvider.credentialFromResult(result);
-          const accessToken = credential.accessToken;
-          console.log(user);
-          console.log("accessToken- face", accessToken);
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // The email of the user's account used.
-          console.log(errorCode);
-          console.log(errorMessage);
+      this.isShowPhone = true;
+      // console.log(storeTokens.state.tokenAccount.accessToken);
+      // signInWithPopup(auth, this.providerFace)
+      //   .then((result) => {
+      //     const user = result.user;
+      //     debugger;
+      //     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+      //     const credential = FacebookAuthProvider.credentialFromResult(result);
+      //     const accessToken = credential.accessToken;
+      //     console.log(user);
+      //     console.log("accessToken- face", accessToken);
+      //     // ...
+      //   })
+      //   .catch((error) => {
+      //     const errorCode = error.code;
+      //     const errorMessage = error.message;
+      //     // The email of the user's account used.
+      //     console.log(errorCode);
+      //     console.log(errorMessage);
 
-          // ...
-        });
+      //     // ...
+      //   });
     },
 
     /**
      * Login Phone Number
      */
     onClickPhoneNumber() {
-      this.$router.push("/phone-number");
+      this.isShowPhone = true;
+
+      // this.$router.push("/phone-number");
     },
   },
 
-  created: function () {},
+  created() {
+    const status = this.onCheckUserIdExits();
+    if (!status) {
+      this.isWellcome = true;
+    }
+    // debugger;
+    // const access = getToken("userId");
+    // console.log(access);
+    // storeTokens.dispatch("checkUserIdExist");
+    // storeTokens.dispatch("getAllData");
+    console.log(storeTokens.state.isUserId);
+  },
 };
 </script>
 

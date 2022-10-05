@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog-phone" v-if="showDialog">
+  <div class="dialog-phone overflow-hidden" v-if="showDialog">
     <div class="p-2">
       <div class="flex justify-center">
         <img
@@ -74,39 +74,38 @@
         >
       </div>
     </div>
+    <el-dialog
+      class="dialog-singup rounded-lg"
+      v-model="centerDialogVisible"
+      align-center
+    >
+      <div class="text-white">
+        <h2 class="text-xl mb-4">Quit the sign-up process</h2>
+        <span class="text-sm text-slate-400">
+          All the information will be deleted if you exit the sing-up process
+          now.
+        </span>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button
+            class="mr-3 text-white text-lg"
+            :type="danger"
+            link
+            @click="centerDialogVisible = false"
+            >CANCEL</el-button
+          >
+          <el-button
+            type="danger"
+            class="text-lg"
+            link
+            @click="onConfimWelcome(false)"
+            >OK</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
   </div>
-
-  <el-dialog
-    class="dialog-singup rounded-lg"
-    v-model="centerDialogVisible"
-    width="90%"
-    align-center
-  >
-    <div class="text-white">
-      <h2 class="text-xl mb-4">Quit the sign-up process</h2>
-      <span class="text-sm text-slate-400">
-        All the information will be deleted if you exit the sing-up process now.
-      </span>
-    </div>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button
-          class="mr-3 text-white text-lg"
-          :type="danger"
-          link
-          @click="centerDialogVisible = false"
-          >CANCEL</el-button
-        >
-        <el-button
-          type="danger"
-          class="text-lg"
-          link
-          @click="onConfimWelcome(false)"
-          >OK</el-button
-        >
-      </span>
-    </template>
-  </el-dialog>
 </template>
 <script>
 export default {
@@ -168,11 +167,6 @@ export default {
 }
 
 .el-dialog.is-align-center {
-  width: 394px;
-  overflow: hidden;
-  height: 175px;
-  display: table;
-  margin-right: 83.5vh;
-  margin-top: 41vh;
+  width: 400px;
 }
 </style>

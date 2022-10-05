@@ -79,6 +79,12 @@ export default {
     onClickContinue() {
       this.isNumber = this.isNumber + 1;
     },
+
+    /**
+     * Tạo Token sau khi login thành công
+     * @param {*} param0
+     * @param {*} param1
+     */
     onBackForm() {
       this.isNumber = this.isNumber - 1;
     },
