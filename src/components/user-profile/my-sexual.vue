@@ -9,10 +9,10 @@
         <div class="flex content-center">
           <input
             class="w-6 h-6 mr-5"
-            type="radio"
-            id="html"
+            type="checkbox"
+            id="cb-straight"
             name="fav_language"
-            value="HTML"
+            value="Straight"
           />
           <label class="text-base text-white" for="html">Straight</label>
         </div>
@@ -21,10 +21,10 @@
         <div class="flex content-center">
           <input
             class="w-6 h-6 mr-5"
-            type="radio"
-            id="html"
+            type="checkbox"
+            id="cb-gay"
             name="fav_language"
-            value="HTML"
+            value="Gay"
           />
           <label class="text-base text-white" for="html">Gay</label>
         </div>
@@ -33,22 +33,22 @@
         <div class="flex content-center">
           <input
             class="w-6 h-6 mr-5"
-            type="radio"
-            id="html"
+            type="checkbox"
+            id="cb-lesbian"
             name="fav_language"
-            value="HTML"
+            value="Lesbian"
           />
           <label class="text-base text-white" for="html">Lesbian</label>
         </div>
       </div>
       <div class="w-full rounded-xl p-4 bg-sexual">
         <div class="flex content-center">
-          <input
-            class="w-6 h-6 mr-5"
-            type="radio"
-            id="html"
+          <input 
+            class="w-6 h-6 mr-5 rounded-lg"
+            type="checkbox"
+            id="cb-bisexual"
             name="fav_language"
-            value="HTML"
+            value="Bisexual"
           />
           <label class="text-base text-white" for="html">Bisexual</label>
         </div>
@@ -57,10 +57,10 @@
         <div class="flex content-center">
           <input
             class="w-6 h-6 mr-5"
-            type="radio"
-            id="html"
+            type="checkbox"
+            id="cb-asexual"
             name="fav_language"
-            value="HTML"
+            value="Asexual"
           />
           <label class="text-base text-white" for="html">Asexual</label>
         </div>
@@ -69,10 +69,10 @@
         <div class="flex content-center">
           <input
             class="w-6 h-6 mr-5"
-            type="radio"
-            id="html"
+            type="checkbox"
+            id="cb-demisexual"
             name="fav_language"
-            value="HTML"
+            value="Demisexual"
           />
           <label class="text-base text-white" for="html">Demisexual</label>
         </div>
@@ -81,10 +81,10 @@
         <div class="flex content-center">
           <input
             class="w-6 h-6 mr-5"
-            type="radio"
-            id="html"
+            type="checkbox"
+            id="cb-pansexual"
             name="fav_language"
-            value="HTML"
+            value="Pansexual"
           />
           <label class="text-base text-white" for="html">Pansexual</label>
         </div>

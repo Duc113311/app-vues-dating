@@ -16,6 +16,7 @@ const storeTokens = createStore({
   // mutations
   mutations: {
     increment(state, data) {
+      debugger;
       state.dataUser = data;
     },
 

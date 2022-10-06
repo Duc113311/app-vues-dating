@@ -1,17 +1,17 @@
 <template>
   <div class="w-full h-full user-profile p-5 grid">
     <div>
-      <div class="text-3xl">
+      <div class="text-2xl text-white">
         <i class="fas fa-chevron-left" @click="onBackForm()"></i>
       </div>
       <div v-if="isNumber === 0">
-        <YourName> </YourName>
+        <YourName :firstName="userData.firstName"> </YourName>
       </div>
       <div v-if="isNumber === 1">
-        <BirthDay></BirthDay>
+        <BirthDay :birthday="userData.birthday"></BirthDay>
       </div>
       <div v-if="isNumber === 2">
-        <AmSex></AmSex>
+        <AmSex :gender="userData.gender"></AmSex>
       </div>
       <div v-if="isNumber === 3">
         <MySexual></MySexual>
@@ -25,7 +25,7 @@
     </div>
     <!--  -->
     <div>
-      <div class="flex justify-center">
+      <!-- <div class="flex justify-center">
         <input
           class="w-6 h-6 mr-2"
           type="radio"
@@ -36,14 +36,15 @@
         <label class="text-base text-white" for="html"
           >Show my gender on my profile</label
         ><br />
-      </div>
+      </div> -->
       <div class="flex justify-center mt-3">
-        <el-button
-          type="danger"
-          class="text-base text-white w-72 rounded-lg p-5 color-button"
+        <button
+          id="btContinue"
+          class="text-base cursor-pointer btContinue border-collapse text-white w-72 rounded-lg p-5 color-button"
           @click="onClickContinue()"
-          >Continue</el-button
         >
+          Continue
+        </button>
       </div>
     </div>
   </div>
@@ -56,6 +57,9 @@ import MySexual from "../components/user-profile/my-sexual";
 import AmSex from "../components/user-profile/am-sex";
 import YourName from "../components/user-profile/your-name.vue";
 import BirthDay from "../components/user-profile/birth-day.vue";
+
+// import userProfiles from "@/stores/user-profile/store-user";
+
 export default {
   name: "UserProfile",
   components: {
@@ -67,7 +71,17 @@ export default {
     BirthDay,
   },
   setup() {
-    return;
+    const userData = {
+      userId: "",
+      providerId: "",
+      phoneNumber: "",
+      firstName: "",
+      birthday: "",
+      gender: 0,
+    };
+    return {
+      userData,
+    };
   },
 
   data() {
@@ -77,6 +91,7 @@ export default {
   },
   methods: {
     onClickContinue() {
+      debugger;
       this.isNumber = this.isNumber + 1;
     },
 
@@ -89,6 +104,10 @@ export default {
       this.isNumber = this.isNumber - 1;
     },
   },
+  mounted() {
+    document.querySelector(".btContinue").disabled = true;
+    document.querySelector(".btContinue").style.backgroundColor = "#382e41";
+  },
 };
 </script>
 
@@ -96,5 +115,9 @@ export default {
 .user-profile {
   background-color: #382e41;
   grid-template-rows: 25fr 4fr;
+}
+
+.btContinue {
+  border: 1px solid #5a4b67;
 }
 </style>

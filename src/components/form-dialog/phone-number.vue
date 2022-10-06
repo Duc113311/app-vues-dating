@@ -9,7 +9,7 @@
       </div>
       <div v-if="isShowCode === 0" class="mt-6">
         <div class="phone-number">
-          <h2 class="mb-2 text-xl font-semibold text-white">My number is</h2>
+          <h2 class="mb-4 text-xl font-semibold text-white">My number is</h2>
           <div class="w-full">
             <input
               id="phone"
@@ -41,10 +41,13 @@
       <div v-if="isShowCode === 1">
         <div class="number-code mt-6">
           <h2 class="mb-2 text-xl text-white">My code is</h2>
-          <div class="mt-2 text-color">Please enter Code sent to</div>
+          <div class="mt-2 text-color">
+            Please enter Code sent to
+            <span class="text-white">{{ this.txtPhoneNumber }}</span>
+          </div>
           <div class="text-code flex justify-center mt-8 mb-8">
             <input
-              type="tel"
+              type="number"
               pattern="[0-9.]+"
               class="one-code text-center"
               autocomplete="tel"
@@ -53,7 +56,7 @@
               data-next="digit-2"
             />
             <input
-              type="tel"
+              type="number"
               pattern="[0-9.]+"
               class="one-code text-center"
               autocomplete="tel"
@@ -63,7 +66,7 @@
               data-next="digit-3"
             />
             <input
-              type="tel"
+              type="number"
               pattern="[0-9.]+"
               class="one-code text-center"
               autocomplete="tel"
@@ -73,7 +76,7 @@
               data-next="digit-4"
             />
             <input
-              type="tel"
+              type="number"
               pattern="[0-9.]+"
               class="one-code text-center"
               autocomplete="tel"
@@ -83,7 +86,7 @@
               data-next="digit-5"
             />
             <input
-              type="tel"
+              type="number"
               pattern="[0-9.]+"
               class="one-code text-center"
               autocomplete="tel"
@@ -93,7 +96,7 @@
               data-next="digit-6"
             />
             <input
-              type="tel"
+              type="number"
               pattern="[0-9.]+"
               class="one-code text-center"
               autocomplete="tel"
@@ -102,15 +105,25 @@
               data-previous="digit-5"
             />
           </div>
-          <div class="mb-4">
-            <a href="#" @click="onPhoneNumber()">Update contact info</a>
+          <div class="mb-4 text-color justify-center flex">
+            <a href="#" @click="onPhoneNumber()">Resend code</a>
           </div>
         </div>
       </div>
     </div>
 
     <div>
-      <div class="flex justify-center mt-3">
+      <!-- Phone number -->
+      <div v-if="isShowCode === 0" class="flex justify-center mt-3">
+        <el-button
+          type="danger"
+          class="text-base text-white w-72 rounded-lg p-5 color-button"
+          @click="onClickContinuePhone()"
+          >Continue</el-button
+        >
+      </div>
+      <!-- QR-code -->
+      <div v-if="isShowCode === 1" class="flex justify-center mt-3">
         <el-button
           type="danger"
           class="text-base text-white w-72 rounded-lg p-5 color-button"
@@ -131,6 +144,8 @@ import {
   PhoneAuthProvider,
   signInWithCredential,
 } from "firebase/auth";
+import storeTokens from "@/stores/login/store-token";
+
 export default {
   name: "FormPhoneNumber",
   setup() {
@@ -148,6 +163,7 @@ export default {
       sentCodeId: "",
       sendCodeError: "",
       isWellcome: false,
+      txtPhoneNumber: "",
     };
   },
 
@@ -171,36 +187,76 @@ export default {
     onBackForm() {
       this.$router.go(-1);
     },
-    async onClickContinueCode() {
+
+    async onClickContinuePhone() {
       debugger;
+
       const mobile = document.getElementById("phone").value;
       const result = this.onValidatePhoneNumber(mobile);
       const phoneNumber = this.valCodeQR.getNumber();
+      this.txtPhoneNumber = phoneNumber;
+
       if (result) {
         if (phoneNumber) {
-          if (this.sentCodeId !== "") {
-            await this.singWithPhone(this.sentCodeId);
-          } else {
-            this.isShowCode = this.isShowCode + 1;
-            this.setuprecaptcha();
-            // const recaptchaContainer = document.getElementById("recaptcha-container");
-            const appVerifier = window.recaptchaVerifier;
-            signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
-              .then((confirmationResult) => {
-                debugger;
-                this.sentCodeId = confirmationResult.verificationId;
-                console.log(this.sentCodeId);
-              })
-              .catch((error) => {
-                debugger;
-                console.log(error);
-                // Error; SMS not sent
-                // ...
-              });
-          }
+          this.setuprecaptcha();
+          // const recaptchaContainer = document.getElementById("recaptcha-container");
+          const appVerifier = window.recaptchaVerifier;
+          signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
+            .then((confirmationResult) => {
+              debugger;
+              this.isShowCode = this.isShowCode + 1;
+              this.sentCodeId = confirmationResult.verificationId;
+              console.log(this.sentCodeId);
+            })
+            .catch((error) => {
+              debugger;
+              this.sendCodeError = "You select bad domain";
+              console.log(error);
+              // Error; SMS not sent
+              // ...
+            });
         }
       }
     },
+
+    async onClickContinueCode() {
+      debugger;
+
+      if (this.sentCodeId !== "") {
+        await this.singWithPhone(this.sentCodeId);
+      }
+    },
+
+    // async onClickContinueCode() {
+    //   debugger;
+    //   const mobile = document.getElementById("phone").value;
+    //   const result = this.onValidatePhoneNumber(mobile);
+    //   const phoneNumber = this.valCodeQR.getNumber();
+    //   if (result) {
+    //     if (phoneNumber) {
+    //       if (this.sentCodeId !== "") {
+    //         await this.singWithPhone(this.sentCodeId);
+    //       } else {
+    //         this.isShowCode = this.isShowCode + 1;
+    //         this.setuprecaptcha();
+    //         // const recaptchaContainer = document.getElementById("recaptcha-container");
+    //         const appVerifier = window.recaptchaVerifier;
+    //         signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
+    //           .then((confirmationResult) => {
+    //             debugger;
+    //             this.sentCodeId = confirmationResult.verificationId;
+    //             console.log(this.sentCodeId);
+    //           })
+    //           .catch((error) => {
+    //             debugger;
+    //             console.log(error);
+    //             // Error; SMS not sent
+    //             // ...
+    //           });
+    //       }
+    //     }
+    //   }
+    // },
 
     singWithPhone(sentCodeId) {
       const digit1 = document.getElementById("digit-1");
@@ -221,7 +277,8 @@ export default {
         .then((result) => {
           debugger;
           const userID = result.user.uid;
-          this.createTokensByUserID(userID);
+          storeTokens.dispatch("postTokenByUserID", { id: userID });
+
           this.isWellcome = true;
           console.log(result);
         })
@@ -235,7 +292,7 @@ export default {
       var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
       if (val !== "") {
         if (vnf_regex.test(val) == false) {
-          this.sendCodeError = "Số điện thoại của bạn không đúng định dạng";
+          this.sendCodeError = "Your phone number is not wrong format";
           return false;
           // Số điện thoại của bạn không đúng định dạng!
         } else {
@@ -243,7 +300,7 @@ export default {
           return true;
         }
       } else {
-        this.sendCodeError = "Bạn chưa điền số điện thoại";
+        this.sendCodeError = "You are not enter the phone number";
       }
     },
     onClickInput() {
@@ -252,7 +309,7 @@ export default {
       if (mobile != "") {
         this.onValidatePhoneNumber(mobile);
       } else {
-        this.sendCodeError = "Bạn chưa điền số điện thoại";
+        this.sendCodeError = "You are not enter the phone number";
       }
     },
   },

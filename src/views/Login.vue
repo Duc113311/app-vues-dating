@@ -112,6 +112,13 @@ export default {
   },
 
   methods: {
+    onClick() {
+      debugger;
+
+      document.getElementById("digit-1").value = document
+        .getElementById("digit-1")
+        .value.slice(0, 1);
+    },
     // Login bằng Google
     async onLoginGoogle() {
       const status = await this.onCheckUserIdExits();
@@ -152,28 +159,28 @@ export default {
     // Login Facebook
     onLoginFacebook() {
       debugger;
-      this.isShowPhone = true;
+      // this.isShowPhone = true;
       // console.log(storeTokens.state.tokenAccount.accessToken);
-      // signInWithPopup(auth, this.providerFace)
-      //   .then((result) => {
-      //     const user = result.user;
-      //     debugger;
-      //     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-      //     const credential = FacebookAuthProvider.credentialFromResult(result);
-      //     const accessToken = credential.accessToken;
-      //     console.log(user);
-      //     console.log("accessToken- face", accessToken);
-      //     // ...
-      //   })
-      //   .catch((error) => {
-      //     const errorCode = error.code;
-      //     const errorMessage = error.message;
-      //     // The email of the user's account used.
-      //     console.log(errorCode);
-      //     console.log(errorMessage);
+      signInWithPopup(auth, this.providerFace)
+        .then((result) => {
+          const user = result.user;
+          debugger;
+          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+          const credential = FacebookAuthProvider.credentialFromResult(result);
+          const accessToken = credential.accessToken;
+          console.log(user);
+          console.log("accessToken- face", accessToken);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          console.log(errorCode);
+          console.log(errorMessage);
 
-      //     // ...
-      //   });
+          // ...
+        });
     },
 
     /**
