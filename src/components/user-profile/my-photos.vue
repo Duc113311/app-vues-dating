@@ -4,20 +4,20 @@
       <h2 class="text-2xl text-white mb-2">My Photos are</h2>
       <span class="text-slate-500">Add at least 2 photos to continue</span>
     </div>
+
     <!-- Image -->
     <div>
       <div class="mt-4 grid grid-cols-3">
-        <el-upload
-          v-for="file in fileList"
-          :key="file.index"
-          class="avatar-uploader mb-8"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
-          v-model="fileListValue"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-          <i class="fa fa-plus rounded-full p-1.5 bg-red-400"></i>
-        </el-upload>
+        <template v-for="file in fileList" :key="file.index">
+          <el-upload
+            class="avatar-uploader mb-8"
+            :before-upload="handleUploadbefore"
+            v-model="fileListValue"
+            :on-change="toggleUpload"
+          >
+            <i class="fa fa-plus rounded-full p-1.5 text-white icon-plus"></i>
+          </el-upload>
+        </template>
       </div>
     </div>
   </div>
@@ -70,14 +70,23 @@ export default {
       ],
     };
   },
-  methods: {},
+  methods: {
+    handleUploadbefore() {
+      debugger;
+      this.$refs.upload.uploadFiles[0].name;
+    },
+
+    toggleUpload() {
+      debugger;
+    },
+  },
 };
 </script>
 
 <style lang="css">
 .avatar-uploader {
-  width: 125px;
-  height: 170px;
+  width: 110px;
+  height: 140px;
   border: 1px solid #b8b3c0;
   display: flex;
   justify-content: center;
@@ -101,9 +110,13 @@ export default {
 
 .el-icon.avatar-uploader-icon {
   font-size: 28px;
-  color: #8c939d;
+  color: #fd5d65;
   width: 178px;
   height: 178px;
   text-align: center;
+}
+
+.icon-plus {
+  background-color: #fd5d65;
 }
 </style>

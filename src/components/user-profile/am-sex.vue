@@ -55,11 +55,18 @@ export default {
 
   mounted() {
     this.gender = storeUsers.state.userProfile.gender;
+    debugger;
     if (this.gender === 1) {
+      document.querySelector(".btContinue").disabled = false;
+      document.querySelector(".btContinue").style.backgroundColor = "red";
       document.querySelector(".bt-woman").style.border = "2px solid red";
-    }
-    if (this.gender === 2) {
+    } else if (this.gender === 2) {
+      document.querySelector(".btContinue").disabled = false;
+      document.querySelector(".btContinue").style.backgroundColor = "red";
       document.querySelector(".bt-man").style.border = "2px solid red";
+    } else {
+      document.querySelector(".btContinue").disabled = true;
+      document.querySelector(".btContinue").style.backgroundColor = "#382e41";
     }
   },
 };

@@ -9,19 +9,23 @@
     </div>
     <div class="w-full mt-4">
       <div>
-        <el-button
-          v-for="item in insterests"
-          :key="item.index"
-          class="oftion-interests mr-3 mb-3 p-5 text-white"
-          size="large"
-          >{{ item.name }}</el-button
-        >
+        <template v-for="(item, key) in insterests" :key="item.id">
+          <button
+            @click="onSelectInterest(item, key)"
+            class="oftion-interests mr-3 mb-3 p-3 text-white"
+            size="large"
+          >
+            {{ item.name }}
+          </button>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import storeUsers from "@/stores/user-profile/store-user";
+
 export default {
   name: "MyInterests",
   setup() {
@@ -107,10 +111,29 @@ export default {
           name: "Sports",
         },
       ],
+
+      isActive: false,
     };
   },
 
-  methods: {},
+  methods: {
+    onSelectInterest(val, key) {
+      debugger;
+      console.log(val, key);
+
+      // document.querySelector("oftion-interests")
+      storeUsers.commit("setInterests", val.name);
+      if (storeUsers.state.isActiveId) {
+        document.getElementsByClassName("oftion-interests")[
+          key
+        ].style.backgroundColor = "red";
+      } else {
+        document.getElementsByClassName("oftion-interests")[
+          key
+        ].style.backgroundColor = "#382E41";
+      }
+    },
+  },
 };
 </script>
 
@@ -118,5 +141,14 @@ export default {
 .oftion-interests:hover {
   background-color: #5b566b;
   color: white;
+  border: 1px solid white;
+}
+
+.oftion-interests {
+  border: 1px solid white;
+  border-radius: 8px;
+}
+.bg-active {
+  background-color: red;
 }
 </style>
