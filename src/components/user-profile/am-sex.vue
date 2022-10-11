@@ -50,6 +50,8 @@ export default {
         document.querySelector(".bt-man").style.border = "2px solid red";
         document.querySelector(".bt-woman").style.border = "2px solid white";
       }
+      document.querySelector(".btContinue").disabled = false;
+      document.querySelector(".btContinue").style.backgroundColor = "red";
     },
   },
 

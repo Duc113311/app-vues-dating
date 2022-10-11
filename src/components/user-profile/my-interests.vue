@@ -119,7 +119,6 @@ export default {
   methods: {
     onSelectInterest(val, key) {
       debugger;
-      console.log(val, key);
 
       // document.querySelector("oftion-interests")
       storeUsers.commit("setInterests", val.name);
@@ -127,12 +126,32 @@ export default {
         document.getElementsByClassName("oftion-interests")[
           key
         ].style.backgroundColor = "red";
+        const interestsData = storeUsers.state.userProfile.interests;
+        if (interestsData.length < 5) {
+          document.querySelector(".btContinue").disabled = true;
+          document.querySelector(".btContinue").style.backgroundColor =
+            "#382e41";
+        } else {
+          document.querySelector(".btContinue").disabled = false;
+          document.querySelector(".btContinue").style.backgroundColor = "red";
+        }
       } else {
         document.getElementsByClassName("oftion-interests")[
           key
         ].style.backgroundColor = "#382E41";
       }
     },
+  },
+
+  mounted() {
+    const interestsData = storeUsers.state.userProfile.interests;
+    if (interestsData.length < 5) {
+      document.querySelector(".btContinue").disabled = true;
+      document.querySelector(".btContinue").style.backgroundColor = "#382e41";
+    } else {
+      document.querySelector(".btContinue").disabled = false;
+      document.querySelector(".btContinue").style.backgroundColor = "red";
+    }
   },
 };
 </script>

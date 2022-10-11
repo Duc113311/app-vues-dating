@@ -118,20 +118,39 @@ export default {
   methods: {
     checkFluency(val) {
       debugger;
-
-      const lengthSexual = storeUsers.state.userProfile.sexuals.length;
       var checkedValue = document.getElementsByClassName("sexual")[val].value;
 
-      console.log(checkedValue);
-      this.sexuals.push(checkedValue);
-      if (lengthSexual < 3) {
-        storeUsers.commit("setSexuals", checkedValue);
+      storeUsers.commit("setSexuals", checkedValue);
+
+      const lengthSexual = storeUsers.state.userProfile.sexuals.length;
+      debugger;
+      if (lengthSexual <= 3) {
+        if (storeUsers.state.isCheckBox) {
+          document.getElementsByClassName("sexual")[val].checked = false;
+        } else {
+          document.getElementsByClassName("sexual")[val].checked = true;
+          if (lengthSexual > 2) {
+            document.querySelector(".btContinue").disabled = false;
+            document.querySelector(".btContinue").style.backgroundColor = "red";
+          }
+        }
       } else {
         document.getElementsByClassName("sexual")[val].checked = false;
       }
 
       debugger;
     },
+  },
+
+  mounted() {
+    const lengthSexual = storeUsers.state.userProfile.sexuals.length;
+    if (lengthSexual < 3) {
+      document.querySelector(".btContinue").disabled = true;
+      document.querySelector(".btContinue").style.backgroundColor = "#382e41";
+    } else {
+      document.querySelector(".btContinue").disabled = false;
+      document.querySelector(".btContinue").style.backgroundColor = "red";
+    }
   },
 };
 </script>

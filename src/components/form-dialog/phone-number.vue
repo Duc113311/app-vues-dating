@@ -133,6 +133,7 @@
       </div>
     </div>
   </div>
+  <welcome v-if="isWellcome" :isShowWelcome="isWellcome"></welcome>
 </template>
 
 <script>
@@ -145,8 +146,10 @@ import {
   signInWithCredential,
 } from "firebase/auth";
 import storeTokens from "@/stores/login/store-token";
+import welcome from "./welcome.vue";
 
 export default {
+  components: { welcome },
   name: "FormPhoneNumber",
   setup() {
     const auth = getAuth();

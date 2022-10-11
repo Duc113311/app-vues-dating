@@ -7,16 +7,35 @@
 
     <!-- Image -->
     <div>
-      <div class="mt-4 grid grid-cols-3">
-        <template v-for="file in fileList" :key="file.index">
-          <el-upload
-            class="avatar-uploader mb-8"
-            :before-upload="handleUploadbefore"
-            v-model="fileListValue"
-            :on-change="toggleUpload"
-          >
-            <i class="fa fa-plus rounded-full p-1.5 text-white icon-plus"></i>
-          </el-upload>
+      <div class="mt-4 grid grid-cols-3 gap-4">
+        <template v-for="fileList in fileListValue" :key="fileList.id">
+          <div class="wrapper relative">
+            <div class="file-upload">
+              <input type="file" @change="toggleUpload($event, fileList)" />
+              <i class="fa fa-plus rounded-full p-1.5 text-white icon-plus"></i>
+            </div>
+            <div
+              class="img-avatar overflow-hidden"
+              v-bind:id="'avatar' + fileList.id"
+            >
+              <img
+                src=""
+                alt=""
+                width="100"
+                height="100"
+                srcset=""
+                class="my-avatar"
+                v-bind:id="fileList.id"
+              />
+            </div>
+            <div
+              class="img-close"
+              @click="removeUpload(fileList)"
+              v-bind:id="'close' + fileList.id"
+            >
+              <img src="../../assets/images/icon-cancel.png" alt="" srcset="" />
+            </div>
+          </div>
         </template>
       </div>
     </div>
@@ -24,61 +43,112 @@
 </template>
 
 <script>
+import storeUsers from "@/stores/user-profile/store-user";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 export default {
   name: "MyPhotos",
   setup() {},
   data() {
     return {
-      fileListValue: "",
-      fileList: [
+      fileListValue: [
         {
-          name: "food.jpeg",
-          url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+          id: 1,
+          url: "image1",
         },
         {
-          name: "plant-1.png",
-          url: "/images/plant-1.png",
+          id: 2,
+          url: "image2",
         },
         {
-          name: "food.jpeg",
-          url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+          id: 3,
+          url: "image3",
         },
         {
-          name: "plant-2.png",
-          url: "/images/plant-2.png",
+          id: 4,
+          url: "image4",
         },
         {
-          name: "food.jpeg",
-          url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+          id: 5,
+          url: "image5",
         },
         {
-          name: "figure-1.png",
-          url: "/images/figure-1.png",
+          id: 6,
+          url: "image6",
         },
         {
-          name: "figure-1.png",
-          url: "/images/figure-1.png",
+          id: 7,
+          url: "image7",
         },
         {
-          name: "figure-1.png",
-          url: "/images/figure-1.png",
+          id: 8,
+          url: "image8",
         },
         {
-          name: "figure-1.png",
-          url: "/images/figure-1.png",
+          id: 9,
+          url: "image9",
         },
       ],
+      showUpload: true,
+      file: "",
+      dialogImageUrl: "",
+      isShowImage: false,
     };
   },
   methods: {
-    handleUploadbefore() {
+    async toggleUpload(event, data) {
       debugger;
-      this.$refs.upload.uploadFiles[0].name;
+      const image = event.target.files[0];
+      console.log(data);
+      const idUrl = data.id;
+      // const reader = new FileReader();
+      // reader.readAsDataURL(image);
+      // reader.onload = (e) => {
+      //   console.log(e);
+      //   console.log(this.dialogImageUrl);
+      // };
+      this.isShowImage = true;
+
+      const storage = getStorage();
+      const storageRef = ref(storage, "dating/" + image.name);
+      await uploadBytes(storageRef, image).then((snapshot) => {
+        debugger;
+        console.log("Uploaded a blob or file!");
+        console.log(snapshot);
+      });
+
+      await getDownloadURL(storageRef, image)
+        .then((url) => {
+          debugger;
+          this.dialogImageUrl = url;
+          // Or inserted into an <img> element
+          const img = document.getElementById(idUrl);
+          const avatar = document.getElementById("avatar" + idUrl);
+          const close = document.getElementById("close" + idUrl);
+          img.setAttribute("src", url);
+          avatar.style.display = "block";
+          close.style.display = "block";
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
-    toggleUpload() {
-      debugger;
+    removeUpload() {
+      this.dialogImageUrl = "";
+      this.isShowImage = false;
     },
+  },
+  mounted() {
+    debugger;
+    const image = storeUsers.state.userProfile.images.length;
+    if (image < 1) {
+      document.querySelector(".btContinue").disabled = true;
+      document.querySelector(".btContinue").style.backgroundColor = "#382e41";
+    } else {
+      document.querySelector(".btContinue").disabled = false;
+      document.querySelector(".btContinue").style.backgroundColor = "red";
+    }
   },
 };
 </script>
@@ -117,6 +187,76 @@ export default {
 }
 
 .icon-plus {
+  font-size: 28px;
   background-color: #fd5d65;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wrapper .file-upload {
+  height: 165px;
+  width: 200px;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 4px solid #ffffff;
+  overflow: hidden;
+  background-color: white;
+  background-size: 100% 200%;
+  transition: all 1s;
+  color: #ffffff;
+  font-size: 100px;
+}
+input[type="file"] {
+  height: 177px;
+  width: 113px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.img-avatar {
+  height: 165px;
+  width: 117px;
+  border-radius: 10px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-size: 100% 200%;
+  transition: all 1s;
+  color: #ffffff;
+  font-size: 100px;
+  display: none;
+}
+
+.img-close {
+  width: 26px;
+  position: absolute;
+  top: -8px;
+  overflow: hidden;
+  right: -10px;
+  display: none;
+}
+
+.show-theme {
+  display: none;
+}
+.hide-theme {
+  display: block;
+}
+.my-avatar {
+  width: 100%;
+  height: 100%;
 }
 </style>

@@ -92,7 +92,7 @@ export default {
   methods: {
     onClickContinue() {
       debugger;
-      this.isNumber = this.isNumber + 1;
+      this.isNumber = this.isNumber + 5;
     },
 
     /**

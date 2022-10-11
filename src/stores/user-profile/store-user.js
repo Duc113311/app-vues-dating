@@ -11,8 +11,10 @@ const storeUsers = createStore({
         gender: 0,
         sexuals: [],
         interests: [],
+        images: [],
       },
       isActiveId: true,
+      isCheckBox: false,
     };
   },
 
@@ -29,7 +31,19 @@ const storeUsers = createStore({
     },
     setSexuals(state, data) {
       debugger;
-      state.userProfile.sexuals.push(data);
+
+      const index = state.userProfile.sexuals.indexOf(data);
+      if (index > -1) {
+        // only splice array when item is found
+        state.userProfile.sexuals.splice(index, 1); // 2nd parameter means remove one item only
+        state.isCheckBox = false;
+      } else {
+        if (state.userProfile.sexuals.length < 3) {
+          state.userProfile.sexuals.push(data);
+        } else {
+          state.isCheckBox = true;
+        }
+      }
     },
 
     setInterests(state, data) {
