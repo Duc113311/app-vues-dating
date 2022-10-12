@@ -121,6 +121,11 @@ export default {
         .then((url) => {
           debugger;
           this.dialogImageUrl = url;
+          const dataImage = {
+            id: idUrl,
+            url: url,
+          };
+          storeUsers.commit("setListAvatar", dataImage);
           // Or inserted into an <img> element
           const img = document.getElementById(idUrl);
           const avatar = document.getElementById("avatar" + idUrl);
@@ -132,6 +137,16 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+
+      // Check
+      const imageNumber = storeUsers.state.userProfile.images.length;
+      if (imageNumber < 1) {
+        document.querySelector(".btContinue").disabled = true;
+        document.querySelector(".btContinue").style.backgroundColor = "#382e41";
+      } else {
+        document.querySelector(".btContinue").disabled = false;
+        document.querySelector(".btContinue").style.backgroundColor = "red";
+      }
     },
 
     removeUpload() {

@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-// import { HTTP } from "../../configs/http-common";
+import { HTTP } from "../../configs/http-common";
 
 const storeUsers = createStore({
   // State
@@ -15,6 +15,7 @@ const storeUsers = createStore({
       },
       isActiveId: true,
       isCheckBox: false,
+      userID: null,
     };
   },
 
@@ -58,10 +59,38 @@ const storeUsers = createStore({
         state.isActiveId = true;
       }
     },
+
+    setListAvatar(state, data) {
+      debugger;
+      const idUrl = data.id;
+      const index = state.userProfile.images.indexOf(idUrl);
+      if (index > -1) {
+        // only splice array when item is found
+        state.userProfile.images.splice(index, 1); // 2nd parameter means remove one item only
+      } else {
+        state.userProfile.images.push(data);
+      }
+    },
+
+    setUserProfiles(state, data) {
+      state.userID = data;
+    },
   },
 
   // Actions
-  actions: {},
+  actions: {
+    async postUserProfile({ commit }, data) {
+      debugger;
+      await HTTP.post("user/v1", data)
+        .then((response) => {
+          debugger;
+          commit("setUserProfiles", response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
 });
 
 export default storeUsers;

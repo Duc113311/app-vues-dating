@@ -38,6 +38,28 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "user-profile" */ "../views/UserProfile.vue"),
   },
+
+  {
+    path: "/home",
+    name: "home-page",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "home-page" */ "../views/home-page/home.vue"),
+  },
+
+  {
+    path: "/test-tinder",
+    name: "test-tinder",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(
+        /* webpackChunkName: "test-tinder" */ "../views/messages/index.vue"
+      ),
+  },
 ];
 
 const router = createRouter({

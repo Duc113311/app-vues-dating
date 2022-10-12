@@ -58,7 +58,8 @@ import AmSex from "../components/user-profile/am-sex";
 import YourName from "../components/user-profile/your-name.vue";
 import BirthDay from "../components/user-profile/birth-day.vue";
 
-// import userProfiles from "@/stores/user-profile/store-user";
+import userProfiles from "@/stores/user-profile/store-user";
+import getToken from "@/middleware/auth";
 
 export default {
   name: "UserProfile",
@@ -92,7 +93,15 @@ export default {
   methods: {
     onClickContinue() {
       debugger;
-      this.isNumber = this.isNumber + 5;
+      if (this.isNumber === 5) {
+        const userId = getToken("userId");
+        const dataUser = userProfiles.state.userProfile;
+        dataUser.userId = userId;
+        console.log(dataUser);
+        userProfiles.dispatch("postUserProfile", dataUser);
+      } else {
+        this.isNumber = this.isNumber + 1;
+      }
     },
 
     /**
