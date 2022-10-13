@@ -16,6 +16,7 @@ const storeUsers = createStore({
       isActiveId: true,
       isCheckBox: false,
       userID: null,
+      listUserProfiles: [],
     };
   },
 
@@ -75,6 +76,10 @@ const storeUsers = createStore({
     setUserProfiles(state, data) {
       state.userID = data;
     },
+
+    setListUserProfiles(state, data) {
+      state.listUserProfiles = data;
+    },
   },
 
   // Actions
@@ -85,6 +90,17 @@ const storeUsers = createStore({
         .then((response) => {
           debugger;
           commit("setUserProfiles", response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    async getListUserProfiles({ commit }, entity) {
+      await HTTP.get("base/v1/" + entity)
+        .then((response) => {
+          debugger;
+          commit("setListUserProfiles", response.data.users);
         })
         .catch((error) => {
           console.log(error);
