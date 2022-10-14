@@ -50,6 +50,30 @@ const routes = [
   },
 
   {
+    path: "/explore",
+    name: "dash-boad-explore",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(
+        /* webpackChunkName: "dash-boad-explore" */ "../views/explore/dashboad.vue"
+      ),
+  },
+
+  {
+    path: "/view-profile",
+    name: "view-profile",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(
+        /* webpackChunkName: "view-profile" */ "../views/use-profile/view-profile.vue"
+      ),
+  },
+
+  {
     path: "/test-tinder",
     name: "test-tinder",
     // route level code-splitting

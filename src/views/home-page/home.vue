@@ -5,25 +5,26 @@
     v-show="isShowPageSay"
   >
     <!-- Trang chủ -->
-    <div
-      class="flex justify-center content-center items-center text-red-400 title-logo"
-    >
-      <img src="../../assets/img/ic_home_tab.svg" class="w-5 mr-1" alt="" />
-      <span class="text-lg font-semibold">dating</span>
-    </div>
+
+    <Header></Header>
 
     <div
       class="w-full body-page overflow-hidden relative rounded-lg"
       :style="[
-        isShowImage ? `background-image: url('${urlImage}');height:84%` : '',
+        isShowImage
+          ? `background-image: url('${urlImage}');height:84%;backgroundPosition: center`
+          : `background-image: url('${urlImage}');height:45%;backgroundPosition: inherit`,
       ]"
     >
       <div class="avatar-img w-full">
         <!-- Title click -->
         <div class="flex justify-center content-center p-0.5 border-solid mt-3">
-          <button class="bt-img p-0.5 rounded-lg mr-0.5"></button>
-          <button class="bt-img p-0.5 rounded-lg mr-0.5"></button>
-          <button class="bt-img p-0.5 rounded-lg mr-0.5"></button>
+          <button
+            v-for="data in btUrlImage"
+            :key="data.id"
+            class="bt-img p-0.5 rounded-lg mr-0.5"
+            @click="onClickNextImage(data)"
+          ></button>
         </div>
         <div
           class="w-full p-2 title-page absolute bottom-0"
@@ -66,16 +67,14 @@
           <div
             class="w-full grid cursor-pointer bt-option flex justify-center text-center content-center cursor-pointer"
           >
-            <img src="../../assets/img/bt_back.svg" alt="" srcset="" />
-            <img src="../../assets/img/bt_nope.svg" alt="" srcset="" />
-            <img src="../../assets/img/bt_super_like.svg" alt="" srcset="" />
+            <img src="../../assets/img/bt_back.svg" @click="onBackImage()" />
+            <img src="../../assets/img/bt_nope.svg" @click="onNopeImage()" />
+            <img src="../../assets/img/bt_super_like.svg" />
             <img
               src="../../assets/img/bt_like.svg"
-              alt=""
-              srcset=""
-              @click="onWatchSay"
+              @click="onWatchSay(false)"
             />
-            <img src="../../assets/img/bt_boost.svg" alt="" srcset="" />
+            <img src="../../assets/img/bt_boost.svg" />
           </div>
         </div>
       </div>
@@ -88,7 +87,9 @@
         <div class="grid w-full title-boy mb-4">
           <div class="w-70 text-white">
             <div class="flex mb-2">
-              <h3 class="text-2xl font-semibold mr-2">Ngọc Trinh, 25</h3>
+              <h3 class="text-2xl font-semibold mr-2">
+                {{ listUserData.firstName }}
+              </h3>
               <img
                 src="../../assets/img/ic_infor.svg"
                 width="30"
@@ -125,20 +126,26 @@
           Sleeps late and replies late
         </h3>
         <div class="flex content-center gap-2 mt-2">
-          <button class="p-2 rounded-lg bt-about">Non-smoker</button>
-          <button class="p-2 rounded-lg bt-about">Aquarius</button>
-          <button class="p-2 rounded-lg bt-about">Pet-free</button>
+          <button
+            v-for="sexual in listSexuals"
+            :key="sexual.index"
+            class="p-2 rounded-lg bt-about"
+          >
+            {{ sexual }}
+          </button>
         </div>
       </div>
       <div class="w-full text-white title-body p-3">
         <h3 class="text-slate-500 mb-3">Interests</h3>
 
-        <div class="grid grid-temlp content-center gap-2">
-          <button class="p-2 rounded-lg bt-about">Non-smoker</button>
-          <button class="p-2 rounded-lg bt-about">Aquarius</button>
-          <button class="p-2 rounded-lg bt-about">Pet-free</button>
-          <button class="p-2 rounded-lg bt-about">Pet-free</button>
-          <button class="p-2 rounded-lg bt-about">Pet-free</button>
+        <div class="grid-temlp content-center">
+          <button
+            v-for="interest in listInterests"
+            :key="interest.index"
+            class="p-2 rounded-lg bt-about mr-2 mb-2"
+          >
+            {{ interest }}
+          </button>
         </div>
       </div>
       <div class="w-full text-white title-body p-3">
@@ -193,23 +200,7 @@
       </div>
     </div>
 
-    <div
-      v-show="isShowImage"
-      class="w-full footer-body flex justify-center content-center text-center cursor-pointer"
-    >
-      <div>
-        <img src="../../assets/img/ic_home_tab.svg" alt="" />
-      </div>
-      <div>
-        <img src="../../assets/img/ic_explore_tab.svg" alt="" />
-      </div>
-      <div>
-        <img src="../../assets/img/ic_message_tab.svg" alt="" />
-      </div>
-      <div>
-        <img src="../../assets/img/ic_profile_tab.svg" alt="" />
-      </div>
-    </div>
+    <Footer v-show="isShowImage"></Footer>
     <div
       class="sticky bottom-0 content-center flex justify-center"
       v-show="!isShowImage"
@@ -225,14 +216,20 @@
     </div>
   </div>
 
-  <SayWatch v-show="!isShowPageSay"></SayWatch>
+  <SayWatch @onWatchSay="onWatchSay" v-show="!isShowPageSay"></SayWatch>
 </template>
 
 <script>
+import Footer from "../../components/common/footer";
+import Header from "../../components/common/header";
 import storeUsers from "@/stores/user-profile/store-user";
 import SayWatch from "../../components/user-profile/detail/say-watch";
 export default {
-  components: { SayWatch },
+  components: {
+    Footer,
+    Header,
+    SayWatch,
+  },
   name: "HomePage",
   setup() {
     const urls = require("@/assets/images/img-home1.jpg");
@@ -259,6 +256,8 @@ export default {
       },
       isShowPageSay: true,
       isShowImage: true,
+      urlImageObject: null,
+      numberNext: 0,
     };
   },
 
@@ -266,11 +265,26 @@ export default {
     listUserData() {
       debugger;
 
-      return storeUsers.state.listUserProfiles[0];
+      return storeUsers.state.listUserProfiles;
     },
 
     urlImage() {
-      return storeUsers.state.listUserProfiles[0].images[0].url;
+      debugger;
+      return storeUsers.state.urlImageData;
+    },
+
+    btUrlImage() {
+      debugger;
+      const imageLength = storeUsers.state.numberImage;
+      return imageLength;
+    },
+
+    listSexuals() {
+      return storeUsers.state.listSexuals;
+    },
+
+    listInterests() {
+      return storeUsers.state.listInterests;
     },
   },
   methods: {
@@ -283,9 +297,25 @@ export default {
       this.isShowImage = true;
     },
 
-    onWatchSay() {
+    onWatchSay(val) {
       debugger;
-      this.isShowPageSay = false;
+      this.isShowPageSay = val;
+    },
+
+    onClickNextImage(val) {
+      debugger;
+      storeUsers.commit("setUrlImageData", val.url);
+    },
+
+    onNopeImage() {
+      debugger;
+      this.numberNext = this.numberNext + 1;
+      storeUsers.commit("setNextUserProfile", this.numberNext);
+    },
+
+    onBackImage() {
+      this.numberNext = this.numberNext - 1;
+      storeUsers.commit("setNextUserProfile", this.numberNext);
     },
   },
   created() {

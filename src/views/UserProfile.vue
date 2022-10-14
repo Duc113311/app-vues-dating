@@ -91,14 +91,15 @@ export default {
     };
   },
   methods: {
-    onClickContinue() {
+    async onClickContinue() {
       debugger;
       if (this.isNumber === 5) {
         const userId = getToken("userId");
         const dataUser = userProfiles.state.userProfile;
         dataUser.userId = userId;
         console.log(dataUser);
-        userProfiles.dispatch("postUserProfile", dataUser);
+        await userProfiles.dispatch("postUserProfile", dataUser);
+        await this.$router.push("/home");
       } else {
         this.isNumber = this.isNumber + 1;
       }
@@ -110,7 +111,10 @@ export default {
      * @param {*} param1
      */
     onBackForm() {
-      this.isNumber = this.isNumber - 1;
+      debugger;
+      if (this.isNumber !== 0) {
+        this.isNumber = this.isNumber - 1;
+      }
     },
   },
   mounted() {

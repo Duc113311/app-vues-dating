@@ -75,21 +75,24 @@ script
 
 <script>
 // @ is an alias to /src
-import { auth } from "../configs/firebase";
+// import { auth } from "../configs/firebase";
 import {
   GoogleAuthProvider,
   FacebookAuthProvider,
   signInWithPopup,
+  getAuth,
 } from "firebase/auth";
 import PhoneNumber from "@/components/form-dialog/phone-number.vue";
 import WelcomeDating from "@/components/form-dialog/welcome.vue";
 import storeTokens from "@/stores/login/store-token";
+import storeUsers from "@/stores/user-profile/store-user";
 import getToken from "@/middleware/auth";
 // Set up actions
 export default {
   name: "Login-auth",
   components: { PhoneNumber, WelcomeDating },
   setup() {
+    const auth = getAuth();
     // Set giá trị Login Google & Facebook
     const providerGoogle = new GoogleAuthProvider();
     const providerFace = new FacebookAuthProvider();
@@ -101,6 +104,7 @@ export default {
     return {
       providerGoogle,
       providerFace,
+      auth,
     };
   },
   data() {
@@ -113,8 +117,6 @@ export default {
 
   methods: {
     onClick() {
-      debugger;
-
       document.getElementById("digit-1").value = document
         .getElementById("digit-1")
         .value.slice(0, 1);
@@ -124,7 +126,7 @@ export default {
       const status = await this.onCheckUserIdExits();
       debugger;
       if (!status) {
-        await signInWithPopup(auth, this.providerGoogle)
+        await signInWithPopup(this.auth, this.providerGoogle)
           .then((result) => {
             const credential = GoogleAuthProvider.credentialFromResult(result);
 
@@ -144,7 +146,13 @@ export default {
             console.log(errorCode);
           });
       } else {
-        this.isWellcome = true;
+        const isCheckProfile = await this.onCheckUserProfileExits();
+        debugger;
+        if (isCheckProfile) {
+          this.$router.push("home");
+        } else {
+          this.isWellcome = true;
+        }
       }
     },
 
@@ -156,12 +164,23 @@ export default {
       });
       return storeTokens.state.isUserId;
     },
+
+    // Check User-profile
+    async onCheckUserProfileExits() {
+      const userId = await getToken("userId");
+      debugger;
+      await storeUsers.dispatch("checkUserProfileExist", {
+        id: userId,
+      });
+      return storeUsers.state.isUserProfile;
+    },
+
     // Login Facebook
     onLoginFacebook() {
       debugger;
       // this.isShowPhone = true;
       // console.log(storeTokens.state.tokenAccount.accessToken);
-      signInWithPopup(auth, this.providerFace)
+      signInWithPopup(this.auth, this.providerFace)
         .then((result) => {
           const user = result.user;
           debugger;
@@ -186,9 +205,20 @@ export default {
     /**
      * Login Phone Number
      */
-    onClickPhoneNumber() {
-      this.isShowPhone = true;
+    async onClickPhoneNumber() {
+      const status = await this.onCheckUserIdExits();
 
+      if (!status) {
+        this.isShowPhone = true;
+      } else {
+        const isCheckProfile = await this.onCheckUserProfileExits();
+        debugger;
+        if (isCheckProfile) {
+          this.$router.push("home");
+        } else {
+          this.isWellcome = true;
+        }
+      }
       // this.$router.push("/phone-number");
     },
   },

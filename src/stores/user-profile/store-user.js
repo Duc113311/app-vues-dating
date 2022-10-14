@@ -17,6 +17,13 @@ const storeUsers = createStore({
       isCheckBox: false,
       userID: null,
       listUserProfiles: [],
+      urlImageData: "",
+      numberImage: 0,
+      listSexuals: [],
+      listInterests: [],
+      isUserProfile: false,
+
+      isActiveColor: true,
     };
   },
 
@@ -78,7 +85,35 @@ const storeUsers = createStore({
     },
 
     setListUserProfiles(state, data) {
-      state.listUserProfiles = data;
+      debugger;
+      state.listUserProfiles = data[0];
+      state.numberImage = data[0].images;
+      state.urlImageData = data[0].images[0].url;
+      state.listUserProfilesPage = data;
+      state.listSexuals = data[0].sexuals;
+      state.listInterests = data[0].interests;
+    },
+
+    setUrlImageData(state, data) {
+      state.urlImageData = data;
+    },
+
+    setNextUserProfile(state, data) {
+      debugger;
+      state.listUserProfiles = state.listUserProfilesPage[data];
+      state.urlImageData = state.listUserProfilesPage[data].images[0].url;
+      state.listSexuals = state.listUserProfilesPage[data].sexuals;
+      state.listInterests = state.listUserProfilesPage[data].interests;
+      state.numberImage = state.listUserProfilesPage[data].images;
+    },
+
+    setUserProfileExits(state, isUserId) {
+      state.isUserProfile = isUserId;
+    },
+
+    setIsActive(state, isActive) {
+      debugger;
+      state.isActiveColor = isActive;
     },
   },
 
@@ -96,11 +131,27 @@ const storeUsers = createStore({
         });
     },
 
+    /**
+     *
+     * @param {*} param0
+     * @param {*} entity
+     */
     async getListUserProfiles({ commit }, entity) {
       await HTTP.get("base/v1/" + entity)
         .then((response) => {
           debugger;
           commit("setListUserProfiles", response.data.users);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    async checkUserProfileExist({ commit }, { id }) {
+      debugger;
+      await HTTP.get("user/v1/check-exits/profile/" + id)
+        .then((response) => {
+          commit("setUserProfileExits", response.data.data);
         })
         .catch((error) => {
           console.log(error);

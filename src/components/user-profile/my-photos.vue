@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mt-10">
+    <div class="mt-10" v-show="isShowHeader">
       <h2 class="text-2xl text-white mb-2">My Photos are</h2>
       <span class="text-slate-500">Add at least 2 photos to continue</span>
     </div>
@@ -157,12 +157,14 @@ export default {
   mounted() {
     debugger;
     const image = storeUsers.state.userProfile.images.length;
-    if (image < 1) {
-      document.querySelector(".btContinue").disabled = true;
-      document.querySelector(".btContinue").style.backgroundColor = "#382e41";
-    } else {
-      document.querySelector(".btContinue").disabled = false;
-      document.querySelector(".btContinue").style.backgroundColor = "red";
+    if (document.querySelector(".btContinue")) {
+      if (image < 1) {
+        document.querySelector(".btContinue").disabled = true;
+        document.querySelector(".btContinue").style.backgroundColor = "#382e41";
+      } else {
+        document.querySelector(".btContinue").disabled = false;
+        document.querySelector(".btContinue").style.backgroundColor = "red";
+      }
     }
   },
 };
