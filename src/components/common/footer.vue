@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full footer-body flex justify-center content-center text-center cursor-pointer"
+    class="w-full absolute bottom-0 right-0 footer-body flex justify-center content-center text-center cursor-pointer"
   >
     <div>
       <img src="@/assets/img/ic_home_tab.svg" @click="onClickHome()" />

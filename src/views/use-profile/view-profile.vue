@@ -1,12 +1,9 @@
 <template>
-  <div
-    class="w-full h-full home-page overflow-hidden p-5"
-    :style="[isShowImage ? '' : isShowScroll]"
-  >
+  <div class="w-full h-full relative home-page-detail overflow-hidden">
     <Header></Header>
 
     <!-- Body -->
-    <div class="w-full body-view-profile">
+    <div class="w-full body-view-profile overflow-hidden">
       <div class="flex w-full text-center text-white cursor-pointer">
         <div
           class="w-6/12 p-2"
@@ -23,7 +20,8 @@
           Preview
         </div>
       </div>
-      <MyPhotos :isShowHeader="isShowHeader"></MyPhotos>
+      <EditProfile v-if="isActiveHeader"></EditProfile>
+      <Preview v-else></Preview>
     </div>
 
     <!--  -->
@@ -32,14 +30,16 @@
 </template>
 
 <script>
-import MyPhotos from "../../components/user-profile/my-photos";
+import Preview from "../../components/user-profile/view/preview";
+import EditProfile from "../../components/user-profile/update/edit-profile";
 import storeUsers from "@/stores/user-profile/store-user";
 
 import Footer from "../../components/common/footer";
 import Header from "../../components/common/header";
 export default {
   components: {
-    MyPhotos,
+    Preview,
+    EditProfile,
     Footer,
     Header,
   },
@@ -48,7 +48,7 @@ export default {
 
   data() {
     return {
-      isShowImage: true,
+      isShowImage: false,
       isShowScroll: {
         overflow: "scroll",
       },
@@ -62,6 +62,9 @@ export default {
       colorNoActive: {
         color: "white",
       },
+
+      firstName: "Đức",
+      ratioAbout: "+22%",
     };
   },
 
@@ -86,14 +89,18 @@ export default {
 </script>
 
 <style lang="css">
-.home-page {
+.home-page-detail {
   background-color: #382e41;
 }
-.home-page::-webkit-scrollbar {
+.body-profile::-webkit-scrollbar {
   display: none;
 }
 .bd-bottom {
   border-bottom: 1px solid #373e50;
+}
+
+.body-profile {
+  height: 95%;
 }
 
 .body-view-profile {

@@ -373,7 +373,6 @@ export default {
   border-top: 1px solid #373e50;
   margin-top: 10px;
 }
-
 .close-infor {
   position: absolute;
   top: -25px;

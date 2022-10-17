@@ -157,6 +157,7 @@ export default {
     },
 
     async onCheckUserIdExits() {
+      debugger;
       const userId = await getToken("userId");
       debugger;
       await storeTokens.dispatch("checkUserIdExist", {
@@ -223,10 +224,16 @@ export default {
     },
   },
 
-  created() {
+  created() {},
+
+  mounted() {
+    debugger;
+
     const status = this.onCheckUserIdExits();
     if (!status) {
-      this.isWellcome = true;
+      debugger;
+
+      this.$router.push("/home");
     }
     // debugger;
     // const access = getToken("userId");

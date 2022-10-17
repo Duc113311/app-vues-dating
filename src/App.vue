@@ -79,7 +79,4 @@ export default {
   background: #884971;
   opacity: 1;
 }
-.body-app {
-  padding: 11.5rem;
-}
 </style>

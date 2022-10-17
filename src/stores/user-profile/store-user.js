@@ -24,6 +24,7 @@ const storeUsers = createStore({
       isUserProfile: false,
 
       isActiveColor: true,
+      userInfor: {},
     };
   },
 
@@ -115,6 +116,10 @@ const storeUsers = createStore({
       debugger;
       state.isActiveColor = isActive;
     },
+
+    setDetailUserProfile(state, data) {
+      state.userInfor = data;
+    },
   },
 
   // Actions
@@ -152,6 +157,17 @@ const storeUsers = createStore({
       await HTTP.get("user/v1/check-exits/profile/" + id)
         .then((response) => {
           commit("setUserProfileExits", response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    async getDetalUserProfile({ commit }, { userId }) {
+      debugger;
+      await HTTP.get("user/v1/get-detail/" + userId)
+        .then((response) => {
+          commit("setDetailUserProfile", response.data.data);
         })
         .catch((error) => {
           console.log(error);
