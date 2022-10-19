@@ -24,30 +24,30 @@ script
       <div class="h-30 justify-center flex p-10">
         <div class="grid">
           <el-button
-            class="bg-white text-base text-black w-80 rounded-lg px-6 py-6 mb-4"
+            class="cursor-pointer bg-white text-base text-black w-80 rounded-lg px-6 py-6 mb-4"
             @click="onLoginGoogle()"
           >
-            <img src="../assets/images/google_icon.svg" class="mr-1" alt="" />
+            <img src="@/assets/images/google_icon.svg" class="mr-1" alt="" />
             Log in with Google
           </el-button>
 
           <el-button
             type="primary"
-            class="bg-face text-base text-white w-80 rounded-lg px-6 py-6 mb-4"
+            class="cursor-pointer bg-face text-base text-white w-80 rounded-lg px-6 py-6 mb-4"
             @click="onLoginFacebook()"
           >
             <img
-              src="../assets/images/facebook_icon.svg"
+              src="@/assets/images/facebook_icon.svg"
               class="mr-1"
               alt=""
             />Log in with Facebook</el-button
           >
           <el-button
             type="danger"
-            class="bg-phone text-base text-white w-80 rounded-lg px-6 py-6 mb-3"
-            @click="onClickPhoneNumber(true)"
+            class="cursor-pointer bg-phone text-base text-white w-80 rounded-lg px-6 py-6 mb-3"
+            @click="onClickPhoneNumber()"
             ><img
-              src="../assets/images/phone_number_icon.svg"
+              src="@/assets/images/phone_number_icon.svg"
               class="mr-1"
               alt=""
             />Log in with Phone number</el-button
@@ -75,7 +75,7 @@ script
 
 <script>
 // @ is an alias to /src
-// import { auth } from "../configs/firebase";
+// import { auth } from "@/configs/firebase";
 import {
   GoogleAuthProvider,
   FacebookAuthProvider,
@@ -160,10 +160,12 @@ export default {
       debugger;
       const userId = await getToken("userId");
       debugger;
-      await storeTokens.dispatch("checkUserIdExist", {
-        id: userId,
-      });
-      return storeTokens.state.isUserId;
+      if (userId) {
+        await storeTokens.dispatch("checkUserIdExist", {
+          id: userId,
+        });
+        return storeTokens.state.isUserId;
+      }
     },
 
     // Check User-profile
@@ -208,8 +210,9 @@ export default {
      */
     async onClickPhoneNumber() {
       const status = await this.onCheckUserIdExits();
-
+      debugger;
       if (!status) {
+        // Không tồn tại userID
         this.isShowPhone = true;
       } else {
         const isCheckProfile = await this.onCheckUserProfileExits();

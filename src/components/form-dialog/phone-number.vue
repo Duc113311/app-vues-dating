@@ -4,111 +4,14 @@
     v-if="this.isShowPhone"
   >
     <div>
-      <div v-if="isShowCode !== 0" class="text-3xl">
+      <div v-if="isShowCode !== 0" class="text-3xl text-white">
         <i class="fas fa-chevron-left" @click="onBackForm()"></i>
       </div>
       <div v-if="isShowCode === 0" class="mt-6">
-        <div class="phone-number">
-          <h2 class="mb-4 text-xl font-semibold text-white">My number is</h2>
-          <div class="w-full">
-            <input
-              id="phone"
-              type="tel"
-              pattern="[0-9]"
-              class="txt-phone w-full rounded-lg"
-              autocomplete="tel"
-              name="phone"
-              required
-              @change="onClickInput()"
-            />
-            <div
-              class="error-text justify-center flex text-red-600 w-full mt-2"
-            >
-              {{ this.sendCodeError }}
-            </div>
-          </div>
-
-          <div class="text-color">
-            <span
-              >When you tap "Continue", Heartlink will send a text with
-              verificatrion code. Message and data rates maty apply.</span
-            >
-            <span>The verifed phone number can be used to log in.</span>
-            <a href="http://">Learn what happens when your number changes</a>
-          </div>
-        </div>
+        <MyNumber :sendCodeError="sendCodeError"></MyNumber>
       </div>
       <div v-if="isShowCode === 1">
-        <div class="number-code mt-6">
-          <h2 class="mb-2 text-xl text-white">My code is</h2>
-          <div class="mt-2 text-color">
-            Please enter Code sent to
-            <span class="text-white">{{ this.txtPhoneNumber }}</span>
-          </div>
-          <div class="text-code flex justify-center mt-8 mb-8">
-            <input
-              type="number"
-              pattern="[0-9.]+"
-              class="one-code text-center"
-              autocomplete="tel"
-              name="digit-1"
-              id="digit-1"
-              data-next="digit-2"
-            />
-            <input
-              type="number"
-              pattern="[0-9.]+"
-              class="one-code text-center"
-              autocomplete="tel"
-              data-previous="digit-1"
-              name="digit-2"
-              id="digit-2"
-              data-next="digit-3"
-            />
-            <input
-              type="number"
-              pattern="[0-9.]+"
-              class="one-code text-center"
-              autocomplete="tel"
-              data-previous="digit-2"
-              name="digit-3"
-              id="digit-3"
-              data-next="digit-4"
-            />
-            <input
-              type="number"
-              pattern="[0-9.]+"
-              class="one-code text-center"
-              autocomplete="tel"
-              name="digit-4"
-              data-previous="digit-3"
-              id="digit-4"
-              data-next="digit-5"
-            />
-            <input
-              type="number"
-              pattern="[0-9.]+"
-              class="one-code text-center"
-              autocomplete="tel"
-              name="digit-5"
-              data-previous="digit-4"
-              id="digit-5"
-              data-next="digit-6"
-            />
-            <input
-              type="number"
-              pattern="[0-9.]+"
-              class="one-code text-center"
-              autocomplete="tel"
-              name="digit-6"
-              id="digit-6"
-              data-previous="digit-5"
-            />
-          </div>
-          <div class="mb-4 text-color justify-center flex">
-            <a href="#" @click="onPhoneNumber()">Resend code</a>
-          </div>
-        </div>
+        <MyCode :txtPhoneNumbers="txtPhoneNumber"></MyCode>
       </div>
     </div>
 
@@ -117,7 +20,9 @@
       <div v-if="isShowCode === 0" class="flex justify-center mt-3">
         <el-button
           type="danger"
-          class="text-base text-white w-72 rounded-lg p-5 color-button"
+          :loading="isLoading"
+          id="btContinueCode"
+          class="text-base btContinueCode text-white w-72 rounded-lg p-5 color-button"
           @click="onClickContinuePhone()"
           >Continue</el-button
         >
@@ -126,7 +31,8 @@
       <div v-if="isShowCode === 1" class="flex justify-center mt-3">
         <el-button
           type="danger"
-          class="text-base text-white w-72 rounded-lg p-5 color-button"
+          id="btContinueOTP"
+          class="text-base btContinueOTP bt-myNumber text-white w-72 rounded-lg p-5 color-button"
           @click="onClickContinueCode()"
           >Continue</el-button
         >
@@ -137,6 +43,8 @@
 </template>
 
 <script>
+import MyCode from "../logins/phone-number/my-code";
+import MyNumber from "@/components/logins/phone-number/my-number.vue";
 import intlTelInput from "intl-tel-input";
 import {
   signInWithPhoneNumber,
@@ -149,7 +57,11 @@ import storeTokens from "@/stores/login/store-token";
 import welcome from "./welcome.vue";
 
 export default {
-  components: { welcome },
+  components: {
+    MyCode,
+    MyNumber,
+    welcome,
+  },
   name: "FormPhoneNumber",
   setup() {
     const auth = getAuth();
@@ -166,7 +78,8 @@ export default {
       sentCodeId: "",
       sendCodeError: "",
       isWellcome: false,
-      txtPhoneNumber: "",
+      txtPhoneNumber: "+098232323",
+      isLoading: false,
     };
   },
 
@@ -188,19 +101,28 @@ export default {
     },
 
     onBackForm() {
-      this.$router.go(-1);
+      debugger;
+      this.isShowCode = this.isShowCode - 1;
+      var input = document.querySelector("#phone");
+      this.valCodeQR = intlTelInput(input, {
+        utilsScript:
+          "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
+      });
     },
 
     async onClickContinuePhone() {
       debugger;
+      this.isLoading = true;
 
       const mobile = document.getElementById("phone").value;
       const result = this.onValidatePhoneNumber(mobile);
       const phoneNumber = this.valCodeQR.getNumber();
       this.txtPhoneNumber = phoneNumber;
-
+      debugger;
       if (result) {
         if (phoneNumber) {
+          debugger;
+
           this.setuprecaptcha();
           // const recaptchaContainer = document.getElementById("recaptcha-container");
           const appVerifier = window.recaptchaVerifier;
@@ -318,11 +240,15 @@ export default {
   },
 
   mounted() {
+    debugger;
     var input = document.querySelector("#phone");
     this.valCodeQR = intlTelInput(input, {
       utilsScript:
         "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
     });
+
+    document.querySelector(".btContinueCode").disabled = true;
+    document.querySelector(".btContinueCode").style.backgroundColor = "#382e41";
   },
 };
 </script>

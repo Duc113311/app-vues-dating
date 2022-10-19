@@ -29,6 +29,8 @@
 
 <script>
 import { fireStoreCore, collection, getDocs } from "./configs/firebase";
+import getToken from "@/middleware/auth";
+
 export default {
   setup() {
     async function getUser() {
@@ -50,6 +52,14 @@ export default {
     setTimeout(() => {
       this.isShowIconApp = false;
     }, 1000);
+  },
+  mounted() {
+    debugger;
+    // Check xem đã đăng nhập vào chưa?
+    const userId = getToken("userId");
+    if (userId) {
+      this.$router.push("/home");
+    }
   },
 };
 </script>
@@ -78,5 +88,9 @@ export default {
 .img-app {
   background: #884971;
   opacity: 1;
+}
+
+*:focus {
+  outline: none;
 }
 </style>
