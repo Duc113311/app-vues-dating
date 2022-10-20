@@ -25,18 +25,6 @@
     </div>
     <!--  -->
     <div>
-      <!-- <div class="flex justify-center">
-        <input
-          class="w-6 h-6 mr-2"
-          type="radio"
-          id="html"
-          name="fav_language"
-          value="HTML"
-        />
-        <label class="text-base text-white" for="html"
-          >Show my gender on my profile</label
-        ><br />
-      </div> -->
       <div class="flex justify-center mt-3">
         <button
           id="btContinue"
@@ -59,7 +47,7 @@ import YourName from "../components/user-profile/your-name.vue";
 import BirthDay from "../components/user-profile/birth-day.vue";
 
 import userProfiles from "@/stores/user-profile/store-user";
-import getToken from "@/middleware/auth";
+import TokenApps from "@/middleware/auth";
 
 export default {
   name: "UserProfile",
@@ -94,7 +82,7 @@ export default {
     async onClickContinue() {
       debugger;
       if (this.isNumber === 5) {
-        const userId = getToken("userId");
+        const userId = TokenApps.getToken("userId");
         const dataUser = userProfiles.state.userProfile;
         dataUser.userId = userId;
         console.log(dataUser);

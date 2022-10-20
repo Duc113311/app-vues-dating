@@ -18,6 +18,9 @@
 </template>
 
 <script>
+import TokenApps from "@/middleware/auth";
+
+import storeTokens from "@/stores/login/store-token";
 export default {
   name: "footer-page",
 
@@ -40,6 +43,20 @@ export default {
 
     onClickProfile() {
       this.$router.push("/view-profile");
+    },
+
+    async onClickMessage() {
+      debugger;
+      const userId = TokenApps.getToken("userId");
+      if (userId) {
+        await storeTokens.dispatch("logoutApp", { id: userId });
+        TokenApps.deleteToken("userId");
+        const isLogouts = storeTokens.state.isLogout;
+        debugger;
+        if (isLogouts) {
+          return this.$router.push("");
+        }
+      }
     },
   },
 };

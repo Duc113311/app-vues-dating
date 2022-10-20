@@ -29,7 +29,9 @@
 
 <script>
 import { fireStoreCore, collection, getDocs } from "./configs/firebase";
-import getToken from "@/middleware/auth";
+import TokenApps from "@/middleware/auth";
+import storeTokens from "@/stores/login/store-token";
+import storeUsers from "@/stores/user-profile/store-user";
 
 export default {
   setup() {
@@ -53,13 +55,33 @@ export default {
       this.isShowIconApp = false;
     }, 1000);
   },
-  mounted() {
+  async mounted() {
     debugger;
+
     // Check xem đã đăng nhập vào chưa?
-    const userId = getToken("userId");
+    const userId = TokenApps.getToken("userId");
     if (userId) {
-      this.$router.push("/home");
+      await storeTokens.dispatch("checkUserIdExist", {
+        id: userId,
+      });
+      const isUserToken = storeTokens.state.isUserId;
+
+      // Nếu tồn tại vào check tiếp trong bảng users
+      if (isUserToken) {
+        await storeUsers.dispatch("checkUserProfileExist", {
+          id: userId,
+        });
+        const isUserProfile = storeUsers.state.isUserProfile;
+
+        // Nếu tồn tại vào check users
+        if (isUserProfile) {
+          return this.$router.push("/home");
+        } else {
+          return this.$router.push("/profile");
+        }
+      }
     }
+    return this.$router.push("");
   },
 };
 </script>

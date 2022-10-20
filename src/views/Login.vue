@@ -86,7 +86,7 @@ import PhoneNumber from "@/components/form-dialog/phone-number.vue";
 import WelcomeDating from "@/components/form-dialog/welcome.vue";
 import storeTokens from "@/stores/login/store-token";
 import storeUsers from "@/stores/user-profile/store-user";
-import getToken from "@/middleware/auth";
+import TokenApps from "@/middleware/auth";
 // Set up actions
 export default {
   name: "Login-auth",
@@ -123,6 +123,7 @@ export default {
     },
     // Login bằng Google
     async onLoginGoogle() {
+      this.isWellcome = true;
       const status = await this.onCheckUserIdExits();
       debugger;
       if (!status) {
@@ -158,7 +159,7 @@ export default {
 
     async onCheckUserIdExits() {
       debugger;
-      const userId = await getToken("userId");
+      const userId = await TokenApps.getToken("userId");
       debugger;
       if (userId) {
         await storeTokens.dispatch("checkUserIdExist", {
@@ -170,7 +171,7 @@ export default {
 
     // Check User-profile
     async onCheckUserProfileExits() {
-      const userId = await getToken("userId");
+      const userId = await TokenApps.getToken("userId");
       debugger;
       await storeUsers.dispatch("checkUserProfileExist", {
         id: userId,
@@ -239,7 +240,6 @@ export default {
       this.$router.push("/home");
     }
     // debugger;
-    // const access = getToken("userId");
     // console.log(access);
     // storeTokens.dispatch("checkUserIdExist");
     // storeTokens.dispatch("getAllData");

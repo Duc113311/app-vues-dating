@@ -10,6 +10,7 @@ const storeTokens = createStore({
       dataUser: [],
       tokenAccount: {},
       isUserId: false,
+      isLogout: false,
     };
   },
   // getters
@@ -27,6 +28,10 @@ const storeTokens = createStore({
 
     setUserIdExits(state, isUserId) {
       state.isUserId = isUserId;
+    },
+
+    setLogoutApp(state, data) {
+      state.isLogout = data;
     },
   },
   // actions
@@ -67,6 +72,18 @@ const storeTokens = createStore({
       await HTTP.get("user/v1/check-exits/" + id)
         .then((response) => {
           commit("setUserIdExits", response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    async logoutApp({ commit }, { id }) {
+      debugger;
+      await HTTP.delete("user/v1/logout/" + id)
+        .then((response) => {
+          debugger;
+          commit("setLogoutApp", response.data.data);
         })
         .catch((error) => {
           console.log(error);

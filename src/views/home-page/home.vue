@@ -320,7 +320,7 @@ export default {
   },
   created() {
     debugger;
-    storeUsers.dispatch("getListUserProfiles", "user-profiles");
+    storeUsers.dispatch("getListUserProfiles", "users");
   },
 
   mounted() {

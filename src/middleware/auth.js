@@ -1,5 +1,14 @@
 import Cookies from "js-cookie";
 
-export default function getToken(token) {
+function getToken(token) {
   return Cookies.get(token);
 }
+function deleteToken(token) {
+  debugger;
+  return Cookies.remove(token);
+}
+
+export default {
+  getToken,
+  deleteToken,
+};

@@ -31,6 +31,7 @@
       <div v-if="isShowCode === 1" class="flex justify-center mt-3">
         <el-button
           type="danger"
+          :loading="isLoadingCode"
           id="btContinueOTP"
           class="text-base btContinueOTP bt-myNumber text-white w-72 rounded-lg p-5 color-button"
           @click="onClickContinueCode()"
@@ -80,6 +81,7 @@ export default {
       isWellcome: false,
       txtPhoneNumber: "+098232323",
       isLoading: false,
+      isLoadingCode: false,
     };
   },
 
@@ -151,42 +153,10 @@ export default {
         await this.singWithPhone(this.sentCodeId);
       }
     },
-
-    // async onClickContinueCode() {
-    //   debugger;
-    //   const mobile = document.getElementById("phone").value;
-    //   const result = this.onValidatePhoneNumber(mobile);
-    //   const phoneNumber = this.valCodeQR.getNumber();
-    //   if (result) {
-    //     if (phoneNumber) {
-    //       if (this.sentCodeId !== "") {
-    //         await this.singWithPhone(this.sentCodeId);
-    //       } else {
-    //         this.isShowCode = this.isShowCode + 1;
-    //         this.setuprecaptcha();
-    //         // const recaptchaContainer = document.getElementById("recaptcha-container");
-    //         const appVerifier = window.recaptchaVerifier;
-    //         signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
-    //           .then((confirmationResult) => {
-    //             debugger;
-    //             this.sentCodeId = confirmationResult.verificationId;
-    //             console.log(this.sentCodeId);
-    //           })
-    //           .catch((error) => {
-    //             debugger;
-    //             console.log(error);
-    //             // Error; SMS not sent
-    //             // ...
-    //           });
-    //       }
-    //     }
-    //   }
-    // },
-
     singWithPhone(sentCodeId) {
       const digit1 = document.getElementById("digit-1");
       const digit2 = document.getElementById("digit-2");
-      const digit3 = document.getElementById("digit-3");
+      const digit3 = document.getElementById("digi   t-3");
       const digit4 = document.getElementById("digit-4");
       const digit5 = document.getElementById("digit-5");
       const digit6 = document.getElementById("digit-6");
@@ -197,6 +167,8 @@ export default {
         digit4.value +
         digit5.value +
         digit6.value;
+      this.isLoadingCode = true;
+
       const credential = PhoneAuthProvider.credential(sentCodeId, code);
       signInWithCredential(this.auth, credential)
         .then((result) => {
@@ -205,6 +177,7 @@ export default {
           storeTokens.dispatch("postTokenByUserID", { id: userID });
 
           this.isWellcome = true;
+          this.isLoadingCode = false;
           console.log(result);
         })
         .catch((error) => {

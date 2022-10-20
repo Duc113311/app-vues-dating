@@ -126,7 +126,7 @@ const storeUsers = createStore({
   actions: {
     async postUserProfile({ commit }, data) {
       debugger;
-      await HTTP.post("user/v1", data)
+      await HTTP.post(`base/v1/users/${data.userId}`, data)
         .then((response) => {
           debugger;
           commit("setUserProfiles", response.data.data);
@@ -145,7 +145,7 @@ const storeUsers = createStore({
       await HTTP.get("base/v1/" + entity)
         .then((response) => {
           debugger;
-          commit("setListUserProfiles", response.data.users);
+          commit("setListUserProfiles", response.data.data);
         })
         .catch((error) => {
           console.log(error);

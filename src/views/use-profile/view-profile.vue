@@ -83,7 +83,7 @@ export default {
   },
 
   created() {
-    storeUsers.dispatch("getListUserProfiles", "user-profiles");
+    storeUsers.dispatch("getListUserProfiles", "users");
   },
 };
 </script>
