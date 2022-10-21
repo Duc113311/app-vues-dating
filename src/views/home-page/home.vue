@@ -1,6 +1,7 @@
 <template>
   <div
     class="w-full h-full home-page overflow-hidden p-5"
+    v-loading="loading"
     :style="[isShowImage ? '' : isShowScroll]"
     v-show="isShowPageSay"
   >
@@ -258,6 +259,7 @@ export default {
       isShowImage: true,
       urlImageObject: null,
       numberNext: 0,
+      loading: true,
     };
   },
 
@@ -324,6 +326,9 @@ export default {
   },
 
   mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 2000);
     debugger;
   },
 };

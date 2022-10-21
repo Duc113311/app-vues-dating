@@ -11,6 +11,7 @@ const storeTokens = createStore({
       tokenAccount: {},
       isUserId: false,
       isLogout: false,
+      isAppAccess: false,
     };
   },
   // getters
@@ -32,6 +33,10 @@ const storeTokens = createStore({
 
     setLogoutApp(state, data) {
       state.isLogout = data;
+    },
+
+    setAppAccess(state, data) {
+      state.isAppAccess = data;
     },
   },
   // actions
@@ -84,6 +89,18 @@ const storeTokens = createStore({
         .then((response) => {
           debugger;
           commit("setLogoutApp", response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    async checkAppAccess({ commit }, { id }) {
+      debugger;
+      await HTTP.get("login/v1/access/" + id)
+        .then((response) => {
+          debugger;
+          commit("setAppAccess", response.data.data);
         })
         .catch((error) => {
           console.log(error);

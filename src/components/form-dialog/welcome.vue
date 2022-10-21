@@ -168,5 +168,6 @@ export default {
 
 .el-dialog.is-align-center {
   width: 400px;
+  margin-top: 25vh;
 }
 </style>

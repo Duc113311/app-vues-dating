@@ -29,7 +29,7 @@
 
 <script>
 import intlTelInput from "intl-tel-input";
-
+import $ from "jquery";
 export default {
   name: "component-my-name",
   setup() {
@@ -107,8 +107,15 @@ export default {
     debugger;
     var input = document.querySelector("#phone");
     this.valCodeQR = intlTelInput(input, {
-      utilsScript:
-        "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
+      initialCountry: "auto",
+      geoIpLookup: function (callback) {
+        $.get("https://ipinfo.io", function () {}, "jsonp").always(function (
+          resp
+        ) {
+          var countryCode = resp && resp.country ? resp.country : "us";
+          callback(countryCode);
+        });
+      },
     });
   },
 };

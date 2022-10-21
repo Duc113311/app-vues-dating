@@ -122,7 +122,6 @@
 <script>
 import axios from "axios";
 
-import intlTelInput from "intl-tel-input";
 // import { auth } from "../../configs/firebase";
 import {
   signInWithPhoneNumber,
@@ -257,13 +256,7 @@ export default {
       }
     },
   },
-  mounted() {
-    var input = document.querySelector("#phone");
-    this.valCodeQR = intlTelInput(input, {
-      utilsScript:
-        "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
-    });
-  },
+  mounted() {},
   components: { Welcome },
 };
 </script>

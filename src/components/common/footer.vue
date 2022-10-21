@@ -54,7 +54,7 @@ export default {
         const isLogouts = storeTokens.state.isLogout;
         debugger;
         if (isLogouts) {
-          return this.$router.push("");
+          this.$router.push("/");
         }
       }
     },

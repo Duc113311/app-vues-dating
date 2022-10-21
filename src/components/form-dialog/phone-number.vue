@@ -125,10 +125,10 @@ export default {
         if (phoneNumber) {
           debugger;
 
-          this.setuprecaptcha();
+          await this.setuprecaptcha();
           // const recaptchaContainer = document.getElementById("recaptcha-container");
           const appVerifier = window.recaptchaVerifier;
-          signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
+          await signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
             .then((confirmationResult) => {
               debugger;
               this.isShowCode = this.isShowCode + 1;
@@ -151,12 +151,13 @@ export default {
 
       if (this.sentCodeId !== "") {
         await this.singWithPhone(this.sentCodeId);
+        debugger;
       }
     },
     singWithPhone(sentCodeId) {
       const digit1 = document.getElementById("digit-1");
       const digit2 = document.getElementById("digit-2");
-      const digit3 = document.getElementById("digi   t-3");
+      const digit3 = document.getElementById("digit-3");
       const digit4 = document.getElementById("digit-4");
       const digit5 = document.getElementById("digit-5");
       const digit6 = document.getElementById("digit-6");
@@ -171,14 +172,19 @@ export default {
 
       const credential = PhoneAuthProvider.credential(sentCodeId, code);
       signInWithCredential(this.auth, credential)
-        .then((result) => {
+        .then(async (result) => {
           debugger;
           const userID = result.user.uid;
-          storeTokens.dispatch("postTokenByUserID", { id: userID });
-
-          this.isWellcome = true;
-          this.isLoadingCode = false;
-          console.log(result);
+          await storeTokens.dispatch("postTokenByUserID", { id: userID });
+          await storeTokens.dispatch("checkAppAccess", { id: userID });
+          // Check lần show wellcome
+          const isShowAccess = storeTokens.state.isAppAccess;
+          if (!isShowAccess) {
+            this.isWellcome = true;
+          } else {
+            this.isLoadingCode = false;
+            this.$router.push("/home");
+          }
         })
         .catch((error) => {
           alert("error", error);
@@ -216,6 +222,7 @@ export default {
     debugger;
     var input = document.querySelector("#phone");
     this.valCodeQR = intlTelInput(input, {
+      initialCountry: "auto",
       utilsScript:
         "https://cdn.jsdelivr.net/npm/intl-tel-input@16.0.3/build/js/utils.js",
     });
