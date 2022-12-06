@@ -1,30 +1,5 @@
 <template>
-  <div class="flex justify-center w-full h-full body-app overflow-hidden">
-    <div class="h-screen w-full image-background">
-      <div class="w-full h-full back-color">
-        <!-- <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/login">Login</router-link>
-      </nav> -->
-        <div
-          v-if="isShowIconApp"
-          class="img-app w-full h-full flex justify-center"
-        >
-          <img
-            class="w-40"
-            src="./assets/images/ic_icon_app.svg"
-            alt=""
-            srcset=""
-          />
-        </div>
-
-        <router-view v-else />
-
-        <div class="recapcha" id="recaptcha-container"></div>
-      </div>
-    </div>
-  </div>
+  <router-view />
 </template>
 
 <script>
@@ -34,6 +9,7 @@ import storeTokens from "@/stores/login/store-token";
 import storeUsers from "@/stores/user-profile/store-user";
 
 export default {
+  components: {},
   setup() {
     async function getUser() {
       const citiesCol = collection(fireStoreCore, "users");
@@ -90,8 +66,6 @@ export default {
 .image-background {
   background-image: url(./assets/images/background.webp);
   z-index: 99;
-  width: 412px;
-  height: 915px;
   padding-right: 0px !important;
   padding-left: 0px !important;
   background-size: cover;
