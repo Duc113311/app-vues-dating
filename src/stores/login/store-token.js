@@ -12,11 +12,17 @@ const storeTokens = createStore({
       isUserId: false,
       isLogout: false,
       isAppAccess: false,
+
+      isLoadingBtn: false,
     };
   },
   // getters
   // mutations
   mutations: {
+    setIsLoadingButton(state, value) {
+      debugger;
+      state.isLoadingBtn = value;
+    },
     increment(state, data) {
       debugger;
       state.dataUser = data;

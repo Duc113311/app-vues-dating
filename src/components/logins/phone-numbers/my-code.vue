@@ -1,6 +1,6 @@
 <template>
-  <div class="number-code mt-6">
-    <h2 class="mb-2 text-xl text-white">My code is</h2>
+  <div class="number-code mt-5">
+    <h2 class="mb-4 text-xl font-bold text-white">My code is</h2>
     <div class="mt-2 text-color">
       Please enter Code sent to
       <span class="text-white">{{ this.renderPhoneNumber }}</span>
@@ -66,7 +66,8 @@
         @change="onCheckOTP()"
       />
     </div>
-    <div class="mb-4 text-color justify-center flex">
+    <ErValidate :txtCodeError="txtCodeError"></ErValidate>
+    <div class="mt-10 text-color justify-center flex">
       <a class="cursor-pointer bt-render" href="#" @click="onPhoneNumber()"
         >Resend code</a
       >
@@ -75,12 +76,17 @@
 </template>
 
 <script>
+import ErValidate from "../../common/error/er-validate";
+import storeTokens from "../../../stores/login/store-token.js";
 export default {
+  components: { ErValidate },
   name: "my-code",
   setup() {},
 
   data() {
-    return {};
+    return {
+      txtCodeError: "Invalid code. please try again",
+    };
   },
 
   props: {
@@ -103,16 +109,13 @@ export default {
      */
     onPhoneNumber() {},
 
-    onCheckOTP() {
-      document.querySelector(".btContinueOTP").disabled = false;
-      document.querySelector(".btContinueOTP").style.backgroundColor = "red";
-    },
+    onCheckOTP() {},
   },
 
   mounted() {
+    storeTokens.commit("setIsLoadingButton", false);
+
     debugger;
-    document.querySelector(".btContinueOTP").disabled = true;
-    document.querySelector(".btContinueOTP").style.backgroundColor = "#382e41";
   },
 };
 </script>

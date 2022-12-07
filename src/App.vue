@@ -1,5 +1,20 @@
 <template>
-  <router-view />
+  <div class="static">
+    <div
+      v-show="isShowIconApp"
+      class="absolute z-20 img-app w-full h-full flex justify-center"
+    >
+      <img
+        class="w-40"
+        src="./assets/images/ic_icon_app.svg"
+        alt=""
+        srcset=""
+      />
+    </div>
+    <div class="tracking-wide absolute z-10 w-full h-full">
+      <router-view />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -88,5 +103,25 @@ export default {
 
 *:focus {
   outline: none;
+}
+
+* {
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+body {
+  font-family: cursive;
+}
+
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
 }
 </style>

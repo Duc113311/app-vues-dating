@@ -1,7 +1,7 @@
 <template>
   <div
     class="w-full h-full user-profile p-5 grid absolute top-0"
-    v-if="this.isShowPhone"
+    v-show="isShowPhone"
   >
     <div>
       <div v-if="isShowCode !== 0" class="text-3xl text-white">
@@ -278,7 +278,6 @@ input[type="number"] {
 }
 
 .iti__country-list {
-  width: 29vh;
   overflow-x: clip;
 }
 </style>

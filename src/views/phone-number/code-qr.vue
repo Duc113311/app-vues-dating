@@ -115,8 +115,6 @@
       </div>
     </div>
   </div>
-
-  <Welcome v-if="isWellcome" :isShowWelcome="isWellcome"></Welcome>
 </template>
 
 <script>
@@ -130,7 +128,6 @@ import {
   PhoneAuthProvider,
   signInWithCredential,
 } from "firebase/auth";
-import Welcome from "@/components/form-dialog/welcome.vue";
 export default {
   name: "CodeQR",
   setup() {
@@ -257,7 +254,6 @@ export default {
     },
   },
   mounted() {},
-  components: { Welcome },
 };
 </script>
 

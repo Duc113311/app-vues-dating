@@ -1,16 +1,19 @@
 <template>
   <div class="phone-number">
-    <h2 class="mb-4 text-xl font-semibold text-white">My number is</h2>
+    <h2 class="mb-4 text-xl font-bold text-white">My number is</h2>
     <div class="w-full">
-      <input
-        id="phone"
-        type="number"
-        pattern="[0-9.]+"
-        class="txt-phone w-full rounded-lg"
-        name="phone"
-        v-model="valCodeQR"
-        @change="onClickInput"
-      />
+      <div class="w-full">
+        <input
+          id="phone"
+          type="number"
+          pattern="[0-9.]+"
+          class="txt-phone w-full rounded-lg"
+          placeholder="Phone number"
+          name="phone"
+          v-model="valCodeQR"
+          @change="onClickInput"
+        />
+      </div>
       <div class="error-text justify-center flex text-red-600 w-full mt-2">
         {{ this.txtCodeError }}
       </div>
@@ -28,6 +31,8 @@
 </template>
 
 <script>
+import storeTokens from "../../../stores/login/store-token.js";
+
 import intlTelInput from "intl-tel-input";
 import $ from "jquery";
 export default {
@@ -35,6 +40,7 @@ export default {
   setup() {
     return;
   },
+
   props: {
     sendCodeError: {
       type: String,
@@ -73,7 +79,8 @@ export default {
           this.txtCodeError = "";
           document.querySelector(".btContinueCode").disabled = false;
           document.querySelector(".btContinueCode").style.backgroundColor =
-            "red";
+            "rgb(220 20 30)";
+          this.$emit("statusLoading", true);
           return true;
         }
       } else {
@@ -101,7 +108,9 @@ export default {
     //#endregion
   },
 
-  created() {},
+  created() {
+    storeTokens.commit("setIsLoadingButton", false);
+  },
 
   mounted() {
     debugger;
@@ -112,7 +121,7 @@ export default {
         $.get("https://ipinfo.io", function () {}, "jsonp").always(function (
           resp
         ) {
-          var countryCode = resp && resp.country ? resp.country : "us";
+          var countryCode = resp && resp.country ? resp.country : "vn";
           callback(countryCode);
         });
       },
@@ -132,10 +141,21 @@ export default {
   outline: none;
 }
 
-.iti__country-list {
-  width: 28.3vh !important;
+.iti--allow-dropdown {
+  width: 100% !important;
+}
+.iti__flag-container {
+  padding: 10px;
 }
 .iti__country-list::-webkit-scrollbar {
   display: none !important;
+}
+
+#phone {
+  padding-left: 58px;
+  padding-right: 58px;
+  background-color: #495063;
+  border: 1px solid #495063 !important;
+  color: white;
 }
 </style>

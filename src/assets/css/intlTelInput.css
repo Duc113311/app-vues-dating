@@ -63,14 +63,15 @@
   max-height: 200px;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  border-radius: 1px;
 }
 .iti__country-list--dropup {
   bottom: 100%;
   margin-bottom: -1px;
 }
-@media (max-width: 500px) {
+@media (min-width: 300px) {
   .iti__country-list {
-    white-space: normal;
+    width: 420px;
   }
 }
 .iti__flag-box {
