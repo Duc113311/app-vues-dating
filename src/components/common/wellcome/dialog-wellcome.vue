@@ -1,10 +1,7 @@
 <template>
-  <div
-    class="w-full h-full user-profile absolute top-0 p-8"
-    v-show="isShowWelcome"
-  >
+  <div class="w-full h-full user-profile absolute top-0 p-8">
     <div class="text-2xl w-full h-10 flex items-center text-white">
-      <i class="fas fa-times"></i>
+      <i class="fas fa-times" @click="onCloseDialog()"></i>
     </div>
     <div class="p-2 mt-10">
       <div class="mb-20">
@@ -95,10 +92,16 @@ export default {
       centerDialogVisible: false,
     };
   },
-  props: ["isShowWelcome"],
 
   mounted() {
     debugger;
+  },
+
+  methods: {
+    onCloseDialog() {
+      debugger;
+      this.$emit("onHideWellcome", false);
+    },
   },
 };
 </script>

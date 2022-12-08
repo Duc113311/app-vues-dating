@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const HTTP = axios.create({
-  baseURL: `http://localhost:5000/heartlink-dating-project/us-central1/app/`,
+  baseURL: `https://us-central1-heartlink-dating-project.cloudfunctions.net/app/`,
   headers: {
-    Authorization: "Bearer {token}",
+    Authorization: `Basic ${localStorage.getItem("accessToken")}`,
   },
 });

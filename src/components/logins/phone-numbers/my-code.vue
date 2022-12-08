@@ -7,66 +7,19 @@
     </div>
     <div class="text-code flex justify-center mt-8 mb-8">
       <input
-        type="number"
-        pattern="[0-9.]+"
-        class="one-code text-center"
-        autocomplete="tel"
-        name="digit-1"
-        id="digit-1"
-        data-next="digit-2"
-      />
-      <input
-        type="number"
-        pattern="[0-9.]+"
-        class="one-code text-center"
-        autocomplete="tel"
-        data-previous="digit-1"
-        name="digit-2"
-        id="digit-2"
-        data-next="digit-3"
-      />
-      <input
-        type="number"
-        pattern="[0-9.]+"
-        class="one-code text-center"
-        autocomplete="tel"
-        data-previous="digit-2"
-        name="digit-3"
-        id="digit-3"
-        data-next="digit-4"
-      />
-      <input
-        type="number"
-        pattern="[0-9.]+"
-        class="one-code text-center"
-        autocomplete="tel"
-        name="digit-4"
-        data-previous="digit-3"
-        id="digit-4"
-        data-next="digit-5"
-      />
-      <input
-        type="number"
-        pattern="[0-9.]+"
-        class="one-code text-center"
-        autocomplete="tel"
-        name="digit-5"
-        data-previous="digit-4"
-        id="digit-5"
-        data-next="digit-6"
-      />
-      <input
-        type="number"
-        pattern="[0-9.]+"
-        class="one-code text-center"
-        autocomplete="tel"
-        name="digit-6"
-        id="digit-6"
-        data-previous="digit-5"
-        @change="onCheckOTP()"
+        type="text"
+        class="digit-box one-code text-center"
+        v-for="(el, ind) in digits"
+        :id="el"
+        :key="el + ind"
+        v-model="valueText[ind]"
+        @keyup="onNextOn(el, ind)"
+        :autofocus="ind === 0"
+        :placeholder="ind + 1"
+        maxlength="1"
       />
     </div>
-    <ErValidate :txtCodeError="txtCodeError"></ErValidate>
+    <ErValidate v-if="renderErrorCode"></ErValidate>
     <div class="mt-10 text-color justify-center flex">
       <a class="cursor-pointer bt-render" href="#" @click="onPhoneNumber()"
         >Resend code</a
@@ -77,7 +30,6 @@
 
 <script>
 import ErValidate from "../../common/error/er-validate";
-import storeTokens from "../../../stores/login/store-token.js";
 export default {
   components: { ErValidate },
   name: "my-code",
@@ -85,21 +37,22 @@ export default {
 
   data() {
     return {
-      txtCodeError: "Invalid code. please try again",
+      digitCount: 4,
+      valueText: [],
+      digits: [1, 2, 3, 4, 5, 6],
     };
   },
 
-  props: {
-    txtPhoneNumbers: {
-      type: String,
-      required: true,
-    },
-  },
+  props: ["txtPhoneNumber", "txtErrorCode", "sentCodeId"],
 
   computed: {
     renderPhoneNumber() {
       debugger;
-      return this.txtPhoneNumbers;
+      return this.txtPhoneNumber;
+    },
+
+    renderErrorCode() {
+      return this.txtErrorCode;
     },
   },
 
@@ -107,14 +60,45 @@ export default {
     /**
      * Render gửi lại mã OTP
      */
-    onPhoneNumber() {},
+    onPhoneNumber() {
+      this.$emit("singWithPhone", this.sentCodeId);
+    },
 
-    onCheckOTP() {},
+    onCheckOTP() {
+      debugger;
+      this.$emit("validateRequireCode", true);
+    },
+
+    onNextOn(key, on) {
+      console.log(key, on);
+      debugger;
+      const indexData = document.getElementById(key);
+      const valueData = indexData.value;
+      if (valueData !== "") {
+        const nextBling = this.digits.length;
+        if (nextBling !== key) {
+          indexData.nextSibling.focus();
+        } else {
+          this.valueCode = this.valueText.toString().split(",").join("");
+
+          if (this.valueCode !== "") {
+            this.$emit("validateRequireCode", {
+              statusActive: false,
+              codeOTP: this.valueCode,
+            });
+          }
+        }
+      }
+      debugger;
+    },
+  },
+
+  created() {
+    document.querySelector(".btContinueCode").disabled = true;
+    document.querySelector(".btContinueCode").style.backgroundColor = "#382e41";
   },
 
   mounted() {
-    storeTokens.commit("setIsLoadingButton", false);
-
     debugger;
   },
 };

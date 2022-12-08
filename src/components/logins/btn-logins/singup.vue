@@ -29,16 +29,20 @@
     </div>
   </div>
   <form-common v-if="isShowPhoneLog"></form-common>
-  <DialogWellcome :isShowWelcome="isShowWelcome"></DialogWellcome>
+  <DialogWellcome
+    v-if="isShowWelcome"
+    @onHideWellcome="onHideWellcome"
+  ></DialogWellcome>
+  <DialogYourEmail v-if="isShowEmail"></DialogYourEmail>
 </template>
 
 <script>
+import DialogYourEmail from "../../common/wellcome/dialog-your-email";
 import DialogWellcome from "../../common/wellcome/dialog-wellcome";
-import { ElNotification } from "element-plus";
-import Bh_message from "@/middleware/message";
 import FormCommon from "../phone-numbers/form-common.vue";
 export default {
   components: {
+    DialogYourEmail,
     DialogWellcome,
     FormCommon,
   },
@@ -48,23 +52,21 @@ export default {
     return {
       isShowPhoneLog: false,
       isShowWelcome: false,
+      isShowEmail: false,
     };
   },
   methods: {
-    warningFun() {
-      ElNotification({
-        title: "Warning",
-        message: "This is a warning message",
-        type: "warning",
-      });
+    onHideWellcome(value) {
+      this.isShowWelcome = value;
     },
+
     /**
      * Login google
      */
     onLoginGoogle() {
       debugger;
 
-      Bh_message.bh_warning();
+      this.isShowEmail = true;
     },
 
     /**

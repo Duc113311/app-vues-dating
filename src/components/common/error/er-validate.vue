@@ -1,6 +1,6 @@
 <template>
   <div class="error-text justify-center flex text-red-600 w-full">
-    {{ this.txtCodeError }}
+    {{ txtCodeError }}
   </div>
 </template>
 
@@ -8,10 +8,10 @@
 export default {
   name: "er-validate",
 
-  props: ["txtCodeError"],
-
   data() {
-    return {};
+    return {
+      txtCodeError: "Invalid code. please try again",
+    };
   },
 };
 </script>

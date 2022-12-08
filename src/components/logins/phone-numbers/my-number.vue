@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import storeTokens from "../../../stores/login/store-token.js";
-
 import intlTelInput from "intl-tel-input";
 import $ from "jquery";
 export default {
@@ -70,24 +68,17 @@ export default {
       if (val !== "") {
         if (vnf_regex.test(val) == false) {
           this.txtCodeError = "Your phone number is not wrong format";
-          document.querySelector(".btContinueCode").disabled = true;
-          document.querySelector(".btContinueCode").style.backgroundColor =
-            "#382e41";
-          return false;
+          this.$emit("validateRequirePhone", { statusActive: true });
+
           // Số điện thoại của bạn không đúng định dạng!
         } else {
           this.txtCodeError = "";
-          document.querySelector(".btContinueCode").disabled = false;
-          document.querySelector(".btContinueCode").style.backgroundColor =
-            "rgb(220 20 30)";
-          this.$emit("statusLoading", true);
-          return true;
+
+          this.$emit("validateRequirePhone", { statusActive: false });
         }
       } else {
         this.txtCodeError = "You are not enter the phone number";
-        document.querySelector(".btContinueCode").disabled = true;
-        document.querySelector(".btContinueCode").style.backgroundColor =
-          "#382e41";
+        this.$emit("validateRequirePhone", { statusActive: true });
       }
     },
     //#endregion
@@ -106,10 +97,6 @@ export default {
       }
     },
     //#endregion
-  },
-
-  created() {
-    storeTokens.commit("setIsLoadingButton", false);
   },
 
   mounted() {

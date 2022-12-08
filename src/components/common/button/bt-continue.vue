@@ -12,18 +12,21 @@
 </template>
 
 <script>
-import storeTokens from "../../../stores/login/store-token.js";
+// import storeTokens from "../../../stores/login/store-token.js";
 export default {
   name: "bt-continue",
-  props: ["isShowTwos"],
+  props: ["isStatusRequire"],
   data() {
-    return {};
+    return {
+      isLoading: false,
+      isNumber: 0,
+    };
   },
 
   computed: {
-    isLoading() {
-      return storeTokens.state.isLoadingBtn;
-    },
+    // isLoading() {
+    //   return storeTokens.state.isLoadingBtn;
+    // },
   },
 
   methods: {
@@ -32,13 +35,14 @@ export default {
      */
     onClickContinues() {
       debugger;
-      if (this.isShowTwos) {
-        this.$emit("isNumber", 1);
-        storeTokens.commit("setIsLoadingButton", true);
-        document.querySelector(".btContinueCode").disabled = true;
-        document.querySelector(".btContinueCode").style.backgroundColor =
-          "rgb(220 20 30)";
+      if (!this.isStatusRequire) {
+        this.$emit("onNextScreen", 1);
       }
+
+      // this.isLoading = true;
+      // document.querySelector(".btContinueCode").disabled = true;
+      // document.querySelector(".btContinueCode").style.backgroundColor =
+      //   "rgb(220 20 30)";
     },
   },
   created() {
