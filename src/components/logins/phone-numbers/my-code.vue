@@ -12,7 +12,7 @@
         v-for="(el, ind) in digits"
         :id="el"
         :key="el + ind"
-        v-model="valueText[ind]"
+        v-model="renderCodeOTP[ind]"
         @keyup="onNextOn(el, ind)"
         :autofocus="ind === 0"
         :placeholder="ind + 1"
@@ -38,12 +38,11 @@ export default {
   data() {
     return {
       digitCount: 4,
-      valueText: [],
       digits: [1, 2, 3, 4, 5, 6],
     };
   },
 
-  props: ["txtPhoneNumber", "txtErrorCode", "sentCodeId"],
+  props: ["txtPhoneNumber", "valueText", "txtErrorCode", "sentCodeId"],
 
   computed: {
     renderPhoneNumber() {
@@ -54,6 +53,10 @@ export default {
     renderErrorCode() {
       return this.txtErrorCode;
     },
+
+    renderCodeOTP() {
+      return this.valueText;
+    },
   },
 
   methods: {
@@ -61,7 +64,8 @@ export default {
      * Render gửi lại mã OTP
      */
     onPhoneNumber() {
-      this.$emit("singWithPhone", this.sentCodeId);
+      debugger;
+      this.$emit("onRenderCodeOTP", this.txtPhoneNumber);
     },
 
     onCheckOTP() {

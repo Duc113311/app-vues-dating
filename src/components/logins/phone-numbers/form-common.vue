@@ -10,7 +10,9 @@
         <MyCode
           :sentCodeId="sentCodeId"
           :txtErrorCode="txtErrorCode"
+          :valueText="valueText"
           @onUpdateLoading="onUpdateLoading"
+          @onRenderCodeOTP="onRenderCodeOTP"
           @validateRequireCode="validateRequire"
           :txtPhoneNumber="txtPhoneNumber"
         ></MyCode>
@@ -33,6 +35,7 @@ import {
   PhoneAuthProvider,
   signInWithCredential,
 } from "firebase/auth";
+import { analytics, logEvent } from "../../../configs/firebase.js";
 import BtBack from "../../common/button/bt-back";
 import MyCode from "./my-code";
 import BtContinue from "../../common/button/bt-continue";
@@ -63,6 +66,7 @@ export default {
       sentCodeId: "",
       codeOTP: "",
       txtErrorCode: false,
+      valueText: [],
     };
   },
 
@@ -96,6 +100,28 @@ export default {
         },
         this.auth
       );
+    },
+
+    async onRenderCodeOTP(value) {
+      debugger;
+
+      if (value) {
+        debugger;
+        // const recaptchaContainer = document.getElementById("recaptcha-container");
+        const appVerifier = window.recaptchaVerifier;
+        await signInWithPhoneNumber(this.auth, value, appVerifier)
+          .then((confirmationResult) => {
+            debugger;
+            this.sentCodeId = confirmationResult.verificationId;
+            console.log(this.sentCodeId);
+          })
+          .catch((error) => {
+            debugger;
+            this.sendCodeError = "You select bad domain";
+            console.log(error);
+            // ...
+          });
+      }
     },
     /**
      * Next sang scream
@@ -149,12 +175,23 @@ export default {
         .then(async (result) => {
           debugger;
           const userID = result.user.uid;
+          debugger;
+          this.txtErrorCode = false;
+          logEvent(analytics, "setSignUpMethod", {
+            nameScream: "Login phone number",
+          });
+
           // Check lần show wellcome
           console.log(userID);
         })
-        .catch((error) => {
+        .catch(() => {
+          debugger;
+
           this.txtErrorCode = true;
-          alert("error", error);
+          document.querySelector(".btContinueCode").disabled = true;
+          document.querySelector(".btContinueCode").style.backgroundColor =
+            "#382e41";
+          this.valueText = [];
         });
     },
   },
