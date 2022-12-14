@@ -20,7 +20,7 @@
             <div>
               <div class="flex justify-center mb-8">
                 <img
-                  src="../assets/images/app_icon_512x512.png"
+                  src="@/assets/images/app_icon_512x512.png"
                   width="100"
                   height="100"
                   alt=""
@@ -34,6 +34,7 @@
             </div>
             <!-- Body -->
             <div class="h-30 justify-center flex p-10">
+              <!-- <Singup></Singup> -->
               <Singup></Singup>
             </div>
 
@@ -63,8 +64,8 @@
 </template>
 
 <script>
-import Singup from "../components/logins/btn-logins/singup";
-import Navbar from "../components/navar-bar/Navbar";
+import Singup from "../../components/logins/btn-logins/singup";
+import Navbar from "../../components/navar-bar/Navbar";
 // @ is an alias to /src
 // import { auth } from "@/configs/firebase";
 import {
@@ -249,7 +250,7 @@ export default {
 
 <style>
 .image-background {
-  background-image: url(../assets/images/background.webp);
+  background-image: url(../../assets/images/background.webp);
   z-index: 99;
   padding-right: 0px !important;
   padding-left: 0px !important;

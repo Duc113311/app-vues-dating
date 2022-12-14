@@ -37,6 +37,8 @@
 </template>
 
 <script>
+// import storeTokens from "@/stores/login/store-token";
+
 import DialogYourEmail from "../../common/wellcome/dialog-your-email";
 import DialogWellcome from "../../common/wellcome/dialog-wellcome";
 import FormCommon from "../phone-numbers/form-common.vue";
@@ -65,6 +67,9 @@ export default {
      */
     onLoginGoogle() {
       debugger;
+      // await storeTokens.dispatch("checkExistUserId", {
+      //   id: "SzqFbvqrZnGFLmNyiwuGgfOHYFQ1",
+      // });
 
       this.isShowEmail = true;
     },

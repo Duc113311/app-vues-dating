@@ -70,10 +70,13 @@
           </div>
         </div>
       </div>
-      <BtArge></BtArge>
+      <BtArge @onShowDialogQuit="onShowDialogQuit"></BtArge>
     </div>
 
-    <DialogQuitSingn></DialogQuitSingn>
+    <DialogQuitSingn
+      @onCancelQuit="onCancelQuit"
+      :isShowQuitSing="isShowQuitSing"
+    ></DialogQuitSingn>
   </div>
 </template>
 
@@ -90,6 +93,7 @@ export default {
   data() {
     return {
       centerDialogVisible: false,
+      isShowQuitSing: false,
     };
   },
 
@@ -101,6 +105,15 @@ export default {
     onCloseDialog() {
       debugger;
       this.$emit("onHideWellcome", false);
+    },
+
+    onShowDialogQuit(value) {
+      debugger;
+      this.isShowQuitSing = value;
+    },
+
+    onCancelQuit() {
+      this.isShowQuitSing = false;
     },
   },
 };

@@ -68,9 +68,9 @@ const storeTokens = createStore({
       await HTTP.post("login/v1/create-token/" + id)
         .then((response) => {
           debugger;
-          document.cookie = `userId=${response.data.data.userId}`;
-          document.cookie = `accessToken=${response.data.data.accessToken}`;
-          document.cookie = `refreshToken=${response.data.data.refreshToken}`;
+          localStorage.setItem("userId", response.data.data.userId);
+          localStorage.setItem("accessToken", response.data.data.accessToken);
+          localStorage.setItem("refreshToken", response.data.data.refreshToken);
           commit("setTokenAccount", response.data.data);
         })
         .catch((error) => {
@@ -104,6 +104,18 @@ const storeTokens = createStore({
     async checkAppAccess({ commit }, { id }) {
       debugger;
       await HTTP.get("login/v1/access/" + id)
+        .then((response) => {
+          debugger;
+          commit("setAppAccess", response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    async checkExistUserId({ commit }, { id }) {
+      debugger;
+      await HTTP.get(`login/v1/check-exist?userId=${id}`)
         .then((response) => {
           debugger;
           commit("setAppAccess", response.data.data);

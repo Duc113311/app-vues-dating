@@ -42,6 +42,7 @@ export default {
     onGender(val) {
       debugger;
       this.gender = val;
+      storeUsers.commit("setGender", val);
       if (this.gender === 1) {
         document.querySelector(".bt-woman").style.border = "2px solid red";
         document.querySelector(".bt-man").style.border = "2px solid white";

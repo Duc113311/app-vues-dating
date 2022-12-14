@@ -2,12 +2,13 @@
   <div>
     <el-dialog
       class="dialog-singup rounded-lg"
-      v-model="centerDialogVisible"
+      :show-close="false"
+      v-model="showFormQuit"
       align-center
     >
       <div class="text-white">
         <h2 class="text-xl mb-4">Quit the sign-up process</h2>
-        <span class="text-sm text-slate-400">
+        <span class="text-xl text-slate-400">
           All the information will be deleted if you exit the sing-up process
           now.
         </span>
@@ -15,10 +16,9 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button
-            class="mr-3 text-white text-lg"
-            :type="danger"
+            class="mr-3 color-cancel text-lg"
             link
-            @click="centerDialogVisible = false"
+            @click="onCancelWelcome"
             >CANCEL</el-button
           >
           <el-button
@@ -38,16 +38,39 @@
 export default {
   name: "dialog-quit-singn",
 
+  props: ["isShowQuitSing"],
+
   data() {
     return {
       centerDialogVisible: false,
     };
   },
 
+  computed: {
+    showFormQuit() {
+      return this.isShowQuitSing;
+    },
+  },
+
   methods: {
-    onConfimWelcome() {},
+    onConfimWelcome() {
+      this.$router.push("/profile");
+    },
+
+    onCancelWelcome() {
+      this.$emit("onCancelQuit", false);
+    },
   },
 };
 </script>
 
-<style></style>
+<style lang="css">
+.dialog-singup {
+  background-color: #434a5d;
+  width: 450px;
+}
+
+.color-cancel {
+  color: white !important;
+}
+</style>

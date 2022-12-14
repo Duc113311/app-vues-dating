@@ -21,7 +21,9 @@ export default {
     /**
      * Click show dialog
      */
-    onClickIAgree() {},
+    onClickIAgree() {
+      this.$emit("onShowDialogQuit", true);
+    },
   },
 };
 </script>

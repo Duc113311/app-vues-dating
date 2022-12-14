@@ -15,7 +15,7 @@
 // import storeTokens from "../../../stores/login/store-token.js";
 export default {
   name: "bt-continue",
-  props: ["isStatusRequire"],
+  props: ["isStatusRequire", "isResultValidate"],
   data() {
     return {
       isLoading: false,
@@ -37,6 +37,10 @@ export default {
       debugger;
       if (!this.isStatusRequire) {
         this.$emit("onNextScreen", 1);
+      }
+
+      if (this.isResultValidate) {
+        this.$emit("onNextWellcome", true);
       }
 
       // this.isLoading = true;

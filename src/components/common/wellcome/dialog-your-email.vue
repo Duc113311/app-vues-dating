@@ -8,37 +8,54 @@
     </div>
 
     <div class="mt-3">
-      <el-input
-        class="your-email mb-3 p-2"
-        v-model="txtFirstName"
+      <input
+        class="your-email w-full text-xl mb-3 p-2 rounded"
+        v-model="txtEmail"
+        type="email"
         placeholder="Your name"
         @keyup="onChangeInput"
       />
     </div>
+    <div class="mt-4">
+      <BtContinue
+        :isResultValidate="isResultValidate"
+        @onNextWellcome="onNextWellcome"
+      ></BtContinue>
+    </div>
+    <div class="flex mt-4 justify-center pt-3 pb-3 text-white text-xl">OR</div>
+    <div class="flex mt-4 justify-center">
+      <el-button
+        class="cursor-pointer bg-white text-base text-black w-80 rounded-lg px-6 py-6 mb-4"
+        @click="onLoginGoogle()"
+      >
+        <img src="@/assets/images/google_icon.svg" class="mr-2" alt="" />
+        <span class="font-sans">Log in with Google</span>
+      </el-button>
+    </div>
 
-    <BtContinue></BtContinue>
-    <div>OR</div>
-    <el-button
-      class="cursor-pointer bg-white text-base text-black w-80 rounded-lg px-6 py-6 mb-4"
-      @click="onLoginGoogle()"
-    >
-      <img src="@/assets/images/google_icon.svg" class="mr-2" alt="" />
-      <span class="font-sans">Log in with Google</span>
-    </el-button>
+    <div class="flex justify-center text-base text-color">
+      Verify instantly by connecting your Google account
+    </div>
 
-    <div>Verify instantly by connecting your Google account</div>
-
-    <el-radio :label="3"
-      >I want to receive news, updates and offers from Heartlink</el-radio
-    >
+    <div class="text-base flex text-white mt-4">
+      <input type="radio" name="" id="" class="mr-7 w-7 bg-radio-input" />
+      <span>I want to receive news, updates and offers from Heartlink</span>
+    </div>
   </div>
+
+  <DialogWellcome v-if="isShowFormWellcome"></DialogWellcome>
 </template>
 
 <script>
+import storeUsers from "@/stores/user-profile/store-user";
+import DialogWellcome from "./dialog-wellcome";
+import "@/assets/css/bh-input.css";
+import validate from "@/middleware/validate";
 import BtContinue from "../button/bt-continue";
 import BtBack from "../button/bt-back";
 export default {
   components: {
+    DialogWellcome,
     BtContinue,
     BtBack,
   },
@@ -47,9 +64,29 @@ export default {
   data() {
     return {
       centerDialogVisible: false,
+      txtEmail: "",
+      isResultValidate: false,
+      isShowFormWellcome: false,
     };
   },
 
+  methods: {
+    onChangeInput() {
+      debugger;
+      this.isResultValidate = validate.validateEmail(this.txtEmail);
+      if (this.isResultValidate) {
+        document.querySelector(".btContinueCode").disabled = false;
+        document.querySelector(".btContinueCode").style.backgroundColor =
+          "rgb(220 20 30)";
+      }
+    },
+
+    onNextWellcome(value) {
+      debugger;
+      this.isShowFormWellcome = value;
+      storeUsers.commit("setEmail", this.txtEmail);
+    },
+  },
   mounted() {
     debugger;
   },
@@ -68,5 +105,14 @@ export default {
   background-color: #495063;
   padding: 10px;
   border: 1px solid #495063;
+}
+
+.your-email {
+  color: white !important;
+  background-color: #495063;
+}
+
+.your-email:focus {
+  border: 1px solid white;
 }
 </style>

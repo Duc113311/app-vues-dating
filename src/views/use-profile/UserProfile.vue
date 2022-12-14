@@ -39,12 +39,12 @@
 </template>
 
 <script>
-import MyPhotos from "../components/user-profile/my-photos";
-import MyInterests from "../components/user-profile/my-interests";
-import MySexual from "../components/user-profile/my-sexual";
-import AmSex from "../components/user-profile/am-sex";
-import YourName from "../components/user-profile/your-name.vue";
-import BirthDay from "../components/user-profile/birth-day.vue";
+import MyPhotos from "../../components/user-profile/my-photos";
+import MyInterests from "../../components/user-profile/my-interests";
+import MySexual from "../../components/user-profile/my-sexual";
+import AmSex from "../../components/user-profile/am-sex";
+import YourName from "../../components/user-profile/your-name.vue";
+import BirthDay from "../../components/user-profile/birth-day.vue";
 
 import userProfiles from "@/stores/user-profile/store-user";
 import TokenApps from "@/middleware/auth";
@@ -102,6 +102,8 @@ export default {
       debugger;
       if (this.isNumber !== 0) {
         this.isNumber = this.isNumber - 1;
+      } else {
+        this.$router.go(-1);
       }
     },
   },

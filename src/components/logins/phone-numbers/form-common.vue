@@ -40,6 +40,8 @@ import BtBack from "../../common/button/bt-back";
 import MyCode from "./my-code";
 import BtContinue from "../../common/button/bt-continue";
 import MyNumber from "./my-number";
+import storeTokens from "@/stores/login/store-token";
+
 export default {
   components: {
     BtBack,
@@ -176,6 +178,7 @@ export default {
           debugger;
           const userID = result.user.uid;
           debugger;
+          storeTokens.dispatch("postTokenByUserID", { id: userID });
           this.txtErrorCode = false;
           logEvent(analytics, "setSignUpMethod", {
             nameScream: "Login phone number",
