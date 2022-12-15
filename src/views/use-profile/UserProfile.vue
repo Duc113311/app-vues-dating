@@ -20,7 +20,7 @@
         <MyInterests></MyInterests>
       </div>
       <div v-if="isNumber === 5">
-        <MyPhotos></MyPhotos>
+        <MyPhotos :isShowHeader="isShowHeader"></MyPhotos>
       </div>
     </div>
     <!--  -->
@@ -76,6 +76,7 @@ export default {
   data() {
     return {
       isNumber: 0,
+      isShowHeader: true,
     };
   },
   methods: {

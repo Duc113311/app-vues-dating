@@ -53,7 +53,9 @@ const storeUsers = createStore({
       const index = state.userProfile.sexuals.indexOf(data);
       if (index > -1) {
         // only splice array when item is found
-        state.userProfile.sexuals.splice(index, 1); // 2nd parameter means remove one item only
+        state.userProfile.sexuals.splice(index, 1);
+        state.isCheckBox = false;
+        // 2nd parameter means remove one item only
       } else {
         if (state.userProfile.sexuals.length < 3) {
           state.userProfile.sexuals.push(data);
@@ -71,16 +73,20 @@ const storeUsers = createStore({
         state.userProfile.interests.splice(index, 1); // 2nd parameter means remove one item only
         state.isActiveId = false;
       } else {
-        state.userProfile.interests.push(data);
-        state.isActiveId = true;
+        if (state.userProfile.interests.length < 5) {
+          state.userProfile.interests.push(data);
+          state.isActiveId = true;
+        } else {
+          state.isActiveId = false;
+        }
       }
     },
 
     setListAvatar(state, data) {
       debugger;
       const idUrl = data.id;
-      const index = state.userProfile.images.indexOf(idUrl);
-      if (index > -1) {
+      const index = state.userProfile.findIndex((x) => x.id === idUrl);
+      if (index !== -1) {
         // only splice array when item is found
         state.userProfile.images.splice(index, 1); // 2nd parameter means remove one item only
       } else {

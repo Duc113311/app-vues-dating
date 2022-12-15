@@ -38,14 +38,13 @@ export default {
   data() {
     return {
       sexuals: [],
-      listSexuals: ["Straight", "Gay", "Lesbian"],
     };
   },
 
   computed: {
     listDataSexuals() {
       debugger;
-      return storeCommon.state.listSexuals;
+      return storeCommon.state.listDataSexuals;
     },
   },
 
@@ -61,23 +60,33 @@ export default {
       if (storeUsers.state.isCheckBox) {
         document.getElementById(val).checked = false;
       }
+      if (lengthSexual === 3) {
+        document.querySelector(".btContinue").disabled = false;
+        document.querySelector(".btContinue").style.backgroundColor = "red";
+      }
       debugger;
       console.log(lengthSexual);
       debugger;
     },
   },
 
-  async created() {
+  created() {
     debugger;
-    await storeCommon.dispatch("getListDataCommon", {
+
+    storeCommon.dispatch("getListDataSexuals", {
       entityName: "sexuals",
       entityId: "en",
     });
   },
-
   mounted() {
     debugger;
     const lengthSexual = storeUsers.state.userProfile.sexuals.length;
+    const dataSexuals = storeUsers.state.userProfile.sexuals;
+    for (let index = 0; index < dataSexuals.length; index++) {
+      const element = dataSexuals[index];
+      debugger;
+      document.getElementById(element).checked = true;
+    }
     if (lengthSexual < 3) {
       document.querySelector(".btContinue").disabled = true;
       document.querySelector(".btContinue").style.backgroundColor = "#382e41";

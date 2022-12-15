@@ -17,8 +17,10 @@
             <div
               class="img-avatar overflow-hidden"
               v-bind:id="'avatar' + fileList.id"
+              v-loading="loading"
+              :target="fileList.id"
             >
-              <img
+              <div
                 src=""
                 alt=""
                 width="100"
@@ -30,7 +32,7 @@
             </div>
             <div
               class="img-close"
-              @click="removeUpload(fileList)"
+              @click="removeUpload(fileList.id)"
               v-bind:id="'close' + fileList.id"
             >
               <img src="../../assets/images/icon-cancel.png" alt="" srcset="" />
@@ -89,15 +91,19 @@ export default {
           url: "image9",
         },
       ],
+      loading: false,
       showUpload: true,
       file: "",
       dialogImageUrl: "",
       isShowImage: false,
     };
   },
+
+  props: ["isShowHeader"],
   methods: {
     async toggleUpload(event, data) {
       debugger;
+      this.loading = true;
       const image = event.target.files[0];
       console.log(data);
       const idUrl = data.id;
@@ -130,7 +136,14 @@ export default {
           const img = document.getElementById(idUrl);
           const avatar = document.getElementById("avatar" + idUrl);
           const close = document.getElementById("close" + idUrl);
-          img.setAttribute("src", url);
+          // img.setAttribute("src", url);
+          debugger;
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000);
+          let bg = "url('" + url + "')";
+
+          img.style.backgroundImage = bg;
           avatar.style.display = "block";
           close.style.display = "block";
         })
@@ -149,16 +162,40 @@ export default {
       }
     },
 
-    removeUpload() {
-      this.dialogImageUrl = "";
-      this.isShowImage = false;
+    removeUpload(val) {
+      const img = document.getElementById(val);
+      const avatar = document.getElementById("avatar" + val);
+      const close = document.getElementById("close" + val);
+      const dataImage = {
+        id: val,
+      };
+      storeUsers.commit("setListAvatar", dataImage);
+      img.style.backgroundImage = "bg";
+      avatar.style.display = "none";
+      close.style.display = "none";
     },
   },
   mounted() {
     debugger;
-    const image = storeUsers.state.userProfile.images.length;
+    const image = storeUsers.state.userProfile.images;
+    for (let index = 0; index < image.length; index++) {
+      const element = image[index];
+      const img = document.getElementById(element.id);
+      const avatar = document.getElementById("avatar" + element.id);
+      const close = document.getElementById("close" + element.id);
+      // img.setAttribute("src", url);
+      debugger;
+      setTimeout(() => {
+        this.loading = false;
+      }, 1000);
+      let bg = "url('" + element.url + "')";
+
+      img.style.backgroundImage = bg;
+      avatar.style.display = "block";
+      close.style.display = "block";
+    }
     if (document.querySelector(".btContinue")) {
-      if (image < 1) {
+      if (image.length < 1) {
         document.querySelector(".btContinue").disabled = true;
         document.querySelector(".btContinue").style.backgroundColor = "#382e41";
       } else {
@@ -243,7 +280,7 @@ input[type="file"] {
 
 .img-avatar {
   height: 165px;
-  width: 117px;
+  width: 100%;
   border-radius: 10px;
   position: absolute;
   display: flex;
@@ -275,5 +312,16 @@ input[type="file"] {
 .my-avatar {
   width: 100%;
   height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.el-loading-spinner {
+  top: 0 !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+  text-align: center !important;
+  position: absolute !important;
 }
 </style>

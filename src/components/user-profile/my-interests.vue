@@ -7,15 +7,19 @@
         profile</span
       >
     </div>
-    <div class="w-full mt-4">
+    <div class="w-full mt-4 overflow-y-auto list-interest">
       <div>
-        <template v-for="(item, key) in insterests" :key="item.id">
+        <template
+          v-for="(item, index) in listDataInterests"
+          :key="item + index"
+        >
           <button
-            @click="onSelectInterest(item, key)"
+            @click="onSelectInterest(index)"
+            :id="index"
             class="oftion-interests mr-3 mb-3 p-3 text-white"
             size="large"
           >
-            {{ item.name }}
+            {{ item }}
           </button>
         </template>
       </div>
@@ -25,6 +29,7 @@
 
 <script>
 import storeUsers from "@/stores/user-profile/store-user";
+import storeCommon from "@/stores/common/store-common";
 
 export default {
   name: "MyInterests",
@@ -33,101 +38,31 @@ export default {
   },
   data() {
     return {
-      insterests: [
-        {
-          id: 1,
-          name: "Horror movie",
-        },
-        {
-          id: 2,
-          name: "Free diving",
-        },
-        {
-          id: 3,
-          name: "Swimming",
-        },
-        {
-          id: 4,
-          name: "Try new things",
-        },
-        {
-          id: 5,
-          name: "Vlogging",
-        },
-        {
-          id: 6,
-          name: "Reading",
-        },
-        {
-          id: 7,
-          name: "Ice Cream",
-        },
-        {
-          id: 8,
-          name: "Music",
-        },
-        {
-          id: 8,
-          name: "Fashion",
-        },
-        {
-          id: 8,
-          name: "Video game",
-        },
-        {
-          id: 8,
-          name: "Traveling",
-        },
-        {
-          id: 8,
-          name: "Art",
-        },
-        {
-          id: 8,
-          name: "Friends",
-        },
-        {
-          id: 8,
-          name: "Television",
-        },
-        {
-          id: 8,
-          name: "Volleyball",
-        },
-        {
-          id: 8,
-          name: "Riding",
-        },
-        {
-          id: 8,
-          name: "Football",
-        },
-        {
-          id: 8,
-          name: "Soccer",
-        },
-        {
-          id: 8,
-          name: "Sports",
-        },
-      ],
-
       isActive: false,
     };
   },
 
+  computed: {
+    listDataInterests() {
+      debugger;
+      return storeCommon.state.listDataInterests;
+    },
+  },
+
   methods: {
-    onSelectInterest(val, key) {
+    onSelectInterest(val) {
       debugger;
 
       // document.querySelector("oftion-interests")
-      storeUsers.commit("setInterests", val.name);
+      storeUsers.commit("setInterests", val);
+      const interestsData = storeUsers.state.userProfile.interests;
+
       if (storeUsers.state.isActiveId) {
-        document.getElementsByClassName("oftion-interests")[
-          key
-        ].style.backgroundColor = "red";
-        const interestsData = storeUsers.state.userProfile.interests;
+        debugger;
+        document.getElementById(val).style.backgroundColor = "red";
         if (interestsData.length < 5) {
+          debugger;
+
           document.querySelector(".btContinue").disabled = true;
           document.querySelector(".btContinue").style.backgroundColor =
             "#382e41";
@@ -136,15 +71,34 @@ export default {
           document.querySelector(".btContinue").style.backgroundColor = "red";
         }
       } else {
-        document.getElementsByClassName("oftion-interests")[
-          key
-        ].style.backgroundColor = "#382E41";
+        debugger;
+
+        document.getElementById(val).style.backgroundColor = "#382E41";
+        if (interestsData.length < 5) {
+          document.querySelector(".btContinue").disabled = true;
+          document.querySelector(".btContinue").style.backgroundColor =
+            "#382e41";
+        }
       }
     },
   },
 
+  created() {
+    debugger;
+    storeCommon.dispatch("getListDataInterests", {
+      entityName: "interests",
+      entityId: "en",
+    });
+  },
+
   mounted() {
     const interestsData = storeUsers.state.userProfile.interests;
+
+    for (let index = 0; index < interestsData.length; index++) {
+      const element = interestsData[index];
+      debugger;
+      document.getElementById(element).style.backgroundColor = "red";
+    }
     if (interestsData.length < 5) {
       document.querySelector(".btContinue").disabled = true;
       document.querySelector(".btContinue").style.backgroundColor = "#382e41";
@@ -169,5 +123,18 @@ export default {
 }
 .bg-active {
   background-color: red;
+}
+
+.list-interest {
+  height: calc(100vh - 370px);
+}
+.list-interest::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.list-interest {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 </style>

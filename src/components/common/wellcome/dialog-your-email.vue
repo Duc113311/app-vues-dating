@@ -49,7 +49,6 @@
 <script>
 import storeUsers from "@/stores/user-profile/store-user";
 import DialogWellcome from "./dialog-wellcome";
-import "@/assets/css/bh-input.css";
 import validate from "@/middleware/validate";
 import BtContinue from "../button/bt-continue";
 import BtBack from "../button/bt-back";

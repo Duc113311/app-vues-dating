@@ -4,25 +4,43 @@ import { HTTP } from "../../configs/http-common";
 const storeCommon = createStore({
   state() {
     return {
-      listSexuals: [],
+      listDataSexuals: [],
+      listDataInterests: [],
     };
   },
 
   mutations: {
-    setListSexuals(state, data) {
-      state.listSexuals = data;
+    setListDataSexuals(state, data) {
+      state.listDataSexuals = data;
+    },
+    setListDataInterests(state, data) {
+      state.listDataInterests = data;
     },
   },
 
   actions: {
-    async getListDataCommon({ commit }, { entityName, entityId }) {
+    async getListDataSexuals({ commit }, { entityName, entityId }) {
       debugger;
       await HTTP.get(
         `base/v1/get-detail?entityName=${entityName}&entityId=${entityId}`
       )
         .then((response) => {
           debugger;
-          commit("setListSexuals", response.data.data);
+          commit("setListDataSexuals", response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    async getListDataInterests({ commit }, { entityName, entityId }) {
+      debugger;
+      await HTTP.get(
+        `base/v1/get-detail?entityName=${entityName}&entityId=${entityId}`
+      )
+        .then((response) => {
+          debugger;
+          commit("setListDataInterests", response.data.data);
         })
         .catch((error) => {
           console.log(error);
