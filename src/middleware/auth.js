@@ -8,7 +8,12 @@ function deleteToken(token) {
   return Cookies.remove(token);
 }
 
+function getAccessToken(userId) {
+  return localStorage.getItem(userId);
+}
+
 export default {
   getToken,
   deleteToken,
+  getAccessToken,
 };

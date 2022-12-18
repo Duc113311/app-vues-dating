@@ -55,6 +55,7 @@ export default {
       isShowPhoneLog: false,
       isShowWelcome: false,
       isShowEmail: false,
+      isShowLocation: false,
     };
   },
   methods: {
@@ -80,7 +81,7 @@ export default {
     onLoginFacebook() {
       debugger;
       //   Bh_message.bh_warning();
-      this.isShowWelcome = true;
+      this.isShowLocation = true;
     },
 
     /**

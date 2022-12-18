@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full user-profile p-5 grid">
     <div>
-      <div class="text-2xl text-white">
+      <div v-if="isNumber !== 6" class="text-2xl text-white">
         <i class="fas fa-chevron-left" @click="onBackForm()"></i>
       </div>
       <div v-if="isNumber === 0">
@@ -22,6 +22,9 @@
       <div v-if="isNumber === 5">
         <MyPhotos :isShowHeader="isShowHeader"></MyPhotos>
       </div>
+      <div v-if="isNumber === 6">
+        <MyLocation></MyLocation>
+      </div>
     </div>
     <!--  -->
     <div>
@@ -36,9 +39,14 @@
       </div>
     </div>
   </div>
+
+  <DialogAvoidSomeone v-if="isShowAvoid" @onHideWellcome="onHideWellcome">
+  </DialogAvoidSomeone>
 </template>
 
 <script>
+import MyLocation from "../../components/user-profile/my-location";
+import DialogAvoidSomeone from "../../components/common/wellcome/dialog-avoid-someone";
 import MyPhotos from "../../components/user-profile/my-photos";
 import MyInterests from "../../components/user-profile/my-interests";
 import MySexual from "../../components/user-profile/my-sexual";
@@ -52,6 +60,8 @@ import TokenApps from "@/middleware/auth";
 export default {
   name: "UserProfile",
   components: {
+    MyLocation,
+    DialogAvoidSomeone,
     MyPhotos,
     MyInterests,
     MySexual,
@@ -77,18 +87,31 @@ export default {
     return {
       isNumber: 0,
       isShowHeader: true,
+      isShowAvoid: false,
     };
   },
   methods: {
+    async onHideWellcome(val) {
+      this.isShowAvoid = val;
+      debugger;
+      await this.onViewHomeRouter;
+    },
+    async onViewHomeRouter() {
+      debugger;
+
+      await this.$router.push("/home");
+    },
     async onClickContinue() {
       debugger;
-      if (this.isNumber === 5) {
-        const userId = TokenApps.getToken("userId");
+      if (this.isNumber === 6) {
+        this.isShowAvoid = true;
+
+        debugger;
+        const userId = TokenApps.getAccessToken("userId");
         const dataUser = userProfiles.state.userProfile;
         dataUser.userId = userId;
         console.log(dataUser);
         await userProfiles.dispatch("postUserProfile", dataUser);
-        await this.$router.push("/home");
       } else {
         this.isNumber = this.isNumber + 1;
       }

@@ -85,7 +85,7 @@ const storeUsers = createStore({
     setListAvatar(state, data) {
       debugger;
       const idUrl = data.id;
-      const index = state.userProfile.findIndex((x) => x.id === idUrl);
+      const index = state.userProfile.images.findIndex((x) => x.id === idUrl);
       if (index !== -1) {
         // only splice array when item is found
         state.userProfile.images.splice(index, 1); // 2nd parameter means remove one item only
