@@ -33,6 +33,10 @@ const storeTokens = createStore({
       state.tokenAccount = token;
     },
 
+    setProviderId(state, data) {
+      state.providerId = data;
+    },
+
     setUserIdExits(state, isUserId) {
       state.isUserId = isUserId;
     },
@@ -63,7 +67,7 @@ const storeTokens = createStore({
      * @param {*} param0
      * @param {*} param1
      */
-    async postTokenByUserID({ commit }, { id }) {
+    async postTokenByUserID({ commit }, { id, providerId }) {
       debugger;
       await HTTP.post("login/v1/create-token/" + id)
         .then((response) => {
@@ -71,6 +75,8 @@ const storeTokens = createStore({
           localStorage.setItem("userId", response.data.data.userId);
           localStorage.setItem("accessToken", response.data.data.accessToken);
           localStorage.setItem("refreshToken", response.data.data.refreshToken);
+          localStorage.setItem("providerId", providerId);
+
           commit("setTokenAccount", response.data.data);
         })
         .catch((error) => {

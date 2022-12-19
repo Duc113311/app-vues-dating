@@ -24,9 +24,12 @@
       @onNextScreen="onNextScreen"
     ></BtContinue>
   </div>
+
+  <DialogYourEmail v-if="isShowEmail"> </DialogYourEmail>
 </template>
 
 <script>
+import DialogYourEmail from "../../common/wellcome/dialog-your-email";
 import intlTelInput from "intl-tel-input";
 import {
   signInWithPhoneNumber,
@@ -44,6 +47,7 @@ import storeTokens from "@/stores/login/store-token";
 
 export default {
   components: {
+    DialogYourEmail,
     BtBack,
     MyCode,
     BtContinue,
@@ -69,6 +73,7 @@ export default {
       codeOTP: "",
       txtErrorCode: false,
       valueText: [],
+      isShowEmail: false,
     };
   },
 
@@ -177,8 +182,13 @@ export default {
         .then(async (result) => {
           debugger;
           const userID = result.user.uid;
+          const providerId = result.providerId;
           debugger;
-          storeTokens.dispatch("postTokenByUserID", { id: userID });
+          storeTokens.dispatch("postTokenByUserID", {
+            id: userID,
+            providerId: providerId,
+          });
+          this.isShowEmail = true;
           this.txtErrorCode = false;
           logEvent(analytics, "setSignUpMethod", {
             nameScream: "Login phone number",

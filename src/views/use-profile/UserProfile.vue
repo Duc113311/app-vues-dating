@@ -1,10 +1,10 @@
 <template>
   <div class="w-full h-full user-profile p-5 grid">
     <div>
-      <div v-if="isNumber !== 6" class="text-2xl text-white">
+      <div v-if="isNumber !== 0" class="text-2xl text-white">
         <i class="fas fa-chevron-left" @click="onBackForm()"></i>
       </div>
-      <div v-if="isNumber === 0">
+      <div v-if="isNumber === 6">
         <YourName :firstName="userData.firstName"> </YourName>
       </div>
       <div v-if="isNumber === 1">
@@ -22,12 +22,15 @@
       <div v-if="isNumber === 5">
         <MyPhotos :isShowHeader="isShowHeader"></MyPhotos>
       </div>
-      <div v-if="isNumber === 6">
+      <div
+        class="flex h-full justify-center items-center"
+        v-if="isNumber === 0"
+      >
         <MyLocation></MyLocation>
       </div>
     </div>
     <!--  -->
-    <div>
+    <div v-if="isNumber !== 0">
       <div class="flex justify-center mt-3">
         <button
           id="btContinue"

@@ -12,23 +12,37 @@
 </template>
 
 <script>
+import storeUsers from "@/stores/user-profile/store-user";
+
 export default {
   name: "bt-location",
   data() {
     return {
       isLoading: false,
       isNumber: 0,
+      latitude: "",
+      longitude: "",
     };
   },
 
   computed: {},
 
   methods: {
+    showPosition(position) {
+      debugger;
+      if (position.coords) {
+        storeUsers.commit("setLocation", position.coords);
+      }
+    },
     /**
      * Sự kiện click để tiếp tục
      */
     onClickContinues() {
       debugger;
+      if (navigator.geolocation) {
+        debugger;
+        navigator.geolocation.getCurrentPosition(this.showPosition);
+      }
     },
   },
   created() {

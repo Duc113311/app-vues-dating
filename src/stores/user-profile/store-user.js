@@ -94,6 +94,12 @@ const storeUsers = createStore({
       }
     },
 
+    setLocation(state, data) {
+      debugger;
+      state.userProfile.latitude = data.latitude;
+      state.userProfile.longitude = data.longitude;
+    },
+
     setUserProfiles(state, data) {
       state.userID = data;
     },
