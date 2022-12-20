@@ -3,7 +3,7 @@
     <el-button
       type="danger"
       :loading="isLoading"
-      id="btContinueCode"
+      :id="btContinueId"
       class="text-base btContinueCode cursor-pointer text-white w-full rounded-lg p-6 color-button"
       @click="onClickContinues"
       >Continue</el-button
@@ -15,7 +15,7 @@
 // import storeTokens from "../../../stores/login/store-token.js";
 export default {
   name: "bt-continue",
-  props: ["isStatusRequire", "isResultValidate"],
+  props: ["isStatusRequire", "isResultValidate", "btContinueId"],
   data() {
     return {
       isLoading: false,

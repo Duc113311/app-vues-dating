@@ -322,7 +322,18 @@ export default {
   },
   created() {
     debugger;
-    storeUsers.dispatch("getListUserProfiles", "users");
+    const param = {
+      userId: localStorage.userId,
+      latitude: localStorage.latitude,
+      longitude: localStorage.longitude,
+      page: 1,
+      pageNumber: 50,
+      startAge: localStorage.startAge,
+      endAge: localStorage.endAge,
+      showMeGender: localStorage.showGender,
+      location: localStorage.locations,
+    };
+    storeUsers.dispatch("getListUserProfiles", param);
   },
 
   mounted() {

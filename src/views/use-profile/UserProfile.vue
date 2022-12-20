@@ -1,10 +1,10 @@
 <template>
   <div class="w-full h-full user-profile p-5 grid">
     <div>
-      <div v-if="isNumber !== 0" class="text-2xl text-white">
+      <div v-if="isNumber !== 7" class="text-2xl text-white">
         <i class="fas fa-chevron-left" @click="onBackForm()"></i>
       </div>
-      <div v-if="isNumber === 6">
+      <div v-if="isNumber === 0">
         <YourName :firstName="userData.firstName"> </YourName>
       </div>
       <div v-if="isNumber === 1">
@@ -14,23 +14,26 @@
         <AmSex :gender="userData.gender"></AmSex>
       </div>
       <div v-if="isNumber === 3">
-        <MySexual></MySexual>
+        <ShowGender></ShowGender>
       </div>
       <div v-if="isNumber === 4">
         <MyInterests></MyInterests>
       </div>
       <div v-if="isNumber === 5">
+        <MySexual></MySexual>
+      </div>
+      <div v-if="isNumber === 6">
         <MyPhotos :isShowHeader="isShowHeader"></MyPhotos>
       </div>
       <div
         class="flex h-full justify-center items-center"
-        v-if="isNumber === 0"
+        v-if="isNumber === 7"
       >
         <MyLocation></MyLocation>
       </div>
     </div>
     <!--  -->
-    <div v-if="isNumber !== 0">
+    <div v-if="isNumber !== 7">
       <div class="flex justify-center mt-3">
         <button
           id="btContinue"
@@ -48,6 +51,7 @@
 </template>
 
 <script>
+import ShowGender from "../../components/user-profile/show-gender";
 import MyLocation from "../../components/user-profile/my-location";
 import DialogAvoidSomeone from "../../components/common/wellcome/dialog-avoid-someone";
 import MyPhotos from "../../components/user-profile/my-photos";
@@ -63,6 +67,7 @@ import TokenApps from "@/middleware/auth";
 export default {
   name: "UserProfile",
   components: {
+    ShowGender,
     MyLocation,
     DialogAvoidSomeone,
     MyPhotos,
@@ -106,7 +111,8 @@ export default {
     },
     async onClickContinue() {
       debugger;
-      if (this.isNumber === 6) {
+
+      if (this.isNumber === 7) {
         this.isShowAvoid = true;
 
         debugger;

@@ -70,10 +70,10 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     debugger;
 
-    storeCommon.dispatch("getListDataSexuals", {
+    await storeCommon.dispatch("getListDataSexuals", {
       entityName: "sexuals",
       entityId: "en",
     });

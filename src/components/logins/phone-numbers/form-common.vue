@@ -44,6 +44,7 @@ import MyCode from "./my-code";
 import BtContinue from "../../common/button/bt-continue";
 import MyNumber from "./my-number";
 import storeTokens from "@/stores/login/store-token";
+import storeUsers from "@/stores/user-profile/store-user";
 
 export default {
   components: {
@@ -140,6 +141,7 @@ export default {
 
       if (this.screenNumber === 1) {
         const mobile = document.getElementById("phone").value;
+        storeUsers.commit("setPhoneNumber", mobile);
         console.log(mobile);
         const result = true;
         const phoneNumber = this.valCodeQR.getNumber();

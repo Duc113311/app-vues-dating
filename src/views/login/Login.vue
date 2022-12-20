@@ -229,22 +229,6 @@ export default {
   },
 
   created() {},
-
-  mounted() {
-    debugger;
-
-    const status = this.onCheckUserIdExits();
-    if (!status) {
-      debugger;
-
-      this.$router.push("/home");
-    }
-    // debugger;
-    // console.log(access);
-    // storeTokens.dispatch("checkUserIdExist");
-    // storeTokens.dispatch("getAllData");
-    console.log(storeTokens.state.isUserId);
-  },
 };
 </script>
 

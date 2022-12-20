@@ -24,8 +24,8 @@
 
       <div class="text-center mt-5 text-slate-500">
         <div class="mt-4">
-          It is easy -share your device's contact with HeartLink when using this
-          feature to pick who you want to avoid
+          It is easy - share your device's contact with HeartLink when using
+          this feature to pick who you want to avoid
         </div>
         <br />
 

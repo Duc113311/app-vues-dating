@@ -25,7 +25,7 @@
         </div>
       </div>
 
-      <BtLocation></BtLocation>
+      <BtLocation @onShowAvoid="onShowAvoid"></BtLocation>
 
       <div
         class="w-full text-base text-white mt-5 angle-down pl-10 pr-10 flex justify-center items-center"
@@ -57,12 +57,20 @@
       </div>
     </div>
   </div>
+  <DialogAvoidSomeone
+    v-if="isShowAvoid"
+    @onHideWellcome="onHideWellcome"
+  ></DialogAvoidSomeone>
 </template>
 
 <script>
+import DialogAvoidSomeone from "../common/wellcome/dialog-avoid-someone";
 import BtLocation from "../common/button/bt-location";
 export default {
-  components: { BtLocation },
+  components: {
+    DialogAvoidSomeone,
+    BtLocation,
+  },
   name: "my-location",
 
   setup() {
@@ -73,10 +81,21 @@ export default {
     return {
       txtFirstName: "",
       isShowMeet: false,
+      isShowAvoid: false,
     };
   },
 
   methods: {
+    onShowAvoid(value) {
+      this.isShowAvoid = value;
+      debugger;
+    },
+    async onHideWellcome(val) {
+      debugger;
+      this.$router.push({ path: "/home" });
+      this.isShowAvoid = val;
+    },
+
     onTellMore() {
       debugger;
       this.isShowMeet = true;

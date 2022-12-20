@@ -18,6 +18,7 @@
     </div>
     <div class="mt-4">
       <BtContinue
+        :btContinueId="btEmail"
         :isResultValidate="isResultValidate"
         @onNextWellcome="onNextWellcome"
       ></BtContinue>
@@ -66,6 +67,7 @@ export default {
       txtEmail: "",
       isResultValidate: false,
       isShowFormWellcome: false,
+      btEmail: "btContinueId",
     };
   },
 
@@ -74,8 +76,8 @@ export default {
       debugger;
       this.isResultValidate = validate.validateEmail(this.txtEmail);
       if (this.isResultValidate) {
-        document.querySelector(".btContinueCode").disabled = false;
-        document.querySelector(".btContinueCode").style.backgroundColor =
+        document.getElementById("btContinueId").disabled = false;
+        document.getElementById("btContinueId").style.backgroundColor =
           "rgb(220 20 30)";
       }
     },

@@ -152,7 +152,7 @@ export default {
         });
 
       // Check
-      const imageNumber = storeUsers.state.userProfile.images.length;
+      const imageNumber = storeUsers.state.userProfile.avatars.length;
       if (imageNumber < 1) {
         document.querySelector(".btContinue").disabled = true;
         document.querySelector(".btContinue").style.backgroundColor = "#382e41";
@@ -177,7 +177,7 @@ export default {
   },
   mounted() {
     debugger;
-    const image = storeUsers.state.userProfile.images;
+    const image = storeUsers.state.userProfile.avatars;
     for (let index = 0; index < image.length; index++) {
       const element = image[index];
       const img = document.getElementById(element.id);

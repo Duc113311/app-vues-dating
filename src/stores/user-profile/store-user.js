@@ -11,7 +11,7 @@ const storeUsers = createStore({
         gender: 0,
         sexuals: [],
         interests: [],
-        images: [],
+        avatars: [],
       },
       isActiveId: true,
       isCheckBox: false,
@@ -25,6 +25,7 @@ const storeUsers = createStore({
 
       isActiveColor: true,
       userInfor: {},
+      showGender: 0,
     };
   },
 
@@ -39,6 +40,9 @@ const storeUsers = createStore({
       debugger;
       state.userProfile.email = value;
     },
+    setPhoneNumber(state, value) {
+      state.userProfile.phoneNumber = value;
+    },
     setUserProfile(state, data) {
       state.userProfile.firstName = data;
     },
@@ -47,6 +51,11 @@ const storeUsers = createStore({
     },
     setGender(state, data) {
       state.userProfile.gender = data;
+    },
+
+    setShowGender(state, data) {
+      state.showGender = data;
+      localStorage.setItem("showGender", data);
     },
     setSexuals(state, data) {
       debugger;
@@ -85,12 +94,12 @@ const storeUsers = createStore({
     setListAvatar(state, data) {
       debugger;
       const idUrl = data.id;
-      const index = state.userProfile.images.findIndex((x) => x.id === idUrl);
+      const index = state.userProfile.avatars.findIndex((x) => x.id === idUrl);
       if (index !== -1) {
         // only splice array when item is found
-        state.userProfile.images.splice(index, 1); // 2nd parameter means remove one item only
+        state.userProfile.avatars.splice(index, 1); // 2nd parameter means remove one item only
       } else {
-        state.userProfile.images.push(data);
+        state.userProfile.avatars.push(data);
       }
     },
 
@@ -98,6 +107,8 @@ const storeUsers = createStore({
       debugger;
       state.userProfile.latitude = data.latitude;
       state.userProfile.longitude = data.longitude;
+      localStorage.setItem("latitude", data.latitude);
+      localStorage.setItem("longitude", data.longitude);
     },
 
     setUserProfiles(state, data) {
@@ -145,7 +156,7 @@ const storeUsers = createStore({
   actions: {
     async postUserProfile({ commit }, data) {
       debugger;
-      await HTTP.post(`base/v1/users/${data.userId}`, data)
+      await HTTP.post(`user/v1/create-one/${data.userId}`, data)
         .then((response) => {
           debugger;
           commit("setUserProfiles", response.data.data);
@@ -160,8 +171,9 @@ const storeUsers = createStore({
      * @param {*} param0
      * @param {*} entity
      */
-    async getListUserProfiles({ commit }, entity) {
-      await HTTP.get("base/v1/" + entity)
+    async getListUserProfiles({ commit }, params) {
+      debugger;
+      await HTTP.post("home/v1/list-users", params)
         .then((response) => {
           debugger;
           commit("setListUserProfiles", response.data.data);

@@ -13,6 +13,8 @@
 
 <script>
 import storeUsers from "@/stores/user-profile/store-user";
+import TokenApps from "@/middleware/auth";
+import userProfiles from "@/stores/user-profile/store-user";
 
 export default {
   name: "bt-location",
@@ -22,17 +24,34 @@ export default {
       isNumber: 0,
       latitude: "",
       longitude: "",
+      isShowAvoid: false,
     };
   },
 
   computed: {},
 
   methods: {
-    showPosition(position) {
+    async onHideWellcome(val) {
+      this.isShowAvoid = val;
+      debugger;
+      this.$router.push({ path: "/home" });
+    },
+
+    async showPosition(position) {
       debugger;
       if (position.coords) {
         storeUsers.commit("setLocation", position.coords);
       }
+      debugger;
+      const userId = TokenApps.getAccessToken("userId");
+      const providerId = TokenApps.getProviderId("providerId");
+      const dataUser = userProfiles.state.userProfile;
+      dataUser.userId = userId;
+      dataUser.providerId = providerId;
+
+      console.log(dataUser);
+      await userProfiles.dispatch("postUserProfile", dataUser);
+      this.$emit("onShowAvoid", true);
     },
     /**
      * Sự kiện click để tiếp tục

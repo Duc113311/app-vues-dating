@@ -21,7 +21,6 @@
 import { fireStoreCore, collection, getDocs } from "./configs/firebase";
 import TokenApps from "@/middleware/auth";
 import storeTokens from "@/stores/login/store-token";
-import storeUsers from "@/stores/user-profile/store-user";
 
 export default {
   components: {},
@@ -50,29 +49,23 @@ export default {
     debugger;
 
     // Check xem đã đăng nhập vào chưa?
-    const userId = TokenApps.getToken("userId");
+    const userId = TokenApps.getAccessToken("userId");
     if (userId) {
-      await storeTokens.dispatch("checkUserIdExist", {
+      await storeTokens.dispatch("checkExistUserId", {
         id: userId,
       });
-      const isUserToken = storeTokens.state.isUserId;
+      const isUserToken = storeTokens.state.isAppAccess;
+      console.log("userId: ", isUserToken);
 
-      // Nếu tồn tại vào check tiếp trong bảng users
       if (isUserToken) {
-        await storeUsers.dispatch("checkUserProfileExist", {
-          id: userId,
-        });
-        const isUserProfile = storeUsers.state.isUserProfile;
-
-        // Nếu tồn tại vào check users
-        if (isUserProfile) {
-          return this.$router.push("/home");
-        } else {
-          return this.$router.push("/profile");
-        }
+        this.$router.push({ path: "/home" });
+      } else {
+        this.$router.push("");
       }
+      // Nếu tồn tại vào check tiếp trong bảnclgg users
+    } else {
+      return this.$router.push("");
     }
-    return this.$router.push("");
   },
 };
 </script>

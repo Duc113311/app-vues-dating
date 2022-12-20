@@ -34,9 +34,11 @@
     @onHideWellcome="onHideWellcome"
   ></DialogWellcome>
   <DialogYourEmail v-if="isShowEmail"></DialogYourEmail>
+  <DialogAvoidSomeone v-if="isShowAvoid"></DialogAvoidSomeone>
 </template>
 
 <script>
+import DialogAvoidSomeone from "../../common/wellcome/dialog-avoid-someone";
 // import storeTokens from "@/stores/login/store-token";
 
 import DialogYourEmail from "../../common/wellcome/dialog-your-email";
@@ -44,6 +46,7 @@ import DialogWellcome from "../../common/wellcome/dialog-wellcome";
 import FormCommon from "../phone-numbers/form-common.vue";
 export default {
   components: {
+    DialogAvoidSomeone,
     DialogYourEmail,
     DialogWellcome,
     FormCommon,
@@ -56,6 +59,7 @@ export default {
       isShowWelcome: false,
       isShowEmail: false,
       isShowLocation: false,
+      isShowAvoid: false,
     };
   },
   methods: {
@@ -81,7 +85,7 @@ export default {
     onLoginFacebook() {
       debugger;
       //   Bh_message.bh_warning();
-      this.isShowLocation = true;
+      this.isShowAvoid = true;
     },
 
     /**
