@@ -342,7 +342,7 @@ export default {
     }, 2000);
     debugger;
   },
-};
+}; 
 </script>
 
 <style lang="css">
