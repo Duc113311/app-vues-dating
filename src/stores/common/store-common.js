@@ -43,8 +43,16 @@ const storeCommon = createStore({
 
     async getListDataInterests({ commit }, { entityName, entityId }) {
       debugger;
+      const token = localStorage.getItem("accessToken");
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Basic ${token}`,
+        },
+      };
       await HTTP.get(
-        `base/v1/get-detail?entityName=${entityName}&entityId=${entityId}`
+        `base/v1/get-detail?entityName=${entityName}&entityId=${entityId}`,
+        config
       )
         .then((response) => {
           debugger;

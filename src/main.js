@@ -7,4 +7,5 @@ import router from "./router";
 import "./assets/styles/index.css";
 import "./assets/css/intlTelInput.css";
 import "intl-tel-input/build/css/intlTelInput.css";
+
 createApp(App).use(router).use(ElementPlus).mount("#app");

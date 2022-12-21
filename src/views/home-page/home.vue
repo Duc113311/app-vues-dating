@@ -306,7 +306,7 @@ export default {
 
     onClickNextImage(val) {
       debugger;
-      storeUsers.commit("setUrlImageData", val.url);
+      storeUsers.commit("setUrlImageData", val.urlName);
     },
 
     onNopeImage() {
@@ -324,14 +324,8 @@ export default {
     debugger;
     const param = {
       userId: localStorage.userId,
-      latitude: localStorage.latitude,
-      longitude: localStorage.longitude,
       page: 1,
       pageNumber: 50,
-      startAge: localStorage.startAge,
-      endAge: localStorage.endAge,
-      showMeGender: localStorage.showGender,
-      location: localStorage.locations,
     };
     storeUsers.dispatch("getListUserProfiles", param);
   },
@@ -342,7 +336,7 @@ export default {
     }, 2000);
     debugger;
   },
-}; 
+};
 </script>
 
 <style lang="css">

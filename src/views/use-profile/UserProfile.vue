@@ -63,6 +63,7 @@ import BirthDay from "../../components/user-profile/birth-day.vue";
 
 import userProfiles from "@/stores/user-profile/store-user";
 import TokenApps from "@/middleware/auth";
+import { analytics, logEvent } from "../../configs/firebase.js";
 
 export default {
   name: "UserProfile",
@@ -120,6 +121,7 @@ export default {
         const dataUser = userProfiles.state.userProfile;
         dataUser.userId = userId;
         console.log(dataUser);
+        logEvent(analytics, "btn_user_create_infor", dataUser);
         await userProfiles.dispatch("postUserProfile", dataUser);
       } else {
         this.isNumber = this.isNumber + 1;

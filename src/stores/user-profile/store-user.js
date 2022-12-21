@@ -118,8 +118,8 @@ const storeUsers = createStore({
     setListUserProfiles(state, data) {
       debugger;
       state.listUserProfiles = data[0];
-      state.numberImage = data[0].images;
-      state.urlImageData = data[0].images[0].url;
+      state.numberImage = data[0].avatars;
+      state.urlImageData = data[0].avatars[0].urlName;
       state.listUserProfilesPage = data;
       state.listSexuals = data[0].sexuals;
       state.listInterests = data[0].interests;
@@ -132,10 +132,10 @@ const storeUsers = createStore({
     setNextUserProfile(state, data) {
       debugger;
       state.listUserProfiles = state.listUserProfilesPage[data];
-      state.urlImageData = state.listUserProfilesPage[data].images[0].url;
+      state.urlImageData = state.listUserProfilesPage[data].avatars[0].urlName;
       state.listSexuals = state.listUserProfilesPage[data].sexuals;
       state.listInterests = state.listUserProfilesPage[data].interests;
-      state.numberImage = state.listUserProfilesPage[data].images;
+      state.numberImage = state.listUserProfilesPage[data].avatars;
     },
 
     setUserProfileExits(state, isUserId) {
