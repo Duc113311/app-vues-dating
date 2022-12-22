@@ -58,7 +58,7 @@ export default {
       console.log("userId: ", isUserToken);
 
       if (isUserToken) {
-        this.$router.push({ path: "/home" });
+        this.$router.push({ path: "/demo-test" });
       } else {
         this.$router.push("");
       }
