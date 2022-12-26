@@ -73,7 +73,6 @@ export default {
 
   methods: {
     onChangeInput() {
-      debugger;
       this.isResultValidate = validate.validateEmail(this.txtEmail);
       if (this.isResultValidate) {
         document.getElementById("btContinueId").disabled = false;
@@ -83,14 +82,11 @@ export default {
     },
 
     onNextWellcome(value) {
-      debugger;
       this.isShowFormWellcome = value;
       storeUsers.commit("setEmail", this.txtEmail);
     },
   },
-  mounted() {
-    debugger;
-  },
+  mounted() {},
 };
 </script>
 

@@ -34,7 +34,6 @@ export default {
      * Sự kiện click để tiếp tục
      */
     onClickContinues() {
-      debugger;
       if (!this.isStatusRequire) {
         this.$emit("onNextScreen", 1);
       }
@@ -48,9 +47,6 @@ export default {
       // document.querySelector(".btContinueCode").style.backgroundColor =
       //   "rgb(220 20 30)";
     },
-  },
-  created() {
-    debugger;
   },
 };
 </script>

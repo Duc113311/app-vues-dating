@@ -124,12 +124,12 @@ export default {
       logEvent(analytics, "login", { methodName: "google" });
       //
       const status = false;
-      debugger;
+
       if (!status) {
         await signInWithPopup(this.auth, this.providerGoogle)
           .then((result) => {
             const credential = GoogleAuthProvider.credentialFromResult(result);
-            debugger;
+
             // Dùng userID để tạo ra Token
             const userID = result.user.uid;
             storeTokens.dispatch("postTokenByUserID", { id: userID });
@@ -148,7 +148,7 @@ export default {
           });
       } else {
         const isCheckProfile = await this.onCheckUserProfileExits();
-        debugger;
+
         if (isCheckProfile) {
           this.$router.push("home");
         } else {
@@ -158,9 +158,8 @@ export default {
     },
 
     async onCheckUserIdExits() {
-      debugger;
       const userId = await TokenApps.getToken("userId");
-      debugger;
+
       if (userId) {
         await storeTokens.dispatch("checkUserIdExist", {
           id: userId,
@@ -172,7 +171,7 @@ export default {
     // Check User-profile
     async onCheckUserProfileExits() {
       const userId = await TokenApps.getToken("userId");
-      debugger;
+
       await storeUsers.dispatch("checkUserProfileExist", {
         id: userId,
       });
@@ -181,13 +180,12 @@ export default {
 
     // Login Facebook
     onLoginFacebook() {
-      debugger;
       // this.isShowPhone = true;
       // console.log(storeTokens.state.tokenAccount.accessToken);
       signInWithPopup(this.auth, this.providerFace)
         .then((result) => {
           const user = result.user;
-          debugger;
+
           // This gives you a Facebook Access Token. You can use it to access the Facebook API.
           const credential = FacebookAuthProvider.credentialFromResult(result);
           const accessToken = credential.accessToken;
@@ -211,13 +209,13 @@ export default {
      */
     async onClickPhoneNumber() {
       const status = await this.onCheckUserIdExits();
-      debugger;
+
       if (!status) {
         // Không tồn tại userID
         this.isShowPhone = true;
       } else {
         const isCheckProfile = await this.onCheckUserProfileExits();
-        debugger;
+
         if (isCheckProfile) {
           this.$router.push("home");
         } else {

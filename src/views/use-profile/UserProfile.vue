@@ -102,21 +102,16 @@ export default {
   methods: {
     async onHideWellcome(val) {
       this.isShowAvoid = val;
-      debugger;
+
       await this.onViewHomeRouter;
     },
     async onViewHomeRouter() {
-      debugger;
-
       await this.$router.push("/home");
     },
     async onClickContinue() {
-      debugger;
-
       if (this.isNumber === 7) {
         this.isShowAvoid = true;
 
-        debugger;
         const userId = TokenApps.getAccessToken("userId");
         const dataUser = userProfiles.state.userProfile;
         dataUser.userId = userId;
@@ -134,7 +129,6 @@ export default {
      * @param {*} param1
      */
     onBackForm() {
-      debugger;
       if (this.isNumber !== 0) {
         this.isNumber = this.isNumber - 1;
       } else {

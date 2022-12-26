@@ -44,25 +44,19 @@ export default {
 
   computed: {
     listDataInterests() {
-      debugger;
       return storeCommon.state.listDataInterests;
     },
   },
 
   methods: {
     onSelectInterest(val) {
-      debugger;
-
       // document.querySelector("oftion-interests")
       storeUsers.commit("setInterests", val);
       const interestsData = storeUsers.state.userProfile.interests;
 
       if (storeUsers.state.isActiveId) {
-        debugger;
         document.getElementById(val).style.backgroundColor = "red";
         if (interestsData.length < 5) {
-          debugger;
-
           document.querySelector(".btContinue").disabled = true;
           document.querySelector(".btContinue").style.backgroundColor =
             "#382e41";
@@ -71,8 +65,6 @@ export default {
           document.querySelector(".btContinue").style.backgroundColor = "red";
         }
       } else {
-        debugger;
-
         document.getElementById(val).style.backgroundColor = "#382E41";
         if (interestsData.length < 5) {
           document.querySelector(".btContinue").disabled = true;
@@ -84,7 +76,6 @@ export default {
   },
 
   created() {
-    debugger;
     storeCommon.dispatch("getListDataInterests", {
       entityName: "interests",
       entityId: "en",
@@ -96,7 +87,6 @@ export default {
 
     for (let index = 0; index < interestsData.length; index++) {
       const element = interestsData[index];
-      debugger;
       document.getElementById(element).style.backgroundColor = "red";
     }
     if (interestsData.length < 5) {

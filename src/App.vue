@@ -46,8 +46,6 @@ export default {
     }, 1000);
   },
   async mounted() {
-    debugger;
-
     // Check xem đã đăng nhập vào chưa?
     const userId = TokenApps.getAccessToken("userId");
     if (userId) {
@@ -58,7 +56,7 @@ export default {
       console.log("userId: ", isUserToken);
 
       if (isUserToken) {
-        this.$router.push({ path: "/demo-test" });
+        this.$router.push({ path: "/home" });
       } else {
         this.$router.push("");
       }

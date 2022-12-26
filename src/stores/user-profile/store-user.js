@@ -37,7 +37,6 @@ const storeUsers = createStore({
      * @param {*} value
      */
     setEmail(state, value) {
-      debugger;
       state.userProfile.email = value;
     },
     setPhoneNumber(state, value) {
@@ -58,7 +57,6 @@ const storeUsers = createStore({
       localStorage.setItem("showGender", data);
     },
     setSexuals(state, data) {
-      debugger;
       const index = state.userProfile.sexuals.indexOf(data);
       if (index > -1) {
         // only splice array when item is found
@@ -75,7 +73,6 @@ const storeUsers = createStore({
     },
 
     setInterests(state, data) {
-      debugger;
       const index = state.userProfile.interests.indexOf(data);
       if (index > -1) {
         // only splice array when item is found
@@ -92,7 +89,6 @@ const storeUsers = createStore({
     },
 
     setListAvatar(state, data) {
-      debugger;
       const idUrl = data.id;
       const index = state.userProfile.avatars.findIndex((x) => x.id === idUrl);
       if (index !== -1) {
@@ -104,7 +100,6 @@ const storeUsers = createStore({
     },
 
     setLocation(state, data) {
-      debugger;
       state.userProfile.latitude = data.latitude;
       state.userProfile.longitude = data.longitude;
       localStorage.setItem("latitude", data.latitude);
@@ -117,12 +112,13 @@ const storeUsers = createStore({
 
     setListUserProfiles(state, data) {
       debugger;
-      state.listUserProfiles = data[0];
-      state.numberImage = data[0].avatars;
-      state.urlImageData = data[0].avatars[0].urlName;
-      state.listUserProfilesPage = data;
-      state.listSexuals = data[0].sexuals;
-      state.listInterests = data[0].interests;
+      state.listUserProfiles = data;
+      // state.listUserProfiles = data[0];
+      // state.numberImage = data[0].avatars;
+      // state.urlImageData = data[0].avatars[0].urlName;
+      // state.listUserProfilesPage = data;
+      // state.listSexuals = data[0].sexuals;
+      // state.listInterests = data[0].interests;
     },
 
     setUrlImageData(state, data) {
@@ -130,7 +126,6 @@ const storeUsers = createStore({
     },
 
     setNextUserProfile(state, data) {
-      debugger;
       state.listUserProfiles = state.listUserProfilesPage[data];
       state.urlImageData = state.listUserProfilesPage[data].avatars[0].urlName;
       state.listSexuals = state.listUserProfilesPage[data].sexuals;
@@ -143,7 +138,6 @@ const storeUsers = createStore({
     },
 
     setIsActive(state, isActive) {
-      debugger;
       state.isActiveColor = isActive;
     },
 
@@ -155,10 +149,8 @@ const storeUsers = createStore({
   // Actions
   actions: {
     async postUserProfile({ commit }, data) {
-      debugger;
       await HTTP.post(`user/v1/create-one/${data.userId}`, data)
         .then((response) => {
-          debugger;
           commit("setUserProfiles", response.data.data);
         })
         .catch((error) => {
@@ -172,10 +164,8 @@ const storeUsers = createStore({
      * @param {*} entity
      */
     async getListUserProfiles({ commit }, params) {
-      debugger;
       await HTTP.post("home/v1/list-users", params)
         .then((response) => {
-          debugger;
           commit("setListUserProfiles", response.data.data);
         })
         .catch((error) => {
@@ -184,7 +174,6 @@ const storeUsers = createStore({
     },
 
     async checkUserProfileExist({ commit }, { id }) {
-      debugger;
       await HTTP.get("user/v1/check-exits/profile/" + id)
         .then((response) => {
           commit("setUserProfileExits", response.data.data);
@@ -195,7 +184,6 @@ const storeUsers = createStore({
     },
 
     async getDetalUserProfile({ commit }, { userId }) {
-      debugger;
       await HTTP.get("user/v1/get-detail/" + userId)
         .then((response) => {
           commit("setDetailUserProfile", response.data.data);

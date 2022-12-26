@@ -37,7 +37,6 @@ export default {
 
   methods: {
     onChangeInput() {
-      debugger;
       // storeTokens.commit("increment", this.txtFirstName);
       if (this.txtFirstName !== "") {
         storeUsers.commit("setUserProfile", this.txtFirstName);
@@ -59,7 +58,6 @@ export default {
       document.querySelector(".btContinue").disabled = true;
       document.querySelector(".btContinue").style.backgroundColor = "#382e41";
     }
-    debugger;
   },
 };
 </script>

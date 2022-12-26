@@ -88,16 +88,13 @@ export default {
   methods: {
     onShowAvoid(value) {
       this.isShowAvoid = value;
-      debugger;
     },
     async onHideWellcome(val) {
-      debugger;
       this.$router.push({ path: "/home" });
       this.isShowAvoid = val;
     },
 
     onTellMore() {
-      debugger;
       this.isShowMeet = true;
       document.getElementsByClassName("el-location")[0].style.display = "none";
       document.getElementsByClassName("angle-up")[0].style.display = "block";
@@ -112,7 +109,6 @@ export default {
   },
 
   mounted() {
-    debugger;
     document.getElementsByClassName("angle-up")[0].style.display = "none";
   },
 };

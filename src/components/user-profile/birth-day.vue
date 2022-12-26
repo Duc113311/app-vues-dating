@@ -47,7 +47,6 @@ export default {
 
   mounted() {
     this.birthday = storeUsers.state.userProfile.birthday;
-    debugger;
     if (this.birthday !== "") {
       document.querySelector(".btContinue").disabled = false;
       document.querySelector(".btContinue").style.backgroundColor = "red";

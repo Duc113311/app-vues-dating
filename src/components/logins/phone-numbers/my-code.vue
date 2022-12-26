@@ -46,7 +46,6 @@ export default {
 
   computed: {
     renderPhoneNumber() {
-      debugger;
       return this.txtPhoneNumber;
     },
 
@@ -64,18 +63,15 @@ export default {
      * Render gửi lại mã OTP
      */
     onPhoneNumber() {
-      debugger;
       this.$emit("onRenderCodeOTP", this.txtPhoneNumber);
     },
 
     onCheckOTP() {
-      debugger;
       this.$emit("validateRequireCode", true);
     },
 
     onNextOn(key, on) {
       console.log(key, on);
-      debugger;
       const indexData = document.getElementById(key);
       const valueData = indexData.value;
       if (valueData !== "") {
@@ -93,7 +89,6 @@ export default {
           }
         }
       }
-      debugger;
     },
   },
 
@@ -102,9 +97,7 @@ export default {
     document.querySelector(".btContinueCode").style.backgroundColor = "#382e41";
   },
 
-  mounted() {
-    debugger;
-  },
+  mounted() {},
 };
 </script>
 

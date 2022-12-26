@@ -87,13 +87,11 @@ export default {
 
   methods: {
     setuprecaptcha() {
-      debugger;
       window.recaptchaVerifier = new RecaptchaVerifier(
         "recaptcha-container",
         {
           size: "invisible",
           callback: function () {
-            debugger;
             console.log("recature resolved");
             this.onClickContinueCode();
           },
@@ -103,7 +101,6 @@ export default {
     },
 
     onBackForm() {
-      debugger;
       this.isShowCode = this.isShowCode - 1;
       var input = document.querySelector("#phone");
       this.valCodeQR = intlTelInput(input, {
@@ -113,30 +110,24 @@ export default {
     },
 
     async onClickContinuePhone() {
-      debugger;
       this.isLoading = true;
 
       const mobile = document.getElementById("phone").value;
       const result = this.onValidatePhoneNumber(mobile);
       const phoneNumber = this.valCodeQR.getNumber();
       this.txtPhoneNumber = phoneNumber;
-      debugger;
       if (result) {
         if (phoneNumber) {
-          debugger;
-
           await this.setuprecaptcha();
           // const recaptchaContainer = document.getElementById("recaptcha-container");
           const appVerifier = window.recaptchaVerifier;
           await signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
             .then((confirmationResult) => {
-              debugger;
               this.isShowCode = this.isShowCode + 1;
               this.sentCodeId = confirmationResult.verificationId;
               console.log(this.sentCodeId);
             })
             .catch((error) => {
-              debugger;
               this.sendCodeError = "You select bad domain";
               console.log(error);
               // Error; SMS not sent
@@ -147,11 +138,8 @@ export default {
     },
 
     async onClickContinueCode() {
-      debugger;
-
       if (this.sentCodeId !== "") {
         await this.singWithPhone(this.sentCodeId);
-        debugger;
       }
     },
     singWithPhone(sentCodeId) {
@@ -173,7 +161,6 @@ export default {
       const credential = PhoneAuthProvider.credential(sentCodeId, code);
       signInWithCredential(this.auth, credential)
         .then(async (result) => {
-          debugger;
           const userID = result.user.uid;
           await storeTokens.dispatch("postTokenByUserID", { id: userID });
           await storeTokens.dispatch("checkAppAccess", { id: userID });
@@ -192,7 +179,6 @@ export default {
     },
 
     onValidatePhoneNumber(val) {
-      debugger;
       var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
       if (val !== "") {
         if (vnf_regex.test(val) == false) {
@@ -208,7 +194,6 @@ export default {
       }
     },
     onClickInput() {
-      debugger;
       const mobile = document.getElementById("phone").value;
       if (mobile != "") {
         this.onValidatePhoneNumber(mobile);
@@ -219,7 +204,6 @@ export default {
   },
 
   mounted() {
-    debugger;
     var input = document.querySelector("#phone");
     this.valCodeQR = intlTelInput(input, {
       initialCountry: "auto",

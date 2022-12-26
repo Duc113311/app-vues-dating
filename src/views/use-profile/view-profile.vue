@@ -70,14 +70,12 @@ export default {
 
   computed: {
     isActiveHeader() {
-      debugger;
       return storeUsers.state.isActiveColor;
     },
   },
 
   methods: {
     onClickUpdate(val) {
-      debugger;
       storeUsers.commit("setIsActive", val);
     },
   },

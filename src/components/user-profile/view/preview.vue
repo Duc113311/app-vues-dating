@@ -46,7 +46,6 @@ export default {
   name: "Preview-profile",
   setup() {
     const urlImage = require("@/assets/images/img-home1.jpg");
-    debugger;
     return {
       urlImage,
     };

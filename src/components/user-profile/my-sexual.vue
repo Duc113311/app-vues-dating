@@ -43,14 +43,12 @@ export default {
 
   computed: {
     listDataSexuals() {
-      debugger;
       return storeCommon.state.listDataSexuals;
     },
   },
 
   methods: {
     checkFluency(val) {
-      debugger;
       // var checkedValue = document.getElementsByClassName("sexual")[val].value;
 
       storeUsers.commit("setSexuals", val);
@@ -64,27 +62,21 @@ export default {
         document.querySelector(".btContinue").disabled = false;
         document.querySelector(".btContinue").style.backgroundColor = "red";
       }
-      debugger;
       console.log(lengthSexual);
-      debugger;
     },
   },
 
   async created() {
-    debugger;
-
     await storeCommon.dispatch("getListDataSexuals", {
       entityName: "sexuals",
       entityId: "en",
     });
   },
   mounted() {
-    debugger;
     const lengthSexual = storeUsers.state.userProfile.sexuals.length;
     const dataSexuals = storeUsers.state.userProfile.sexuals;
     for (let index = 0; index < dataSexuals.length; index++) {
       const element = dataSexuals[index];
-      debugger;
       document.getElementById(element).checked = true;
     }
     if (lengthSexual < 3) {

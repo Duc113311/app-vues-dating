@@ -63,7 +63,6 @@ export default {
      * Hàm xử lý click show navbar dạng mobile
      */
     onClickAction() {
-      debugger;
       const navbarToggle = document.querySelector("#navbar-toggle");
       const navbarMenu = document.querySelector("#navbar-menu");
       const navbarLinksContainer = navbarMenu.querySelector(".navbar-links");

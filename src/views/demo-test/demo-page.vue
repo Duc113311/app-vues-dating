@@ -105,14 +105,11 @@ export default {
       var hammertime = new Hammer(el);
 
       hammertime.on("pan", function (event) {
-        debugger;
         el.classList.add("moving");
         console.log(event);
       });
 
       hammertime.on("pan", function (event) {
-        debugger;
-
         if (event.deltaX === 0) return;
         if (event.center.x === 0 && event.center.y === 0) return;
 
@@ -171,9 +168,7 @@ export default {
     });
   },
 
-  beforeMount() {
-    debugger;
-  },
+  beforeMount() {},
 };
 </script>
 

@@ -5,7 +5,6 @@ function getToken(token) {
 }
 
 function deleteToken(token) {
-  debugger;
   return Cookies.remove(token);
 }
 

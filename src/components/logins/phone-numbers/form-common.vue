@@ -80,7 +80,6 @@ export default {
 
   methods: {
     validateRequire(value) {
-      debugger;
       const statusActive = value.statusActive;
       this.codeOTP = value.codeOTP;
       this.isStatusRequire = statusActive;
@@ -95,13 +94,11 @@ export default {
     },
 
     setuprecaptcha() {
-      debugger;
       window.recaptchaVerifier = new RecaptchaVerifier(
         "recaptcha-container",
         {
           size: "invisible",
           callback: function () {
-            debugger;
             console.log("recature resolved");
             this.onClickContinueCode();
           },
@@ -111,20 +108,15 @@ export default {
     },
 
     async onRenderCodeOTP(value) {
-      debugger;
-
       if (value) {
-        debugger;
         // const recaptchaContainer = document.getElementById("recaptcha-container");
         const appVerifier = window.recaptchaVerifier;
         await signInWithPhoneNumber(this.auth, value, appVerifier)
           .then((confirmationResult) => {
-            debugger;
             this.sentCodeId = confirmationResult.verificationId;
             console.log(this.sentCodeId);
           })
           .catch((error) => {
-            debugger;
             this.sendCodeError = "You select bad domain";
             console.log(error);
             // ...
@@ -136,7 +128,6 @@ export default {
      * @param {*} val
      */
     async onNextScreen(value) {
-      debugger;
       this.screenNumber = this.screenNumber + value;
 
       if (this.screenNumber === 1) {
@@ -149,19 +140,15 @@ export default {
 
         if (result) {
           if (phoneNumber) {
-            debugger;
-
             await this.setuprecaptcha();
             // const recaptchaContainer = document.getElementById("recaptcha-container");
             const appVerifier = window.recaptchaVerifier;
             await signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
               .then((confirmationResult) => {
-                debugger;
                 this.sentCodeId = confirmationResult.verificationId;
                 console.log(this.sentCodeId);
               })
               .catch((error) => {
-                debugger;
                 this.sendCodeError = "You select bad domain";
                 console.log(error);
                 // ...
@@ -178,14 +165,11 @@ export default {
     },
 
     singWithPhone(sentCodeId) {
-      debugger;
       const credential = PhoneAuthProvider.credential(sentCodeId, this.codeOTP);
       signInWithCredential(this.auth, credential)
         .then(async (result) => {
-          debugger;
           const userID = result.user.uid;
           const providerId = result.providerId;
-          debugger;
           storeTokens.dispatch("postTokenByUserID", {
             id: userID,
             providerId: providerId,
@@ -200,8 +184,6 @@ export default {
           console.log(userID);
         })
         .catch(() => {
-          debugger;
-
           this.txtErrorCode = true;
           document.querySelector(".btContinueCode").disabled = true;
           document.querySelector(".btContinueCode").style.backgroundColor =
@@ -212,7 +194,6 @@ export default {
   },
 
   mounted() {
-    debugger;
     var input = document.querySelector("#phone");
     this.valCodeQR = intlTelInput(input, {
       initialCountry: "auto",

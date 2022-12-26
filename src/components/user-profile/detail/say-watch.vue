@@ -82,7 +82,6 @@ export default {
 
   computed: {
     urlImage() {
-      debugger;
       return storeUsers.state.urlImageData;
     },
 
@@ -97,12 +96,10 @@ export default {
       this.isShowConfirm = false;
     },
     onClickNextImage(val) {
-      debugger;
       storeUsers.commit("setUrlImageData", val.url);
     },
 
     onClose() {
-      debugger;
       this.$emit("onWatchSay", true);
     },
   },

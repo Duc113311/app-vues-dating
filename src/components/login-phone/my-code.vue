@@ -71,9 +71,7 @@ export default {
     return {};
   },
   methods: {
-    onPhoneNumber() {
-      debugger;
-    },
+    onPhoneNumber() {},
   },
 };
 </script>

@@ -102,7 +102,6 @@ export default {
   props: ["isShowHeader"],
   methods: {
     async toggleUpload(event, data) {
-      debugger;
       this.loading = true;
       const image = event.target.files[0];
       console.log(data);
@@ -118,14 +117,12 @@ export default {
       const storage = getStorage();
       const storageRef = ref(storage, "dating/" + image.name);
       await uploadBytes(storageRef, image).then((snapshot) => {
-        debugger;
         console.log("Uploaded a blob or file!");
         console.log(snapshot);
       });
 
       await getDownloadURL(storageRef, image)
         .then((url) => {
-          debugger;
           this.dialogImageUrl = url;
           const dataImage = {
             id: idUrl,
@@ -137,7 +134,6 @@ export default {
           const avatar = document.getElementById("avatar" + idUrl);
           const close = document.getElementById("close" + idUrl);
           // img.setAttribute("src", url);
-          debugger;
           setTimeout(() => {
             this.loading = false;
           }, 1000);
@@ -176,7 +172,6 @@ export default {
     },
   },
   mounted() {
-    debugger;
     const image = storeUsers.state.userProfile.avatars;
     for (let index = 0; index < image.length; index++) {
       const element = image[index];
@@ -184,7 +179,6 @@ export default {
       const avatar = document.getElementById("avatar" + element.id);
       const close = document.getElementById("close" + element.id);
       // img.setAttribute("src", url);
-      debugger;
       setTimeout(() => {
         this.loading = false;
       }, 1000);

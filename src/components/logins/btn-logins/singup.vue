@@ -71,7 +71,6 @@ export default {
      * Login google
      */
     onLoginGoogle() {
-      debugger;
       // await storeTokens.dispatch("checkExistUserId", {
       //   id: "SzqFbvqrZnGFLmNyiwuGgfOHYFQ1",
       // });
@@ -83,7 +82,6 @@ export default {
      * Login Facebook
      */
     onLoginFacebook() {
-      debugger;
       //   Bh_message.bh_warning();
       this.isShowAvoid = true;
     },

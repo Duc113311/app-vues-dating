@@ -97,18 +97,12 @@ export default {
     };
   },
 
-  mounted() {
-    debugger;
-  },
-
   methods: {
     onCloseDialog() {
-      debugger;
       this.$emit("onHideWellcome", false);
     },
 
     onShowDialogQuit(value) {
-      debugger;
       this.isShowQuitSing = value;
     },
 

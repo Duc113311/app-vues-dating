@@ -33,16 +33,13 @@ export default {
   methods: {
     async onHideWellcome(val) {
       this.isShowAvoid = val;
-      debugger;
       this.$router.push({ path: "/home" });
     },
 
     async showPosition(position) {
-      debugger;
       if (position.coords) {
         storeUsers.commit("setLocation", position.coords);
       }
-      debugger;
       const userId = TokenApps.getAccessToken("userId");
       const providerId = TokenApps.getProviderId("providerId");
       const dataUser = userProfiles.state.userProfile;
@@ -57,15 +54,10 @@ export default {
      * Sự kiện click để tiếp tục
      */
     onClickContinues() {
-      debugger;
       if (navigator.geolocation) {
-        debugger;
         navigator.geolocation.getCurrentPosition(this.showPosition);
       }
     },
-  },
-  created() {
-    debugger;
   },
 };
 </script>

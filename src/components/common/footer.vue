@@ -46,13 +46,11 @@ export default {
     },
 
     async onClickMessage() {
-      debugger;
       const userId = TokenApps.getToken("userId");
       if (userId) {
         await storeTokens.dispatch("logoutApp", { id: userId });
         TokenApps.deleteToken("userId");
         const isLogouts = storeTokens.state.isLogout;
-        debugger;
         if (isLogouts) {
           this.$router.push("/");
         }

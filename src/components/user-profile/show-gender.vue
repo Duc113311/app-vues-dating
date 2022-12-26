@@ -48,7 +48,6 @@ export default {
 
   methods: {
     onShowGender(val) {
-      debugger;
       this.genders = val;
       storeUsers.commit("setShowGender", val);
       if (this.genders === 1) {
@@ -73,7 +72,6 @@ export default {
 
   mounted() {
     this.genders = storeUsers.state.showGender;
-    debugger;
     if (this.genders === 1) {
       document.querySelector(".btContinue").disabled = false;
       document.querySelector(".btContinue").style.backgroundColor = "red";

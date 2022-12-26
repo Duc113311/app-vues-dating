@@ -147,13 +147,11 @@ export default {
   },
   methods: {
     setuprecaptcha() {
-      debugger;
       window.recaptchaVerifier = new RecaptchaVerifier(
         "recaptcha-container",
         {
           size: "invisible",
           callback: function () {
-            debugger;
             console.log("recature resolved");
             this.onClickContinueCode();
           },
@@ -165,7 +163,6 @@ export default {
       this.$router.go(-1);
     },
     async onClickContinueCode() {
-      debugger;
       const phoneNumber = this.valCodeQR.getNumber();
       if (phoneNumber) {
         if (this.sentCodeId !== "") {
@@ -177,12 +174,10 @@ export default {
           const appVerifier = window.recaptchaVerifier;
           signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
             .then((confirmationResult) => {
-              debugger;
               this.sentCodeId = confirmationResult.verificationId;
               console.log(this.sentCodeId);
             })
             .catch((error) => {
-              debugger;
               console.log(error);
               // Error; SMS not sent
               // ...
@@ -193,18 +188,15 @@ export default {
       }
     },
     async createTokensByUserID(userID) {
-      debugger;
       try {
         await axios
           .post(
             `http://localhost:5000/heartlink-dating-project/us-central1/app/login/v1/create-token/${userID}`
           )
           .then((response) => {
-            debugger;
             console.log(response);
           });
       } catch (error) {
-        debugger;
         console.log(error);
       }
     },
@@ -225,7 +217,6 @@ export default {
       const credential = PhoneAuthProvider.credential(sentCodeId, code);
       signInWithCredential(this.auth, credential)
         .then((result) => {
-          debugger;
           const userID = result.user.uid;
           this.createTokensByUserID(userID);
           this.isWellcome = true;
@@ -236,7 +227,6 @@ export default {
         });
     },
     onValidatePhoneNumber(val) {
-      debugger;
       var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
       if (vnf_regex.test(val) == false) {
         this.sendCodeError = "Số điện thoại của bạn không đúng định dạng";
@@ -244,7 +234,6 @@ export default {
       }
     },
     onClickInput() {
-      debugger;
       const mobile = document.getElementById("phone").value;
       if (mobile != "") {
         this.onValidatePhoneNumber(mobile);

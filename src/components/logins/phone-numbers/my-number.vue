@@ -63,7 +63,6 @@ export default {
      * @param {*} val
      */
     onValidatePhoneNumber(val) {
-      debugger;
       var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
       if (val !== "") {
         if (vnf_regex.test(val) == false) {
@@ -88,7 +87,6 @@ export default {
      * Sự kiện khi click input
      */
     onClickInput() {
-      debugger;
       const mobile = document.getElementById("phone").value;
       if (mobile != "") {
         this.onValidatePhoneNumber(mobile);
@@ -100,7 +98,6 @@ export default {
   },
 
   mounted() {
-    debugger;
     var input = document.querySelector("#phone");
     this.valCodeQR = intlTelInput(input, {
       initialCountry: "auto",

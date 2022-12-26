@@ -56,18 +56,14 @@ export default {
     return {};
   },
 
-  mounted() {
-    debugger;
-  },
+  mounted() {},
 
   methods: {
     onCloseDialog() {
-      debugger;
       this.$emit("onHideWellcome", false);
     },
 
     onShowDialogQuit(value) {
-      debugger;
       this.isShowQuitSing = value;
     },
 
